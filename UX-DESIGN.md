@@ -1,5 +1,8 @@
 # QR Code Generator User Experience Design Document
 
+## Prototype
+Access the Figma prototype [here](https://www.figma.com/proto/h3MlEfPk2gwJBsLaQIrhcZ/Wireframes?node-id=42-51&starting-point-node-id=42%3A51&mode=design&t=4162Olo80Kj8PCA3-1)
+
 ## App Map
 
 ![app map](<ux-design/App Map.png>)
