@@ -1,19 +1,18 @@
-# Project Repository
+# QR Code Generator
 
-This repository will be used for team projects.
+In an increasingly digital world, our app aims to bridge the gap between virtual identities and real-life interactions. We envision a future where sharing your social presence can be as seamless as a single scan, and building new connections doesn't involve sifting through an endless number of apps or notes. With our platform, users will be able to effortlessly generate a unified QR code that contains ttheir chosen social accounts, fostering faster and more authentic connections. By scanning and saving others' codes, they will be able to build a digital directory, and ensure meaningful digital relationships. Our primary goal is to simplify, streamline, and enrich the way we connect in the digital age. 
 
-Several sets of instructions are included in this repository. They should each be treated as separate assignments with their own due dates and sets of requirements.
+<b> Streamlining social connections with QR codes, making digital introductions as easy as a scan and save. </b>
 
-1. See the [App Map & Wireframes](instructions-0a-app-map-wireframes.md) and [Prototyping](./instructions-0b-prototyping.md) instructions for the requirements of the initial user experience design of the app.
+## Team Members 
+Lara Kim: https://github.com/larahynkim 
+Sivan Cooperman: https://github.com/SivanC 
+Angela Tao: https://github.com/XinranTaoAngela 
+Byron Chan: https://github.com/byroncjy 
+Pan Li: https://github.com/Pan-LLi
 
-1. Delete the contents of this file and replace with the contents of a proper README.md, as described in the [project setup instructions](./instructions-0c-project-setup.md)
+Our team identified a challenge we wanted to tackle: managing and sharing multiple social profiles can be a hassle. This was an inconvenience that each one of us had experienced, and we were sure that most people, especially at our age, could resonate with us. To streamline this, we conceptualized an app that combines social links into a single QR code. We hope that this app will be of help to many and revolutionize the way in which we form new connections. 
 
-1. See the [Sprint Planning instructions](instructions-0d-sprint-planning.md) for the requirements of Sprint Planning for each Sprint.
-
-1. See the [Front-End Development instructions](./instructions-1-front-end.md) for the requirements of the initial Front-End Development.
-
-1. See the [Back-End Development instructions](./instructions-2-back-end.md) for the requirements of the initial Back-End Development.
-
-1. See the [Database Integration instructions](./instructions-3-database.md) for the requirements of integrating a database into the back-end.
-
-1. See the [Deployment instructions](./instructions-4-deployment.md) for the requirements of deploying an app.
+With our team values and guidelines, our team will collaborate, communicate, and develop to successfully deliver our finalized app to our end-users. 
+[Contribution guidelines for this project](CONTRIBUTING.md)
+ 
