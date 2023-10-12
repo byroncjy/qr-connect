@@ -14,5 +14,11 @@ Pan Li: https://github.com/Pan-LLi<br>
 Our team identified a challenge we wanted to tackle: managing and sharing multiple social profiles can be a hassle. This was an inconvenience that each one of us had experienced, and we were sure that most people, especially at our age, could resonate with us. To streamline this, we conceptualized an app that combines social links into a single QR code. We hope that this app will be of help to many and revolutionize the way in which we form new connections. 
 
 With our team values and guidelines, our team will collaborate, communicate, and develop to successfully deliver our finalized app to our end-users. 
+
 [Contribution guidelines for this project.](CONTRIBUTING.md)
- 
+
+## Instructions for Building and Testing
+(To be updated upon completion)
+
+## Relevant Reading 
+[How Do QR Codes Work](https://www.sproutqr.com/blog/how-do-qr-codes-work)
