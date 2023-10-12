@@ -1,4 +1,4 @@
-# Contributiing
+# Contributing
 This document details norms and procedures for contributing to the project.
 Before contributing, please read through this document. By contributing, you
 agree to the rules and standards written below.
