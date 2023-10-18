@@ -13,7 +13,7 @@ img{
 
 .Box > * {  
           margin: 20px 0; 
-      }
+}
 
 .ScanButton {
           background-color: white; 
@@ -27,7 +27,7 @@ img{
           
 }
         
-        /* Styles for the button when hovered */
+       
 .ScanButton:hover {
           background-color: black; 
           color: white;           
