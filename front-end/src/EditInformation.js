@@ -1,67 +1,77 @@
 import React, { useState } from 'react'
 import './EditInformation.css'
 
+const platformOptions = [
+  { value: '', label: 'Select platform' },
+  { value: 'Personal Website', label: 'Personal Website' },
+  { value: 'Linkedin', label: 'Linkedin' },
+  { value: 'Instagram', label: 'Instagram' },
+  { value: 'Facebook', label: 'Facebook' },
+  { value: 'Twitter', label: 'Twitter' },
+  { value: 'Github', label: 'Github' }
+]
+
 const EditInformation = () => {
-  const [socialMedia, setSocialMedia] = useState([{ platform: '', info: '' }])
+  const [platformInformationMap, setPlatformInformationMap] = useState([{ platform: '', info: '' }])
 
+  // Handles platform name change in dropdown
   const handlePlatformChange = (index, event) => {
-    const updatedSocialMedia = [...socialMedia]
-    updatedSocialMedia[index].platform = event.target.value
-    setSocialMedia(updatedSocialMedia)
+    const { value } = event.target
+    const updatedPlatformInformationMap = [...platformInformationMap]
+    updatedPlatformInformationMap[index].platform = value
+    setPlatformInformationMap(updatedPlatformInformationMap)
   }
 
+  // Handles platform information change in text box
   const handleInfoChange = (index, event) => {
-    const updatedSocialMedia = [...socialMedia]
-    updatedSocialMedia[index].info = event.target.value
-    setSocialMedia(updatedSocialMedia)
+    const updatedPlatformInformationMap = [...platformInformationMap]
+    updatedPlatformInformationMap[index].info = event.target.value
+    setPlatformInformationMap(updatedPlatformInformationMap)
   }
 
-  const handleAddSocialMedia = () => {
-    const updatedSocialMedia = [...socialMedia, { platform: '', info: '' }]
-    setSocialMedia(updatedSocialMedia)
+  // Handles adding another platform line
+  const handleAddPlatformInformation = () => {
+    const updatedPlatformInformationMap = [...platformInformationMap, { platform: '', info: '' }]
+    setPlatformInformationMap(updatedPlatformInformationMap)
   }
 
   return (
     <div className="edit-information-container">
       <h2>Edit Your Personal Information</h2>
-      {socialMedia.map((item, index) => (
+      {platformInformationMap.map((item, index) => (
         <div key={index}>
-          <label htmlFor={`socialMedia${index}`}></label>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <label htmlFor={`platform${index}`}></label>
 
-          <select
-            id={`socialMedia${index}`}
-            value={item.platform}
-            onChange={(e) => handlePlatformChange(index, e)}
-          >
-            <option value="Select Platform">Select platform</option>
-            <option value="Facebook">Facebook</option>
-            <option value="Instagram">Instagram</option>
-            <option value="Linkedin">Linkedin</option>
-            <option value="Other">Other</option>
-          </select>
+            <select
+              id={`platform${index}`}
+              value={item.platform}
+              onChange={(e) => handlePlatformChange(index, e)}
+            >
+              {platformOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
 
-          {item.platform === 'Other' && (
-            <input
-              type="text"
-              placeholder="Type your platform name"
-              value={item.info}
-              onChange={(e) => handleInfoChange(index, e)}
-            />
-          )}
-
-          <label htmlFor={`textInput${index}`}></label>
-          <input
-            type="text"
-            placeholder="Link / Information"
-            id={`textInput${index}`}
-            value={item.info}
-            onChange={(e) => handleInfoChange(index, e)}
-          />
+            {item.platform !== '' && (
+              <input
+                type="text"
+                placeholder="Link / Information"
+                value={item.info}
+                onChange={(e) => handleInfoChange(index, e)}
+              />
+            )}
+          </div>
         </div>
       ))}
-      <button onClick={handleAddSocialMedia}>Add another platform</button>
-      <br />
-      <button type="save" className="save-btn">Save</button>
+      <div style={{ margin: '20px 0' }}>
+        <button onClick={handleAddPlatformInformation}>Add another platform</button>
+      </div>
+      <button type="save" className="save-btn">
+        Save
+      </button>
     </div>
   )
 }
