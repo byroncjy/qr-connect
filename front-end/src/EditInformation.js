@@ -85,6 +85,11 @@ const EditInformation = () => {
     }
   }
 
+  const handleDeletePlatform = (index) => {
+    const updatedPlatformInformationMap = platformInformationMap.filter((_, i) => i !== index)
+    setPlatformInformationMap(updatedPlatformInformationMap)
+  }
+
   return (
     <div className="edit-information-container">
       <h2>Edit Your Personal Information</h2>
@@ -113,6 +118,8 @@ const EditInformation = () => {
                 onChange={(e) => handleInfoChange(index, e)}
               />
             )}
+
+            <button onClick={() => handleDeletePlatform(index)}>X</button>
           </div>
         </div>
       ))}
