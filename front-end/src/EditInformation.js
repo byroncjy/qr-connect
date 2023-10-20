@@ -137,6 +137,7 @@ const EditInformation = () => {
 
       {/* Displays picture and upload picture button */}
       <div className="edit-information-header">
+        {/* Note that right now image urls are randomly generated via Mockaroo */}
         <img src={profileData.url_picture} alt="Profile Picture" className="profile-picture" />
         <p>Upload profile picture below: </p>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
