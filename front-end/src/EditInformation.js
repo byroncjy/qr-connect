@@ -4,8 +4,8 @@ import './EditInformation.css'
 
 const platformOptions = [
   { value: '', label: 'Select platform' },
-  { value: 'Phone Number', label: 'Phone Number' },
-  { value: 'Personal Website', label: 'Personal Website' },
+  { value: 'Phone number', label: 'Phone number' },
+  { value: 'Personal website', label: 'Personal website' },
   { value: 'Linkedin', label: 'Linkedin' },
   { value: 'Instagram', label: 'Instagram' },
   { value: 'Facebook', label: 'Facebook' },
@@ -135,17 +135,18 @@ const EditInformation = () => {
     <div className="edit-information-container">
       <h2>Edit Personal Information</h2>
 
+      {/* Displays picture and upload picture button */}
       <div className="edit-information-header">
         <img src={profileData.url_picture} alt="Profile Picture" className="profile-picture" />
-        <p>Upload Profile Picture: </p>
-      </div>
-
-      <div className="profile-section">
+        <p>Upload profile picture below: </p>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <input type="file" accept="image/*" onChange={handleProfilePictureUpload} />
         </div>
-        <p>First Name: {profileData.first_name}</p>
-        <p>Last Name: {profileData.last_name}</p>
+      </div>
+
+      <div className="profile-section">
+        <p>First name: {profileData.first_name}</p>
+        <p>Last name: {profileData.last_name}</p>
         <p>Email: {profileData.email}</p>
       </div>
         {/* Display each row of plaform name and information */}
