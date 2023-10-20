@@ -1,9 +1,9 @@
 // HomeScreen.js
-import React from 'react';
-import './HomeScreen.css';
+import React from 'react'
+import './HomeScreen.css'
 
 const HomeScreen = () => {
-    return (
+  return (
       <div className="home-container">
         <div className="home-header">
           <img src="path_to_logo" alt="App Logo" className="app-logo" />
@@ -15,7 +15,7 @@ const HomeScreen = () => {
           <a href="/generate-code" className="home-link">Generate Code</a>
         </div>
       </div>
-    );
+  )
 }
 
-export default HomeScreen;
+export default HomeScreen

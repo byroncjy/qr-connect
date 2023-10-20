@@ -1,7 +1,7 @@
 // app.js
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomeScreen from './HomeScreen';
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import HomeScreen from './HomeScreen'
 import EditInformation from './EditInformation'
 import SavedConnections from './SavedConnections'
 import GenerateCode from './GenerateCode'
@@ -24,7 +24,7 @@ const App = () => {
       </Routes>
       <Footer />
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

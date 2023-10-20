@@ -1,20 +1,20 @@
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import './Header.css';
+import React from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import './Header.css'
 
 const Header = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
+  const location = useLocation()
+  const navigate = useNavigate()
 
-    const handleLogout = () => {
-        navigate('/'); // Redirect to login page
-    };
+  const handleLogout = () => {
+    navigate('/') // Redirect to login page
+  }
 
-    const handleBack = () => {
-        navigate(-1); // Go back to the previous page
-    };
+  const handleBack = () => {
+    navigate(-1) // Go back to the previous page
+  }
 
-    return (
+  return (
         <div className="header">
             {location.pathname !== '/home' && location.pathname !== '/' && (
                 <button onClick={handleBack} className="back-btn">Back</button>
@@ -24,7 +24,7 @@ const Header = () => {
                 <button onClick={handleLogout} className="logout-btn">Logout</button>
             )}
         </div>
-    );
+  )
 }
 
-export default Header;
+export default Header
