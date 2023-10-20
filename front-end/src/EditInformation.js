@@ -19,7 +19,7 @@ const EditInformation = () => {
   // State to hold profile data
   const [profileData, setProfileData] = useState({})
 
-  // Fetch saved personal data from backend upon load
+  // Fetch all saved data from backend upon load
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,6 +35,8 @@ const EditInformation = () => {
     }
     fetchData()
 
+    // Fetch profile data: email, firstname, lastname, profile pic
+    // As of now, only profile pic is editable - the others should be tied to account registration
     const fetchProfileData = async () => {
       try {
         const response = await axios.get('https://my.api.mockaroo.com/profile.json?key=f5770b40')
@@ -47,6 +49,7 @@ const EditInformation = () => {
     fetchProfileData()
   }, [])
 
+  // Handle change in platform name
   const handlePlatformChange = (index, event) => {
     const { value } = event.target
     const updatedPlatformInformationMap = [...platformInformationMap]
@@ -54,17 +57,52 @@ const EditInformation = () => {
     setPlatformInformationMap(updatedPlatformInformationMap)
   }
 
+  // Handle change in platform information
   const handleInfoChange = (index, event) => {
     const updatedPlatformInformationMap = [...platformInformationMap]
     updatedPlatformInformationMap[index].info = event.target.value
     setPlatformInformationMap(updatedPlatformInformationMap)
   }
 
+  // Handle adding new entry of platform name and information
   const handleAddPlatformInformation = () => {
     const updatedPlatformInformationMap = [...platformInformationMap, { platform: '', info: '' }]
     setPlatformInformationMap(updatedPlatformInformationMap)
   }
 
+  // Handle deleting an entry of platform name and information
+  const handleDeletePlatform = (index) => {
+    const updatedPlatformInformationMap = platformInformationMap.filter((_, i) => i !== index)
+    setPlatformInformationMap(updatedPlatformInformationMap)
+  }
+
+  // Handle profile picture upload
+  const handleProfilePictureUpload = async (event) => {
+    const image = event.target.files[0]
+    const formData = new FormData()
+    formData.append('file', image)
+
+    try {
+      const response = await axios.put(
+        'https://my.api.mockaroo.com/profile.json?key=f5770b40&__method=PUT',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+
+      if (response.status === 200) {
+        // Update the profile picture in the UI
+        setProfileData({ ...profileData, url_picture: URL.createObjectURL(image) })
+      }
+    } catch (error) {
+      console.error('Error uploading profile picture:', error)
+    }
+  }
+
+  // Handle saving all platform information (does not include profile picture)
   const handleSave = async () => {
     try {
       const requestData = platformInformationMap.map((item) => {
@@ -93,30 +131,29 @@ const EditInformation = () => {
     }
   }
 
-  const handleDeletePlatform = (index) => {
-    const updatedPlatformInformationMap = platformInformationMap.filter((_, i) => i !== index)
-    setPlatformInformationMap(updatedPlatformInformationMap)
-  }
-
   return (
     <div className="edit-information-container">
       <h2>Edit Personal Information</h2>
+
       <div className="edit-information-header">
         <img src={profileData.url_picture} alt="Profile Picture" className="profile-picture" />
+        <p>Upload Profile Picture: </p>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center' }}> {/* Centering the button */}
-        <button>Upload profile picture</button>
-      </div>
+
       <div className="profile-section">
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <input type="file" accept="image/*" onChange={handleProfilePictureUpload} />
+        </div>
         <p>First Name: {profileData.first_name}</p>
         <p>Last Name: {profileData.last_name}</p>
         <p>Email: {profileData.email}</p>
       </div>
+        {/* Display each row of plaform name and information */}
         {platformInformationMap.map((item, index) => (
             <div key={index}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <label htmlFor={`platform${index}`}></label>
-
+                {/* Dropdown */}
                 <select
                   id={`platform${index}`}
                   value={item.platform}
@@ -129,6 +166,7 @@ const EditInformation = () => {
                 ))}
                 </select>
 
+                {/* If not Select Platform, display text input box */}
                 {item.platform !== '' && (
                 <input
                     type="text"
@@ -137,12 +175,14 @@ const EditInformation = () => {
                     onChange={(e) => handleInfoChange(index, e)}
                 />
                 )}
-
+                {/* Delete entry */}
                 <button onClick={() => handleDeletePlatform(index)}>X</button>
               </div>
             </div>
         ))}
+        {/* Add new entry */}
         <button onClick={handleAddPlatformInformation}>Add another platform</button>
+        {/* Save updated platform information */}
         <button type="button" className="save-btn" onClick={handleSave}>
             Save
         </button>
