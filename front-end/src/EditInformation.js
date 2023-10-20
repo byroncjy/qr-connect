@@ -12,8 +12,10 @@ const platformOptions = [
 ]
 
 const EditInformation = () => {
+  // Map contains key: value pairs of (platform name: info)
   const [platformInformationMap, setPlatformInformationMap] = useState([])
 
+  // Fetch saved personal data from backend upon load
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,7 +24,7 @@ const EditInformation = () => {
           throw new Error('Network response was not ok')
         }
         const data = await response.json()
-        // Convert data into same keys as platformInformationMap
+        // updatedData updates data to the key, value names of platformInformationMap
         const updatedData = data.map((item) => {
           return { platform: item.platform_name, info: item.platform_information }
         })
@@ -51,6 +53,36 @@ const EditInformation = () => {
   const handleAddPlatformInformation = () => {
     const updatedPlatformInformationMap = [...platformInformationMap, { platform: '', info: '' }]
     setPlatformInformationMap(updatedPlatformInformationMap)
+  }
+
+  const handleSave = async () => {
+    try {
+      // Converts platformInformationMap data into the key, value names needed for API
+      const requestData = platformInformationMap.map((item) => {
+        return {
+          platform_name: item.platform,
+          platform_information: item.info
+        }
+      })
+
+      const response = await fetch(
+        'https://my.api.mockaroo.com/edit-information.json?key=f5770b40&__method=PUT',
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      // Handle success
+    } catch (error) {
+      console.error('Error saving data:', error)
+    }
   }
 
   return (
@@ -85,7 +117,8 @@ const EditInformation = () => {
         </div>
       ))}
       <button onClick={handleAddPlatformInformation}>Add another platform</button>
-      <button type="save" className="save-btn">
+      <br />
+      <button type="button" className="save-btn" onClick={handleSave}>
         Save
       </button>
     </div>
