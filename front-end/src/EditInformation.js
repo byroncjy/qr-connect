@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './EditInformation.css'
 
 const platformOptions = [
@@ -12,9 +12,29 @@ const platformOptions = [
 ]
 
 const EditInformation = () => {
-  const [platformInformationMap, setPlatformInformationMap] = useState([{ platform: '', info: '' }])
+  const [platformInformationMap, setPlatformInformationMap] = useState([])
 
-  // Handles platform name change in dropdown
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://my.api.mockaroo.com/edit-information.json?key=f5770b40')
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        const data = await response.json()
+        // Convert data into same keys as platformInformationMap
+        const updatedData = data.map((item) => {
+          return { platform: item.platform_name, info: item.platform_information }
+        })
+        setPlatformInformationMap(updatedData)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
   const handlePlatformChange = (index, event) => {
     const { value } = event.target
     const updatedPlatformInformationMap = [...platformInformationMap]
@@ -22,14 +42,12 @@ const EditInformation = () => {
     setPlatformInformationMap(updatedPlatformInformationMap)
   }
 
-  // Handles platform information change in text box
   const handleInfoChange = (index, event) => {
     const updatedPlatformInformationMap = [...platformInformationMap]
     updatedPlatformInformationMap[index].info = event.target.value
     setPlatformInformationMap(updatedPlatformInformationMap)
   }
 
-  // Handles adding another platform line
   const handleAddPlatformInformation = () => {
     const updatedPlatformInformationMap = [...platformInformationMap, { platform: '', info: '' }]
     setPlatformInformationMap(updatedPlatformInformationMap)
@@ -66,9 +84,7 @@ const EditInformation = () => {
           </div>
         </div>
       ))}
-      <div style={{ margin: '20px 0' }}>
-        <button onClick={handleAddPlatformInformation}>Add another platform</button>
-      </div>
+      <button onClick={handleAddPlatformInformation}>Add another platform</button>
       <button type="save" className="save-btn">
         Save
       </button>
