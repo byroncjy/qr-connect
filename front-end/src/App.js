@@ -3,7 +3,7 @@ import './App.css';
 import { Link } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import ScanCode from './ScanCode';
-
+import ConnectionDetails from './ConnectionDetails';
 
 const App = props => {
   return (
@@ -12,11 +12,9 @@ const App = props => {
     
         <main className="App-main">
           <Routes>
-
-            {/* a route for the home page */}
             <Route path="/ScanCode" element={<ScanCode />} />
 
-          
+            <Route path="/ConnectionDetails" element={<ConnectionDetails/>} />
           </Routes>
         </main>
     
