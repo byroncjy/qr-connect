@@ -5,7 +5,7 @@ import './SelectInformationForm.css'
 const SelectInformationForm = props => {
   const [data, setData] = useState(() => [])
   // track which boxes are checked
-  const [checked, setChecked] = useState(() => [true]) // bool array
+  const [checked, setChecked] = useState(() => []) // bool array
   const [allChecked, setAllChecked] = useState(() => true) // bool
 
   const handleSelectAll = () => {
@@ -19,11 +19,10 @@ const SelectInformationForm = props => {
     // data from mockaroo is 1-indexed
     checkedCopy[e.target.id - 1] = e.target.checked
     setChecked(checkedCopy)
-    // check if all boxes checked
   }
 
   const handleSubmit = () => {
-    // console.log('Submitted!')
+    console.log('Submitted!')
   }
 
   // get data from api
@@ -31,11 +30,11 @@ const SelectInformationForm = props => {
     const fetchData = async () => {
       console.log('Fetching user information data...')
       try {
-        const response = await axios('https://my.api.mockaroo.com/info.json?key=820f1130')
+        const response = await axios(
+          'https://my.api.mockaroo.com/info.json?key=820f1130')
         setData(response.data)
         console.log('Successfully retrieved mock data!')
       } catch (err) {
-        setChecked([])
         console.log('Unable to retrieve data!')
         console.error(err)
       }
@@ -67,14 +66,18 @@ const SelectInformationForm = props => {
           <input key={`input${item.id}`}
                 id={item.id /* passed to update state */}
                 type="checkbox"
-                checked={checked[item.id - 1]}
+                checked={checked[item.id - 1] || false /* was triggering an
+                  uncontrolled component warning without second part */}
                 onChange={e => handleCheckBox(e)} />
           <label key={`label${item.id}`}>{item.label}: {item.content}<br/></label>
         </div>
       )}
       </div>
-      {/* does nothing yet ... eventually should return `checked` to the QR Code Generator, probably? */}
-      <button className="select-submit-button" type="button" onClick={handleSubmit()}>Generate My QR Code!</button>
+      {/* does nothing yet ... eventually should return `checked` to the QR
+        Code Generator, probably? */}
+      <button className="select-submit-button"
+              type="button"
+              onClick={handleSubmit}>Generate My QR Code!</button>
     </div>
   )
 }
