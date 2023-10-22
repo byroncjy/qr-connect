@@ -12,7 +12,7 @@ const HomeScreen = () => {
         <div className="home-links">
           <a href="/edit-information" className="home-link">Edit Information</a>
           <a href="/saved-connections" className="home-link">Saved Connections</a>
-          <a href="/generate-code" className="home-link">Generate Code</a>
+          <a href="/select-information" className="home-link">Generate Code</a>
         </div>
       </div>
   )

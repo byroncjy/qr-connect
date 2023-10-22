@@ -17,11 +17,11 @@ const Header = () => {
   return (
         <div className="header">
             {location.pathname !== '/home' && location.pathname !== '/' && (
-                <button onClick={handleBack} className="back-btn">Back</button>
+                <button onClick={handleBack} className="back-button">Back</button>
             )}
             <h1 className="header-title">QR Code Generator</h1>
             {location.pathname === '/home' && (
-                <button onClick={handleLogout} className="logout-btn">Logout</button>
+                <button onClick={handleLogout} className="logout-button">Logout</button>
             )}
         </div>
   )
