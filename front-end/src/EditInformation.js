@@ -104,10 +104,30 @@ const EditInformation = () => {
     }
   }
 
-  // Handle saving all platform information (does not include profile picture)
+  // Handle saving all profile data and platform information (does not include profile picture)
   // Duplicate entries with non-empty info will not be allowed to save
   // Any entry with empty platform or info will not get saved
   const handleSave = async () => {
+    // Saving of profile data: names
+    try {
+      const response = await axios.put(
+        'https://my.api.mockaroo.com/profile.json?key=f5770b40&__method=PUT',
+        profileData,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+
+      if (response.status !== 200) {
+        throw new Error(`Network response was not ok. Status Code: ${response.status}`)
+      }
+      setProfileData(profileData) // Update profileData after successful save
+    } catch (error) {
+      console.error('Error saving data:', error)
+    }
+    // Saving of platform info
     try {
       // Check for duplicate entries
       const platformNames = new Set()
@@ -171,8 +191,19 @@ const EditInformation = () => {
       </div>
 
       <div className="profile-section">
-        <p>First name: {profileData.first_name}</p>
-        <p>Last name: {profileData.last_name}</p>
+        <p>Name: </p>
+        <input
+          type="text"
+          placeholder="First name"
+          value={profileData.first_name}
+          onChange={(e) => setProfileData({ ...profileData, first_name: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="Last name"
+          value={profileData.last_name}
+          onChange={(e) => setProfileData({ ...profileData, last_name: e.target.value })}
+        />
         <p>Email: {profileData.email}</p>
       </div>
         {/* Display each row of plaform name and information */}
