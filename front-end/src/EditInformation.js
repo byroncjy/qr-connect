@@ -103,11 +103,17 @@ const EditInformation = () => {
   }
 
   // Handle saving all platform information (does not include profile picture)
+  // Any entry with empty platform or info will not get saved
   const handleSave = async () => {
     try {
+      // Filter out the entries with either empty platform or empty info
+      const filteredPlatformInformationMap = platformInformationMap.filter(
+        (item) => item.platform !== '' && item.info !== ''
+      )
+
       const response = await axios.put(
         'https://my.api.mockaroo.com/edit-information.json?key=f5770b40&__method=PUT',
-        platformInformationMap,
+        filteredPlatformInformationMap,
         {
           headers: {
             'Content-Type': 'application/json'
@@ -118,7 +124,8 @@ const EditInformation = () => {
       if (response.status !== 200) {
         throw new Error(`Network response was not ok. Status Code: ${response.status}`)
       }
-      // Handle success
+      // Update the platformInformationMap state
+      setPlatformInformationMap(filteredPlatformInformationMap)
     } catch (error) {
       console.error('Error saving data:', error)
     }
@@ -178,7 +185,7 @@ const EditInformation = () => {
         {/* Add new entry */}
         <button onClick={handleAddPlatformInformation}>Add another platform</button>
         {/* Save updated platform information */}
-        <button type="button" className="save-btn" onClick={handleSave}>
+        <button type="button" className="save-button" onClick={handleSave}>
             Save
         </button>
     </div>

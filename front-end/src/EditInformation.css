@@ -20,7 +20,7 @@
     border-radius: 4px;
 }
 
-.save-btn {
+.save-button {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -32,7 +32,7 @@
     margin-top: 10px;
 }
 
-.save-btn:hover {
+.save-button:hover {
     background-color: #0056b3;
 }
 
