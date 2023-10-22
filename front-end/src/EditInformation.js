@@ -18,6 +18,8 @@ const EditInformation = () => {
   const [platformInformationMap, setPlatformInformationMap] = useState([])
   // State to hold profile data
   const [profileData, setProfileData] = useState({})
+  // State for error message
+  const [errorMessage, setErrorMessage] = useState('')
 
   // Fetch all saved data from backend upon load
   useEffect(() => {
@@ -103,9 +105,32 @@ const EditInformation = () => {
   }
 
   // Handle saving all platform information (does not include profile picture)
+  // Duplicate entries with non-empty info will not be allowed to save
   // Any entry with empty platform or info will not get saved
   const handleSave = async () => {
     try {
+      // Check for duplicate entries
+      const platformNames = new Set()
+      let hasDuplicates = false
+      for (const item of platformInformationMap) {
+        if (item.platform && item.info) {
+          if (platformNames.has(item.platform)) {
+            hasDuplicates = true
+            break
+          } else {
+            platformNames.add(item.platform)
+          }
+        }
+      }
+
+      if (hasDuplicates) {
+        // Set the error message
+        setErrorMessage('Error: Cannot save duplicate entries of the same platform.')
+        return
+      } else {
+        // Clear the error message
+        setErrorMessage('')
+      }
       // Filter out the entries with either empty platform or empty info
       const filteredPlatformInformationMap = platformInformationMap.filter(
         (item) => item.platform !== '' && item.info !== ''
@@ -188,6 +213,10 @@ const EditInformation = () => {
         <button type="button" className="save-button" onClick={handleSave}>
             Save
         </button>
+        {/* Display error message */}
+        {errorMessage && (
+          <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>
+        )}
     </div>
   )
 }
