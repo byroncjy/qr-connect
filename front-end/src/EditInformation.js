@@ -14,7 +14,7 @@ const platformOptions = [
 ]
 
 const EditInformation = () => {
-  // Array of maps of containing platform_name, platform_information
+  // Array of maps of containing platform, info
   const [platformInformationMap, setPlatformInformationMap] = useState([])
   // State to hold profile data
   const [profileData, setProfileData] = useState({})
@@ -25,10 +25,7 @@ const EditInformation = () => {
       try {
         const response = await axios.get('https://my.api.mockaroo.com/edit-information.json?key=f5770b40')
         const data = response.data
-        const updatedData = data.map((item) => {
-          return { platform: item.platform_name, info: item.platform_information }
-        })
-        setPlatformInformationMap(updatedData)
+        setPlatformInformationMap(data)
       } catch (error) {
         console.error('Error fetching platform data:', error)
       }
@@ -76,7 +73,10 @@ const EditInformation = () => {
     setPlatformInformationMap(updatedPlatformInformationMap)
   }
 
-  // Handle profile picture upload
+  // Handles user uploading new profile picture
+  // For now, it sends image as multipart form data to API
+  // This assumes our API will be set up to receive images this way, but subject to change
+  // Then saves a local browser url that temporarily holds the image to profileData
   const handleProfilePictureUpload = async (event) => {
     const image = event.target.files[0]
     const formData = new FormData()
@@ -105,16 +105,9 @@ const EditInformation = () => {
   // Handle saving all platform information (does not include profile picture)
   const handleSave = async () => {
     try {
-      const requestData = platformInformationMap.map((item) => {
-        return {
-          platform_name: item.platform,
-          platform_information: item.info
-        }
-      })
-
       const response = await axios.put(
         'https://my.api.mockaroo.com/edit-information.json?key=f5770b40&__method=PUT',
-        requestData,
+        platformInformationMap,
         {
           headers: {
             'Content-Type': 'application/json'
@@ -123,7 +116,7 @@ const EditInformation = () => {
       )
 
       if (response.status !== 200) {
-        throw new Error('Network response was not ok')
+        throw new Error(`Network response was not ok. Status Code: ${response.status}`)
       }
       // Handle success
     } catch (error) {
