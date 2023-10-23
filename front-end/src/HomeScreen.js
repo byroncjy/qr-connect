@@ -6,7 +6,7 @@ const HomeScreen = () => {
     return (
       <div className="home-container">
         <div className="home-header">
-          <img src="path_to_logo" alt="App Logo" className="app-logo" />
+          <img src = 'https://picsum.photos/400' alt="App Logo" className="app-logo" />
           <p>App Description: Lorem ipsum dolor sit...</p>
         </div>
         <div className="home-links">
