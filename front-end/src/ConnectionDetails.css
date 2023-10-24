@@ -50,6 +50,7 @@ img {
   border: 1px solid black;
   cursor: pointer;
   border-radius: 30px;
+  background-color: pink;
 }
 
 .areaC {
