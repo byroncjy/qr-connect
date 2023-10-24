@@ -1,3 +1,4 @@
+//Terms of services page, content randomly generated, will be add later
 import React from 'react';
 import './TermOfServices.css';
 
