@@ -1,3 +1,4 @@
+//privacy policy page, content randomly generated and will be edit later
 import React from 'react';
 import './PrivacyPolicy.css';
 
