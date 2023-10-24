@@ -9,6 +9,9 @@ import Header from './Header'
 import Footer from './Footer'
 import Login from './Login'
 import Signup from './Signup'
+import PrivacyPolicy from './PrivacyPolicy'
+import ContactUs from './ContactUs'
+import TermOfServices from './TermOfServices'
 
 const App = () => {
   return (
@@ -21,6 +24,9 @@ const App = () => {
         <Route path="/edit-information" element={<EditInformation />} />
         <Route path="/saved-connections" element={<SavedConnections />} />
         <Route path="/generate-code" element={<GenerateCode />} />
+        <Route path="/ContactUs" element={<ContactUs />}/>
+        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />}/>
+        <Route path="/TermOfServices" element={<TermOfServices />}/>
       </Routes>
       <Footer />
     </Router>

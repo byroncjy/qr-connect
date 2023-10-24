@@ -1,4 +1,3 @@
-/* HomeScreen.css */
 .home-container {
     padding: 20px;
 }
@@ -9,9 +8,11 @@
 }
 
 .app-logo {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 10px;
+    width: 200px; 
+    height: 200px; 
+    margin-bottom: 20px; 
+    border-radius: 50%; 
+    object-fit: cover;
 }
 
 .home-links {
