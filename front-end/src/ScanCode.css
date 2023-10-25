@@ -1,36 +1,36 @@
-img{
-    width: 200px;
-    height: 150px;
-    border-radius: 50%;      
+img {
+          width: 200px;
+          height: 150px;
+          border-radius: 50%;
 }
 
 .Box {
-          display: flex;         
-          flex-direction: column; 
+          display: flex;
+          flex-direction: column;
           justify-content: center;
           align-items: center;
-          max-height: 100vh; 
+          max-height: 100vh;
           overflow-y: auto;
 }
 
-.Box > * {  
-          margin: 20px 0; 
+.Box>* {
+          margin: 20px 0;
 }
 
 .ScanButton {
-          background-color: white; 
-          color: black;           
-          padding: 10px 20px;      
-          border: 1px solid black;           
-          cursor: pointer;         
-          border-radius: 10px;     
+          background-color: white;
+          color: black;
+          padding: 10px 20px;
+          border: 1px solid black;
+          cursor: pointer;
+          border-radius: 10px;
           transition: background-color 0.3s, color 0.3s;
           width: 30vw;
-          
+
 }
-        
-       
+
+
 .ScanButton:hover {
-          background-color: black; 
-          color: white;           
+          background-color: black;
+          color: white;
 }

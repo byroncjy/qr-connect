@@ -44,10 +44,10 @@ const ConnectionDetails = ({ ScanedInfo }) => {
                                                   </ul>
                                         </div>
                                         <div className="areaE">
-                                        <ul>
-                                                  <li>instagram introduction 2 </li>
-                                                  <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem printer took a galley of type and scrambled it to make a type specimen book. </li>
-                                                  <li>instagram introduction 2 </li>
+                                                  <ul>
+                                                            <li>instagram introduction 2 </li>
+                                                            <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem printer took a galley of type and scrambled it to make a type specimen book. </li>
+                                                            <li>instagram introduction 2 </li>
                                                   </ul>
                                         </div>
                               </div>
