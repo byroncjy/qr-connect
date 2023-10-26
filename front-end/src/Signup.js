@@ -20,7 +20,7 @@ const Signup = () => {
                 <input type="text" placeholder="Username" className="input-field" />
                 <input type="password" placeholder="Password" className="input-field" />
                 <input type="password" placeholder="Re-enter Password" className="input-field" />
-                <button type="submit" className="submit-btn">Sign Up</button>
+                <button type="submit" className="submit-buttn">Sign Up</button>
             </form>
         </div>
   )
