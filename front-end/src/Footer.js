@@ -1,9 +1,9 @@
 // Footer.js
-import React from 'react';
-import './Footer.css';
+import React from 'react'
+import './Footer.css'
 
 const Footer = () => {
-    return (
+  return (
         <div className="footer-container">
             <p className="footer-text">© 2023 My App. All Rights Reserved.</p>
             <div className="footer-links">
@@ -12,7 +12,7 @@ const Footer = () => {
                 <a href="/ContactUs">Contact Us</a>
             </div>
         </div>
-    );
+  )
 }
 
-export default Footer;
+export default Footer

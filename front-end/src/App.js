@@ -1,10 +1,10 @@
 // app.js
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomeScreen from './HomeScreen';
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import HomeScreen from './HomeScreen'
 import EditInformation from './EditInformation'
 import SavedConnections from './SavedConnections'
-import GenerateCode from './GenerateCode'
+import SelectInformation from './SelectInformation'
 import Header from './Header'
 import Footer from './Footer'
 import Login from './Login'
@@ -27,10 +27,11 @@ const App = () => {
         <Route path="/ContactUs" element={<ContactUs />}/>
         <Route path="/PrivacyPolicy" element={<PrivacyPolicy />}/>
         <Route path="/TermOfServices" element={<TermOfServices />}/>
+        <Route path="/select-information" element={<SelectInformation />} />
       </Routes>
       <Footer />
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App
