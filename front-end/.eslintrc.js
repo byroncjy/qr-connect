@@ -5,6 +5,7 @@ module.exports = {
 		"es2021": true
 	},
 	"extends": [
+		'react-app',
 		"eslint:recommended",
 		"plugin:react/recommended"
 	],
@@ -29,25 +30,8 @@ module.exports = {
 		"react"
 	],
 	"rules": {
-		"indent": [
-			"error",
-			"tab"
-		],
-		"linebreak-style": [
-			"error",
-			"unix"
-		],
-		"quotes": [
-			"error",
-			"double"
-		],
-		"semi": [
-			"error",
-			"always"
-		]
-	}
+    }
 };
 
 
-}
 
