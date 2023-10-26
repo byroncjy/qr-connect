@@ -1,20 +1,20 @@
 // Login.js
-import React from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import './Login.css';
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import './Login.css'
 
 const Login = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate()
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        // TODO: Add your login logic here.
+  const handleLogin = (e) => {
+    e.preventDefault()
+    // TODO: Add your login logic here.
 
-        // Navigate to the HomeScreen after login logic.
-        navigate('/home');
-    };
+    // Navigate to the HomeScreen after login logic.
+    navigate('/home')
+  }
 
-    return (
+  return (
         <div className="login-container">
             <h2>Login</h2>
             <form className="login-form" onSubmit={handleLogin}>
@@ -24,7 +24,7 @@ const Login = () => {
             </form>
             <button className="signup-btn" onClick={() => navigate('/signup')}>Sign Up</button>
         </div>
-    );
+  )
 }
 
-export default Login;
+export default Login
