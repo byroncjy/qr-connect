@@ -12,7 +12,16 @@ import Login from './Login'
 import Signup from './Signup'
 import ScanCode from './ScanCode';
 import ConnectionDetails from './ConnectionDetails';
+
+<<<<<<< HEAD
+import ScanCode from './ScanCode';
+import ConnectionDetails from './ConnectionDetails';
 import logo from './logo.svg';
+=======
+import PrivacyPolicy from './PrivacyPolicy'
+import ContactUs from './ContactUs'
+import TermOfServices from './TermOfServices'
+>>>>>>> origin/LoginSinginHoneHeaderFooter
 
 const App = () => {
   return (
@@ -26,8 +35,19 @@ const App = () => {
         <Route path="/edit-information" element={<EditInformation />} />
         <Route path="/saved-connections" element={<SavedConnections />} />
         <Route path="/generate-code" element={<GenerateCode />} />
+        <Route path="/ContactUs" element={<ContactUs />}/>
+        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />}/>
+        <Route path="/TermOfServices" element={<TermOfServices />}/>
         <Route path="/ScanCode" element={<ScanCode />} />
         <Route path="/ConnectionDetails" element={<ConnectionDetails/>} />
+<<<<<<< HEAD
+        <Route path="/ScanCode" element={<ScanCode />} />
+        <Route path="/ConnectionDetails" element={<ConnectionDetails/>} />
+=======
+        <Route path="/ContactUs" element={<ContactUs />}/>
+        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />}/>
+        <Route path="/TermOfServices" element={<TermOfServices />}/>
+>>>>>>> origin/LoginSinginHoneHeaderFooter
       </Routes>
       <Footer />
     </Router>
