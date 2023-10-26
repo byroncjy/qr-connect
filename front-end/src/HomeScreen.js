@@ -33,7 +33,6 @@ const HomeScreen = () => {
                 <a href="/saved-connections" className="home-link">Saved Connections</a>
                 <a href="/generate-code" className="home-link">Generate Code</a>
             </div>
-
         </div>
     );
 }
