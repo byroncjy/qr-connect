@@ -11,6 +11,9 @@ import Signup from "./Signup";
 import PrivacyPolicy from "./PrivacyPolicy";
 import ContactUs from "./ContactUs";
 import TermOfServices from "./TermOfServices";
+import ScanCode from './ScanCode';
+import ConnectionDetails from './ConnectionDetails';
+import './App.css';
 
 const App = () => {
 	return (
@@ -22,6 +25,8 @@ const App = () => {
 				<Route path="/home" element={<HomeScreen />} />
 				<Route path="/edit-information" element={<EditInformation />} />
 				<Route path="/saved-connections" element={<SavedConnections />} />
+				<Route path="/scan-code" element={<ScanCode />} />
+				<Route path="/ConnectionDetails" element={<ConnectionDetails />} />
 				<Route path="/ContactUs" element={<ContactUs />} />
 				<Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
 				<Route path="/TermOfServices" element={<TermOfServices />} />
