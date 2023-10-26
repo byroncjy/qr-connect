@@ -13,7 +13,10 @@ import Login from './Login'
 import Signup from './Signup'
 import ScanCode from './ScanCode';
 import ConnectionDetails from './ConnectionDetails';
-import logo from './logo.svg';
+import PrivacyPolicy from './PrivacyPolicy'
+import ContactUs from './ContactUs'
+import TermOfServices from './TermOfServices'
+
 
 const App = () => {
   return (
@@ -29,6 +32,9 @@ const App = () => {
         <Route path="/generate-code" element={<GenerateCode />} />
         <Route path="/ScanCode" element={<ScanCode />} />
         <Route path="/ConnectionDetails" element={<ConnectionDetails/>} />
+        <Route path="/ContactUs" element={<ContactUs />}/>
+        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />}/>
+        <Route path="/TermOfServices" element={<TermOfServices />}/>
         <Route path="/select-information" element={<SelectInformation />} />
 
       </Routes>
