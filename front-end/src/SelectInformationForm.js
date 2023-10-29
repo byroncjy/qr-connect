@@ -55,27 +55,38 @@ const SelectInformationForm = props => {
   }, [checked])
 
   return (
-    <div>
-      <input type="checkbox"
-              checked={allChecked}
-              onChange={handleSelectAll} />
-      <label>Select All<br/></label>
+    <div className="select-information-form">
+      <div className="select-information-header">
+        <h2>Select Information</h2>
+      </div>
+      <label>Select All</label>
+      <label className="select-information-checkbox">
+          <input type="checkbox"
+                  checked={allChecked}
+                  onChange={handleSelectAll} />
+        <span className="slider"></span>
+      </label>
+      <hr/>
       <div>
       {data.map(item =>
-        <div key={`input-div${item.id}`}>
-          <input key={`input${item.id}`}
-                id={item.id /* passed to update state */}
-                type="checkbox"
-                checked={checked[item.id - 1] || false /* was triggering an
-                  uncontrolled component warning without second part */}
-                onChange={e => handleCheckBox(e)} />
-          <label key={`label${item.id}`}>{item.label}: {item.content}<br/></label>
+        <div className="select-information-checkbox-wrapper" 
+              key={`input-div${item.id}`}>
+          <label key={`label${item.id}`}>{item.label}: {item.content}</label>
+          <label className="select-information-checkbox">
+            <input key={`input${item.id}`}
+                    id={item.id /* passed to update state */}
+                    type="checkbox"
+                    checked={checked[item.id - 1] || false /* was triggering an
+                    uncontrolled component warning without second part */}
+                    onChange={e => handleCheckBox(e)} />
+            <span className="slider"></span>
+          </label>
         </div>
       )}
       </div>
       {/* does nothing yet ... eventually should return `checked` to the QR
         Code Generator, probably? */}
-      <button className="select-submit-button"
+      <button className="select-information-submit-button"
               type="button"
               onClick={handleSubmit}>Generate My QR Code!</button>
     </div>
