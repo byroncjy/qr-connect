@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ConnectionDetails.css'
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 const ConnectionDetails = ({ ScanedInfo }) => {
 
@@ -32,35 +30,35 @@ const ConnectionDetails = ({ ScanedInfo }) => {
           }, []);
 
           return (
-        
+
                     <div className='Box'>
-                    {ScanResult.map((item, index) => (
-                      <div className="DetailsContainer" key={index}>
-                        <div className="areaA">
-                          <img className="PlatForms" src={item.webImage} alt="" />
-                        </div>
-                        <div className="areaB" style={{ backgroundColor: item.mediaColor }}>
-                          {item.webName}
-                        </div>
-                        <div className="areaC">
-                          <div className="ViewCode">
-                            <Link to="/ViewCode">ViewCode</Link>
-                          </div>
-                        </div>
-                        <div className="areaD">
-                          <ul>
-                            <li>{item.Description}</li>
-                        
-                          </ul>
-                        </div>
-                        <div className="areaE">
-                          <ul>
-                          <li>{item.Description}</li>
-                          </ul>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                              {ScanResult.map((item, index) => (
+                                        <div className="DetailsContainer" key={index}>
+                                                  <div className="areaA">
+                                                            <img className="PlatForms" src={item.webImage} alt="" />
+                                                  </div>
+                                                  <div className="areaB" style={{ backgroundColor: item.mediaColor }}>
+                                                            {item.webName}
+                                                  </div>
+                                                  <div className="areaC">
+                                                            <div className="ViewCode">
+                                                                      <Link to="/ViewCode">ViewCode</Link>
+                                                            </div>
+                                                  </div>
+                                                  <div className="areaD">
+                                                            <ul>
+                                                                      <li>{item.Description}</li>
+
+                                                            </ul>
+                                                  </div>
+                                                  <div className="areaE">
+                                                            <ul>
+                                                                      <li>{item.Description}</li>
+                                                            </ul>
+                                                  </div>
+                                        </div>
+                              ))}
+                    </div>
 
           );
 }
