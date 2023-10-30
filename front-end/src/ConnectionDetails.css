@@ -5,18 +5,14 @@ img {
 }
 
 .DetailsContainer {
-          top: 20%;
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          grid-template-rows: repeat(8, 1fr);
-          gap: 20px;
-          width: 80vw;
-          height: 70vh;
-          box-sizing: border-box;
-          font-size: 10px;
-          overflow-y: auto;
-          overflow-x: hidden;
-
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  gap: 20px;
+  width: 80vw;
+  height: 70vh;
+  box-sizing: border-box;
+  font-size: 10px;
 }
 
 .areaA,
@@ -34,8 +30,8 @@ img {
 
 .areaD,
 .areaE {
-          overflow: hidden;
-          text-align: left;
+  text-align: left;
+
 }
 
 .areaA {
@@ -106,3 +102,4 @@ a {
           text-decoration: none;
           color: inherit;
 }
+
