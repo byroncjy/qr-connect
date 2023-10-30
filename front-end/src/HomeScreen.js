@@ -3,6 +3,7 @@ import axios from 'axios';
 import './HomeScreen.css';
 
 const HomeScreen = () => {
+
     const [imageSrc, setImageSrc] = useState('');
 
     useEffect(() => {
@@ -32,8 +33,9 @@ const HomeScreen = () => {
                 <a href="/saved-connections" className="home-link">Saved Connections</a>
                 <a href="/generate-code" className="home-link">Generate Code</a>
             </div>
+
         </div>
     );
 }
 
-export default HomeScreen;
+export default HomeScreen

@@ -15,7 +15,7 @@
     text-align: center;
 }
 
-.back-btn, .logout-btn {
+.back-button, .logout-button {
     padding: 5px 15px;
     border: none;
     border-radius: 5px;
@@ -25,6 +25,6 @@
     transition: background-color 0.3s;
 }
 
-.back-btn:hover, .logout-btn:hover {
+.back-button:hover, .logout-button:hover {
     background-color: #0056b3;
 }
