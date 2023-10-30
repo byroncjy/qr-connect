@@ -1,36 +1,60 @@
 import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './ConnectionDetails.css'
 
 const ConnectionDetails = ({ ScanedInfo }) => {
+          const [ScanResult, setScanResult] = useState([]);
+
+          useEffect(() => {
+                    async function fetchScanResult() {
+                              try {
+                                        const ScanResultUrl = 'https://my.api.mockaroo.com/QRcodeResult.json?key=723ed310'
+                                        await axios.get(ScanResultUrl)
+                                                  .then(response => {
+                                                            if (response.status === 200) {
+                                                                      setScanResult(response.data);
+                                                                      console.log(response.data)
+                                                            }
+                                                  })
+                              } catch (error) {
+                                        console.error(error);
+                              }
+                    }
+
+                    fetchScanResult();
+          }, []);
+
           return (
+        
                     <div className='Box'>
-
-
-                              <div class="DetailsContainer">
-                                        <div class="areaA"><img className="PlatForms" src="../instagram-circle-icon.png"></img></div>
-                                        <div class="areaB" style={{ backgroundColor: 'pink' }}>{ScanedInfo}Bot 1</div>
-                                        <div class="areaC">
-                                                  <div className="ViewCode">
-
-                                                            <Link to="/ViewCode">ViewCode</Link></div>
-                                        </div>
-                                        <div class="areaD">
-                                                  <ul>
-                                                            <li>instagram introduction 1 </li>
-                                                            <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem printer took a galley of type and scrambled it to make a type specimen book. </li>
-                                                            <li>instagram introduction 1 </li>
-                                                  </ul>
-                                        </div>
-                                        <div class="areaE">
-                                        <ul>
-                                                  <li>instagram introduction 2 </li>
-                                                  <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem printer took a galley of type and scrambled it to make a type specimen book. </li>
-                                                  <li>instagram introduction 2 </li>
-                                                  </ul>
-                                        </div>
-                              </div>
-                    </div>
-
+                    {ScanResult.map((item, index) => (
+                      <div className="DetailsContainer" key={index}>
+                        <div className="areaA">
+                          <img className="PlatForms" src={item.webImage} alt="" />
+                        </div>
+                        <div className="areaB" style={{ backgroundColor: item.mediaColor }}>
+                          {item.webName}
+                        </div>
+                        <div className="areaC">
+                          <div className="ViewCode">
+                            <Link to="/ViewCode">ViewCode</Link>
+                          </div>
+                        </div>
+                        <div className="areaD">
+                          <ul>
+                            <li>{item.Description}</li>
+                        
+                          </ul>
+                        </div>
+                        <div className="areaE">
+                          <ul>
+                          <li>{item.Description}</li>
+                          </ul>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
           );
 }
 
