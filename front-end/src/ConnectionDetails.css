@@ -24,14 +24,13 @@ img {
           justify-content: center;
           align-items: center;
           padding: 10px;
-
 }
 
 
 .areaD,
 .areaE {
           text-align: left;
-
+          overflow: hidden;
 }
 
 .areaA {

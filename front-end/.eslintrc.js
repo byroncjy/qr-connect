@@ -5,7 +5,9 @@ module.exports = {
 		"es2021": true
 	},
 	"extends": [
+		"react-app",
 		"eslint:recommended",
+		"plugin:react/recommended"
 	],
 	"overrides": [
 		{
@@ -22,7 +24,7 @@ module.exports = {
 	],
 	"parserOptions": {
 		"ecmaVersion": "latest",
-		"sourceType": "module"
+		"sourceType": "module"     
 	},
 	"rules": {
 		"indent": [

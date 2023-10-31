@@ -28,7 +28,7 @@ function ScanCode() {
 	return (
 		<div className='Box'>
 			<div><Link to="/">Home</Link></div>
-			<img className="Logo" src={imageUrl}></img>
+			<img className="Logo" src={imageUrl} alt=""></img>
 			<div className="ScanButton">Scan</div>
 		</div>
 	);
