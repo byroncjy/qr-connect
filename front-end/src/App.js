@@ -1,5 +1,4 @@
 // app.js
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomeScreen from "./HomeScreen";
@@ -28,7 +27,8 @@ const App = () => {
 				<Route path="/ConnectionDetails" element={<ConnectionDetails />} />
 				<Route path="/ContactUs" element={<ContactUs />} />
 				<Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
-				<Route path="/TermOfServices" element={<TermOfServices />} />
+        <Route path="/ScanCode" element={<ScanCode />} />
+        <Route path="/ConnectionDetails" element={<ConnectionDetails/>} />  
 			</Routes>
 			<Footer />
 		</Router>

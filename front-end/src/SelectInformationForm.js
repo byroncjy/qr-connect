@@ -1,0 +1,96 @@
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import './SelectInformationForm.css'
+
+const SelectInformationForm = props => {
+  const [data, setData] = useState(() => [])
+  // track which boxes are checked
+  const [checked, setChecked] = useState(() => []) // bool array
+  const [allChecked, setAllChecked] = useState(() => true) // bool
+
+  const handleSelectAll = () => {
+    const checkedCopy = checked
+    // if all checked, then uncheck, else check
+    setChecked(checkedCopy.map(() => !allChecked))
+  }
+
+  const handleCheckBox = e => {
+    const checkedCopy = [...checked]
+    // data from mockaroo is 1-indexed
+    checkedCopy[e.target.id - 1] = e.target.checked
+    setChecked(checkedCopy)
+  }
+
+  const handleSubmit = () => {
+    console.log('Submitted!')
+  }
+
+  // get data from api
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log('Fetching user information data...')
+      try {
+        const response = await axios(
+          'https://my.api.mockaroo.com/info.json?key=820f1130')
+        setData(response.data)
+        console.log('Successfully retrieved mock data!')
+      } catch (err) {
+        console.log('Unable to retrieve data!')
+        console.error(err)
+      }
+    }
+    fetchData()
+  }, [])
+
+  // initialize checked after data is set
+  useEffect(() => {
+    setChecked(Array.from({ length: data.length }, () => true))
+  }, [data])
+
+  // check if all checked after `checked` changes (confusing i know)
+  useEffect(() => {
+    if (checked.length) {
+      setAllChecked(checked.reduce((acc, head) => acc && head))
+    }
+  }, [checked])
+
+  return (
+    <div className="select-information-form">
+      <div className="select-information-header">
+        <h2>Select Information</h2>
+      </div>
+      <label>Select All</label>
+      <label className="select-information-checkbox">
+          <input type="checkbox"
+                  checked={allChecked}
+                  onChange={handleSelectAll} />
+        <span className="slider"></span>
+      </label>
+      <hr/>
+      <div>
+      {data.map(item =>
+        <div className="select-information-checkbox-wrapper" 
+              key={`input-div${item.id}`}>
+          <label key={`label${item.id}`}>{item.label}: {item.content}</label>
+          <label className="select-information-checkbox">
+            <input key={`input${item.id}`}
+                    id={item.id /* passed to update state */}
+                    type="checkbox"
+                    checked={checked[item.id - 1] || false /* was triggering an
+                    uncontrolled component warning without second part */}
+                    onChange={e => handleCheckBox(e)} />
+            <span className="slider"></span>
+          </label>
+        </div>
+      )}
+      </div>
+      {/* does nothing yet ... eventually should return `checked` to the QR
+        Code Generator, probably? */}
+      <button className="select-information-submit-button"
+              type="button"
+              onClick={handleSubmit}>Generate My QR Code!</button>
+    </div>
+  )
+}
+
+export default SelectInformationForm
