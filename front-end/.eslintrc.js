@@ -5,7 +5,7 @@ module.exports = {
 		"es2021": true
 	},
 	"extends": [
-		"react-app",
+		'react-app',
 		"eslint:recommended",
 		"plugin:react/recommended"
 	],
@@ -24,9 +24,11 @@ module.exports = {
 	],
 	"parserOptions": {
 		"ecmaVersion": "latest",
-		"sourceType": "module"     
+		"sourceType": "module"
 	},
+	"plugins": [
+		"react"
+	],
 	"rules": {
     }
 };
-

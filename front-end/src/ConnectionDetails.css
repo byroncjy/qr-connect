@@ -4,15 +4,15 @@ img {
           border-radius: 50%;
 }
 
-.DetailsContainer {
+.detailsContainer {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          grid-template-rows: repeat(8, 1fr);
+          grid-template-rows: auto auto repeat(8, 1fr);
           gap: 20px;
           width: 80vw;
           height: 70vh;
           box-sizing: border-box;
-          font-size: 10px;
+          font-size: 12px;
 }
 
 .areaA,
@@ -30,7 +30,12 @@ img {
 .areaD,
 .areaE {
           text-align: left;
-          overflow: hidden;
+          overflow: auto;
+          padding: 5px;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
 }
 
 .areaA {
@@ -56,7 +61,7 @@ img {
 }
 
 .areaD {
-          grid-column: 2 / 5;
+          grid-column: 1 / 5;
           grid-row: 2 / 5;
           background-color: white;
           color: black;
@@ -67,7 +72,7 @@ img {
 }
 
 .areaE {
-          grid-column: 2 / 5;
+          grid-column: 1 / 5;
           grid-row: 5 / 8;
           background-color: white;
           color: black;
@@ -76,7 +81,7 @@ img {
           border-radius: 20px;
 }
 
-.ViewCode {
+.viewCode {
           background-color: white;
           color: black;
           padding: 10px 20px;
@@ -84,11 +89,12 @@ img {
           cursor: pointer;
           border-radius: 10px;
           transition: background-color 0.3s, color 0.3s;
-          width: 10vw;
+          width: 50vw;
           font-size: 10px;
+          text-align: center;
 }
 
-.ViewCode:hover {
+.viewCode:hover {
           background-color: black;
           color: white;
 }
@@ -103,7 +109,7 @@ a {
 }
 
 .Box {
-          padding-top: 150vh;
+          padding-top: 130vh;
           display: flex;
           flex-direction: column;
 }
