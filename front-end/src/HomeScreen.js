@@ -29,6 +29,7 @@ const HomeScreen = () => {
                 <p>App Description: Lorem ipsum dolor sit...</p>
             </div>
             <div className="home-links">
+                <a href="/scan-code" className="home-link">Scan Code</a>
                 <a href="/edit-information" className="home-link">Edit Information</a>
                 <a href="/saved-connections" className="home-link">Saved Connections</a>
                 <a href="/select-information" className="home-link">Generate Code</a>
