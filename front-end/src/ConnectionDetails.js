@@ -30,8 +30,8 @@ const ConnectionDetails = () => {
 	}, []);
 
 	return (
-
-		<div className='Box'>
+		
+		<div className='Box'>	
 			{scanResult.map((item, index) => (
 				<div className="detailsContainer" key={index}>
 					<div className="areaA">
@@ -56,10 +56,10 @@ const ConnectionDetails = () => {
 			))}
 
 			<div className="">
-				<div className="viewCode">
-					<Link to="/ViewCode"> View Code </Link>
-				</div>
-			</div>
+					<div className="viewCode">
+							<Link to="/ViewCode"> View Code </Link>
+						</div>
+					</div>
 		</div>
 
 	);
