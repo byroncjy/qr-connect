@@ -35,12 +35,12 @@ app.post('/ScanCode', async (req, res) => {
                     const image = await loadImage(`data:image/png;base64,${base64Data}`);
                     // Create canvas
                     const canvas = createCanvas(image.width, image.height);
-                    const ctx = canvas.getContext('2d');
+                    const context = canvas.getContext('2d');
                     // Draw the image onto the canvas
-                    ctx.drawImage(image, 0, 0);
+                    context.drawImage(image, 0, 0);
                 
                     // Get image data from canvas
-                    const imageData = ctx.getImageData(0, 0, image.width, image.height);
+                    const imageData = context.getImageData(0, 0, image.width, image.height);
             const code = jsQR(imageData.data, imageData.width, imageData.height);
         
             if (code) {
