@@ -1,6 +1,6 @@
 # QR Code Generator
 
-In an increasingly digital world, our app aims to bridge the gap between virtual identities and real-life interactions. We envision a future where sharing your social presence can be as seamless as a single scan, and building new connections doesn't involve sifting through an endless number of apps or notes. With our platform, users will be able to effortlessly generate a unified QR code that contains ttheir chosen social accounts, fostering faster and more authentic connections. By scanning and saving others' codes, they will be able to build a digital directory, and ensure meaningful digital relationships. Our primary goal is to simplify, streamline, and enrich the way we connect in the digital age. 
+In an increasingly digital world, our app aims to bridge the gap between virtual identities and real-life interactions. We envision a future where sharing your social presence can be as seamless as a single scan, and building new connections doesn't involve sifting through an endless number of apps or notes. With our platform, users will be able to effortlessly generate a unified QR code that contains their chosen social accounts, fostering faster and more authentic connections. By scanning and saving others' codes, they will be able to build a digital directory, and ensure meaningful digital relationships. Our primary goal is to simplify, streamline, and enrich the way we connect in the digital age. 
 
 <b> Streamlining social connections with QR codes, making digital introductions as easy as a scan and save. </b>
 
@@ -18,7 +18,22 @@ With our team values and guidelines, our team will collaborate, communicate, and
 [Contribution guidelines for this project.](CONTRIBUTING.md)
 
 ## Instructions for Building and Testing
-(To be updated upon completion)
+### Build and launch the back end
+
+1. Navigate into the `back-end` directory
+1. Run `npm install` to install all dependencies listed in the `package.json` file.
+1. Run `npm start` to launch the back-end server
+
+### Build and launch the front end
+
+1. Navigate into the `front-end` directory
+1. Run `npm install` to install all dependencies listed in the `package.json` file.
+1. Run `npm start` to launch the React.js server
+
+### Visit the web app in your web browser
+
+- install [React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
+- navigate your web browser to http://localhost:3000
 
 ## Relevant Reading 
 [How Do QR Codes Work](https://www.sproutqr.com/blog/how-do-qr-codes-work)

@@ -11,6 +11,7 @@ import ConnectionDetails from "./ConnectionDetails";
 import PrivacyPolicy from "./PrivacyPolicy";
 import ContactUs from "./ContactUs";
 import TermOfServices from "./TermOfServices";
+import './App.css';
 
 const App = () => {
 	return (

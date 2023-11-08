@@ -1,18 +1,18 @@
 img {
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 
 .detailsContainer {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          grid-template-rows: auto auto repeat(8, 1fr);
-          gap: 20px;
-          width: 80vw;
-          height: 70vh;
-          box-sizing: border-box;
-          font-size: 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto auto repeat(8, 1fr);
+  gap: 20px;
+  width: 80vw;
+  height: 70vh;
+  box-sizing: border-box;
+  font-size: 12px;
 }
 
 .areaA,
@@ -20,96 +20,97 @@ img {
 .areaC,
 .areaD,
 .areaE {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 }
-
 
 .areaD,
 .areaE {
-          text-align: left;
-          overflow: auto;
-          padding: 5px;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: flex-start;
+  text-align: left;
+  overflow: auto;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  overflow: hidden;
+  text-align: left;
 }
 
 .areaA {
-          grid-column: 1 / 2;
-          grid-row: 1 / 2;
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
 }
 
 .areaB {
-          grid-column: 2 / 5;
-          grid-row: 1 / 2;
-          background-color: white;
-          color: black;
-          border: 1px solid black;
-          cursor: pointer;
-          border-radius: 30px;
-          background-color: pink;
+  grid-column: 2 / 5;
+  grid-row: 1 / 2;
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  cursor: pointer;
+  border-radius: 30px;
+  background-color: pink;
 }
 
 .areaC {
-          grid-column: 1 / 2;
-          grid-row: 2 / 3;
-          /*background-color: lightyellow; */
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  /*background-color: lightyellow; */
 }
 
 .areaD {
-          grid-column: 1 / 5;
-          grid-row: 2 / 5;
-          background-color: white;
-          color: black;
-          border: 1px solid black;
-          cursor: pointer;
-          border-radius: 20px;
-
+  grid-column: 1 / 5;
+  grid-row: 2 / 5;
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  cursor: pointer;
+  border-radius: 20px;
 }
 
 .areaE {
-          grid-column: 1 / 5;
-          grid-row: 5 / 8;
-          background-color: white;
-          color: black;
-          border: 1px solid black;
-          cursor: pointer;
-          border-radius: 20px;
+  grid-column: 1 / 5;
+  grid-row: 5 / 8;
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  cursor: pointer;
+  border-radius: 20px;
 }
 
 .viewCode {
-          background-color: white;
-          color: black;
-          padding: 10px 20px;
-          border: 1px solid black;
-          cursor: pointer;
-          border-radius: 10px;
-          transition: background-color 0.3s, color 0.3s;
-          width: 50vw;
-          font-size: 10px;
-          text-align: center;
+  background-color: white;
+  color: black;
+  padding: 10px 20px;
+  border: 1px solid black;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background-color 0.3s, color 0.3s;
+  width: 50vw;
+  font-size: 10px;
+  text-align: center;
 }
 
 .viewCode:hover {
-          background-color: black;
-          color: white;
+  background-color: black;
+  color: white;
 }
 
 li {
-          padding: 5px;
+  padding: 5px;
 }
 
 a {
-          text-decoration: none;
-          color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
 
 .Box {
-         
-          display: flex;
-          flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
 }
