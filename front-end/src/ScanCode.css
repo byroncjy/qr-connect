@@ -1,36 +1,42 @@
-img {
-          width: 200px;
-          height: 150px;
+.Logo {
+          width: 50px;
+          height: 50px;
           border-radius: 50%;
+          
 }
 
 .Box {
           display: flex;
           flex-direction: column;
-          justify-content: center;
           align-items: center;
-          max-height: 100vh;
-          overflow-y: auto;
+          
+          min-height: 80vh;
 }
 
 .Box>* {
-          margin: 20px 0;
+          margin: 10px 0;
 }
 
-.ScanButton {
+.scanButton,.toHome {
           background-color: white;
           color: black;
           padding: 10px 20px;
           border: 1px solid black;
           cursor: pointer;
           border-radius: 10px;
+          text-align: center;
           transition: background-color 0.3s, color 0.3s;
           width: 30vw;
+  
 
 }
 
 
-.ScanButton:hover {
+.scanButton:hover {
           background-color: black;
           color: white;
+}
+
+.toHome{
+     
 }

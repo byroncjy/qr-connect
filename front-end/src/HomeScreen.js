@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './HomeScreen.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./HomeScreen.css";
 
 const HomeScreen = () => {
 
-    const [imageSrc, setImageSrc] = useState('');
+	const [imageSrc, setImageSrc] = useState("");
 
-    useEffect(() => {
-        const fetchImage = async () => {
-            try {
-                const response = await axios.get('https://picsum.photos/400', {
-                    responseType: 'blob'  // Important to set the responseType to 'blob'
-                });
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                setImageSrc(url);
-            } catch (error) {
-                console.error('Error fetching image:', error);
-            }
-        };
+	useEffect(() => {
+		const fetchImage = async () => {
+			try {
+				const response = await axios.get("https://picsum.photos/400", {
+					responseType: "blob"  // Important to set the responseType to 'blob'
+				});
+				const url = window.URL.createObjectURL(new Blob([response.data]));
+				setImageSrc(url);
+			} catch (error) {
+				console.error("Error fetching image:", error);
+			}
+		};
 
-        fetchImage();
-    }, []);
+		fetchImage();
+	}, []);
 
     return (
         <div className="home-container">
@@ -38,4 +38,4 @@ const HomeScreen = () => {
     );
 }
 
-export default HomeScreen
+export default HomeScreen;
