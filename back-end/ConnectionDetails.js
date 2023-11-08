@@ -34,7 +34,7 @@ app.post('/ScanCode', async (req, res) => {
     const code = jsQR(imageData.data, imageData.width, imageData.height)
 
     if (code) {
-      res.json({ qrCodeText: code.data })
+      res.json({ qrCodeText: code.data, redirect: '/ConnectionDetails' })
     } else {
       res.status(400).send('No QR code found.')
     }
@@ -43,6 +43,13 @@ app.post('/ScanCode', async (req, res) => {
     res.status(500)
   }
 })
+
+/*
+app.get('/ConnectionDetails', (req, res) => {
+  const scanResultUrl = 'https://my.api.mockaroo.com/QRcodeResult.json?key=723ed310'
+  res.json({ scanResultUrl })
+})
+*/
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
