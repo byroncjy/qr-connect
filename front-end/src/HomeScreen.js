@@ -1,3 +1,4 @@
+// frontend/src/components/HomeScreen.js (assuming the file is located here)
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './HomeScreen.css';
@@ -8,8 +9,9 @@ const HomeScreen = () => {
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/images/home-logo-image', {
-          responseType: 'blob', // Important to set the responseType to 'blob' to handle binary data
+        // Use the correct port where your backend server is running.
+        const response = await axios.get('http://localhost:3000/images/home-logo-image', {
+          responseType: 'blob',
         });
         const url = window.URL.createObjectURL(new Blob([response.data]));
         setImageSrc(url);
