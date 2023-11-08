@@ -9,13 +9,14 @@ const SavedConnections = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/saved-connections');
+        const apiUrl = process.env.REACT_APP_API_URL; 
+        const response = await axios.get(apiUrl);
         setConnections(response.data);
       } catch (error) {
         console.error('Error fetching connections data:', error);
       }
     };
-  
+
     fetchData();
   }, []);
 

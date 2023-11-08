@@ -1,59 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
-import './ConnectionDetails.css';
+
+import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./ConnectionDetails.css";
 
 const ConnectionDetails = () => {
-  const [userDetails, setUserDetails] = useState({});
-  const [loading, setLoading] = useState(true);
-  const { id } = useParams(); 
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3001/api/connection-details/${id}`);
-        setUserDetails(response.data);
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-      } finally {
-        setLoading(false); 
-      }
-    };
+	const [scanResult, setScanResult] = useState([]);
 
-    if (id) {
-      fetchUserDetails();
-    }
-  }, [id]);
+	useEffect(() => {
+		async function fetchScanResult() {
+			try {
+				const scanResultUrl = "https://my.api.mockaroo.com/QRcodeResult.json?key=723ed310";
+				await axios.get(scanResultUrl)
+					.then(response => {
+						if (response.status === 200) {
+							setScanResult(response.data);
+							console.log(response.data);
 
-  if (loading) {
-    return <div>Loading user details...</div>;
-  }
+						}
+					});
+			} catch (error) {
+				console.error(error);
+			}
+		}
 
-  if (!userDetails || Object.keys(userDetails).length === 0) {
-    return <div>User details not found.</div>;
-  }
 
-  return (
-    <div className='Box'>
-      <div className="DetailsContainer">
-        <div className="areaA">
-          <img className="PlatForms" src={userDetails.profile_pic_url || 'default-avatar.png'} alt={userDetails.name} />
-        </div>
-        <div className="areaB">
-          {userDetails.name || 'User Name'}
-        </div>
-        <div className="areaC">
-        </div>
-        <div className="areaD">
-        </div>
-        <div className="areaE">
-        </div>
-        <div className="areaF">
-          <Link to="/SavedConnections">Back to Connections</Link>
-        </div>
-      </div>
-    </div>
-  );
+		fetchScanResult();
+
+	}, []);
+
+	return (
+		
+		<div className='Box'>	
+			{scanResult.map((item, index) => (
+				<div className="detailsContainer" key={index}>
+					<div className="areaA">
+						<img className="PlatForms" src={item.webImage} alt="" />
+					</div>
+					<div className="areaB" style={{ backgroundColor: item.mediaColor }}>
+						{item.webName}
+					</div>
+					<div className="areaD">
+						<ul>
+							<li>{item.Description}</li>
+							<li>{item.Description}</li>
+						</ul>
+					</div>
+					<div className="areaE">
+						<ul>
+							<li>{item.Description}</li>
+							<li>{item.Description}</li>
+						</ul>
+					</div>
+				</div>
+			))}
+
+			<div className="">
+					<div className="viewCode">
+							<Link to="/ViewCode"> View Code </Link>
+						</div>
+					</div>
+		</div>
+
+	);
 };
 
 export default ConnectionDetails;

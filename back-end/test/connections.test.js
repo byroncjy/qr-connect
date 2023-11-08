@@ -11,9 +11,38 @@ describe('Connections', () => {
       chai.request(server)
         .get('/api/saved-connections')
         .end((err, res) => {
-          should.not.exist(err); 
           res.should.have.status(200);
           res.body.should.be.a('array');
+          done();
+        });
+    });
+  });
+
+  describe('/GET saved-connections with wrong endpoint', () => {
+    it('it should not GET connections due to wrong endpoint', (done) => {
+      chai.request(server)
+        .get('/api/incorrect-endpoint')
+        .end((err, res) => {
+          res.should.have.status(404);
+          done();
+        });
+    });
+  });
+
+  describe('/GET saved-connections with simulated server error', () => {
+    before(() => {
+      process.env.SIMULATE_ERROR = 'true';
+    });
+
+    after(() => {
+      delete process.env.SIMULATE_ERROR;
+    });
+
+    it('it should handle server error', (done) => {
+      chai.request(server)
+        .get('/api/saved-connections')
+        .end((err, res) => {
+          res.should.have.status(500);
           done();
         });
     });

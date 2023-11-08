@@ -40,5 +40,11 @@ app.use('/users', userRoutes)
 app.use('/users', platformRoutes)
 app.use('/api', connectionsRoutes);
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Internal Server Error');
+});
+
+
 // export the express app we created to make it available to other modules
 module.exports = app

@@ -1,10 +1,20 @@
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
+require('dotenv').config();
 
-router.get('/saved-connections', async (req, res) => {
+const apiBaseUrl = process.env.API_BASE_URL;
+const apiKey = process.env.LARA_API_KEY;
+
+router.get('/saved-connections', async (req, res, next) => {
+  if (process.env.SIMULATE_ERROR === 'true') {
+    const err = new Error('Simulated server error');
+    err.status = 500;
+    return next(err); 
+  }
+
   try {
-    const mockApiUrl = 'https://api.mockaroo.com/api/1a199910?count=16&key=14ea8470';
+    const mockApiUrl = `${apiBaseUrl}?key=${apiKey}`;
     const response = await axios.get(mockApiUrl);
     const connections = response.data;
 
@@ -13,6 +23,11 @@ router.get('/saved-connections', async (req, res) => {
     console.error('Error fetching connections data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+});
+
+router.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.status || 500).json({ error: err.message || 'Internal Server Error' });
 });
 
 module.exports = router;
