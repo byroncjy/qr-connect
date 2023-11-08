@@ -21,6 +21,7 @@ const EditInformation = () => {
 	// State for error message
 	const [errorMessage, setErrorMessage] = useState("");
 
+<<<<<<< HEAD
 	// Fetch all saved data from backend upon load
 	useEffect(() => {
 		const fetchData = async () => {
@@ -47,6 +48,41 @@ const EditInformation = () => {
 		};
 		fetchProfileData();
 	}, []);
+=======
+  // In final implementation, we will retrieve userId of current logged in user
+  // For now, we just mock userId
+  const userId = 20
+
+  // Fetch all saved data from backend upon load
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
+        // Ensure .env file is setup for this to work
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`)        
+        const data = response.data
+        setPlatformInformationMap(data)
+      } catch (error) {
+        console.error('Error fetching platform data:', error)
+      }
+    }
+    fetchData()
+
+    // Fetch profile data: email, firstname, lastname, profile pic
+    const fetchProfileData = async () => {
+      try {
+        // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
+        // Ensure .env file is setup for this to work
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}`)
+        const data = response.data
+        setProfileData(data)
+      } catch (error) {
+        console.error('Error fetching profile data:', error)
+      }
+    }
+    fetchProfileData()
+  }, [])
+>>>>>>> 28461fee0a0a83876f82a9d1d20377a0910cb7fd
 
 	// Handle change in platform name
 	const handlePlatformChange = (index, event) => {
@@ -75,6 +111,7 @@ const EditInformation = () => {
 		setPlatformInformationMap(updatedPlatformInformationMap);
 	};
 
+<<<<<<< HEAD
 	// Handles user uploading new profile picture
 	// For now, it sends image as multipart form data to API
 	// This assumes our API will be set up to receive images this way, but subject to change
@@ -94,6 +131,27 @@ const EditInformation = () => {
 					}
 				}
 			);
+=======
+  // Handles user uploading new profile picture
+  // Sends image as multipart form data to backend uploadPicture route
+  // Then saves a local browser url that temporarily holds the image to profileData
+  const handleProfilePictureUpload = async (event) => {
+    const image = event.target.files[0]
+    const formData = new FormData()
+    formData.append('file', image)
+
+    try {
+      const response = await axios.put(
+        // Ensure .env file is set up for this to work
+        `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/uploadPicture`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+>>>>>>> 28461fee0a0a83876f82a9d1d20377a0910cb7fd
 
 			if (response.status === 200) {
 				// Update the profile picture in the UI
@@ -104,6 +162,7 @@ const EditInformation = () => {
 		}
 	};
 
+<<<<<<< HEAD
 	// Handle saving all profile data and platform information (does not include profile picture)
 	// Duplicate entries with non-empty info will not be allowed to save
 	// Any entry with empty platform or info will not get saved
@@ -165,6 +224,61 @@ const EditInformation = () => {
 					}
 				}
 			);
+=======
+  // Handle saving all profile data and platform information (does not include profile picture)
+  // Duplicate entries with non-empty info will not be allowed to save
+  // Any entry with empty platform or info will not get saved
+  const handleSave = async () => {
+    // Saving of profile data
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}`,
+        profileData,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      if (response.status !== 200) {
+        throw new Error(`Network response was not ok. Status Code: ${response.status}`)
+      }
+      setProfileData(profileData) // Update profileData after successful save
+    } catch (error) {
+      console.error('Error saving data:', error)
+    }
+    // Saving of platform info
+    try {
+      // Check for duplicate entries
+      const platformNames = new Set();
+      for (const item of platformInformationMap) {
+        if (item.platform && item.info) {
+          if (platformNames.has(item.platform)) {
+            // Set the error message immediately if a duplicate is found
+            setErrorMessage('Error: Cannot save duplicate entries of the same platform.')
+            return;
+          } else {
+            platformNames.add(item.platform)
+          }
+        }
+      }
+      // Clear the error message if no duplicates are found
+      setErrorMessage('');
+      // Filter out the entries with either empty platform or empty info
+      const filteredPlatformInformationMap = platformInformationMap.filter(
+        (item) => item.platform !== '' && item.info !== ''
+      )
+
+      const response = await axios.put(
+        `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`,
+        filteredPlatformInformationMap,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+>>>>>>> 28461fee0a0a83876f82a9d1d20377a0910cb7fd
 
 			if (response.status !== 200) {
 				throw new Error(`Network response was not ok. Status Code: ${response.status}`);
@@ -180,6 +294,7 @@ const EditInformation = () => {
 		<div className="edit-information-container">
 			<h2>Edit Personal Information</h2>
 
+<<<<<<< HEAD
 			{/* Displays picture and upload picture button */}
 			<div className="edit-information-header">
 				{/* Note that right now image urls are randomly generated via Mockaroo */}
@@ -189,6 +304,17 @@ const EditInformation = () => {
 					<input type="file" accept="image/*" onChange={handleProfilePictureUpload} />
 				</div>
 			</div>
+=======
+      {/* Displays picture and upload picture button */}
+      <div className="edit-information-header">
+        {/* Note that right now image urls are randomly generated via Mockaroo */}
+        <img src={profileData.url_picture} alt="Profile" className="profile-picture" />
+        <p>Upload profile picture below: </p>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <input type="file" accept="image/*" onChange={handleProfilePictureUpload} />
+        </div>
+      </div>
+>>>>>>> 28461fee0a0a83876f82a9d1d20377a0910cb7fd
 
 			<div className="profile-section">
 				<p>Name: </p>
