@@ -1,15 +1,14 @@
-var chai = require('chai')
-var assert = require('assert');
-var router = require('../router')
+const chai = require('chai')
+const router = require('../router')
 
-var expect = chai.expect
+const expect = chai.expect
 
 // tests related to sending requests about a user
 describe('User Routes', function () {
   // email, first/last name, pfp
   describe('Account Information', function () {
     describe('Successful GET', function () {
-      it('should respond with an HTTP 200 status code and an object in the body'), function () {
+      it('should respond with an HTTP 200 status code and an object in the body', function () {
         // example id
         const id = 0
         chai
@@ -18,7 +17,7 @@ describe('User Routes', function () {
           .end((err, res) => {
             expect(err).to.be.null
             expect(res).to.have.status(200)
-            expect(res.body).to.be.a.('object')
+            expect(res.body).to.be.a('object')
             expect(res.body).to.have.all.keys('email', 'first_name', 'last_name', 'url_picture')
             done()
           })
@@ -29,11 +28,12 @@ describe('User Routes', function () {
         chai
           .request(router)
           .get('/user/notanid')
-          .end(err, res) => {
+          .end((err, res) => {
             expect(res).to.have.status(500)
-            expect(res.body).to.be.a.('object')
+            expect(res.body).to.be.a('object')
             expect(res).to.have.keys('error')
             done()
+          })
       })
     }),
     describe('Successful PUT', function () {
@@ -50,14 +50,14 @@ describe('User Routes', function () {
           .end((err, res) => {
             expect(err).to.be.null
             expect(res).to.have.status(200)
-            expect(res.body).to.be.a.('object')
+            expect(res.body).to.be.a('object')
             expect(res.body).to.have.keys('message')
             done()
           })
       })
     }),
-    describe('Unsuccessful PUT', function() {
-      it('should respond with an HTTP 500 status and error message'), function () {
+    describe('Unsuccessful PUT', function () {
+      it('should respond with an HTTP 500 status and error message', function () {
         chai
           .request(router)
           .put(`/user/${id}`)
@@ -66,7 +66,7 @@ describe('User Routes', function () {
           })
           .end((err, res) => {
             expect(res).to.have.status(500)
-            expect(res.body).to.be.a.('object')
+            expect(res.body).to.be.a('object')
             expect(res).to.have.keys('error')
             done()
           })
@@ -85,4 +85,3 @@ describe('User Routes', function () {
     })
   })
 })
-
