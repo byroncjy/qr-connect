@@ -30,26 +30,13 @@ app.get('/', (req, res) => {
   res.send('Hello from root')
 })
 
-// Multer is commented out until needed
-// // enable file uploads saved to disk in a directory named 'public/uploads'
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'public/uploads')
-//   },
-//   filename: function (req, file, cb) {
-//     // take apart the uploaded file's name so we can create a new one based on it
-//     const extension = path.extname(file.originalname)
-//     const basenameWithoutExtension = path.basename(
-//       file.originalname,
-//       extension
-//     )
-//     // create a new filename with a timestamp in the middle
-//     const newName = `${basenameWithoutExtension}-${Date.now()}${extension}`
-//     // tell multer to use this new filename for the uploaded file
-//     cb(null, newName)
-//   }
-// })
-// const upload = multer({ storage })
+// Import route files
+const userRoutes = require('./users')
+const platformRoutes = require('./platforms')
+
+// Use route files
+app.use('/users', userRoutes)
+app.use('/users', platformRoutes)
 
 // export the express app we created to make it available to other modules
 module.exports = app

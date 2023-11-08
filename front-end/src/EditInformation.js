@@ -21,6 +21,10 @@ const EditInformation = () => {
   // State for error message
   const [errorMessage, setErrorMessage] = useState('')
 
+  // In final implementation, we will retrieve userId of current logged in user
+  // For now, we just mock userId
+  const userId = 20
+
   // Fetch all saved data from backend upon load
   useEffect(() => {
     const fetchData = async () => {
@@ -35,10 +39,11 @@ const EditInformation = () => {
     fetchData()
 
     // Fetch profile data: email, firstname, lastname, profile pic
-    // As of now, only profile pic is editable - the others should be tied to account registration
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get('https://my.api.mockaroo.com/profile.json?key=f5770b40')
+        // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
+        // Ensure .env file is setup for this to work
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}`)
         const data = response.data
         setProfileData(data)
       } catch (error) {
@@ -76,8 +81,7 @@ const EditInformation = () => {
   }
 
   // Handles user uploading new profile picture
-  // For now, it sends image as multipart form data to API
-  // This assumes our API will be set up to receive images this way, but subject to change
+  // Sends image as multipart form data to backend uploadPicture route
   // Then saves a local browser url that temporarily holds the image to profileData
   const handleProfilePictureUpload = async (event) => {
     const image = event.target.files[0]
@@ -86,7 +90,8 @@ const EditInformation = () => {
 
     try {
       const response = await axios.put(
-        'https://my.api.mockaroo.com/profile.json?key=f5770b40&__method=PUT',
+        // Ensure .env file is set up for this to work
+        `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/uploadPicture`,
         formData,
         {
           headers: {
@@ -119,7 +124,6 @@ const EditInformation = () => {
           }
         }
       )
-
       if (response.status !== 200) {
         throw new Error(`Network response was not ok. Status Code: ${response.status}`)
       }
@@ -183,7 +187,7 @@ const EditInformation = () => {
       {/* Displays picture and upload picture button */}
       <div className="edit-information-header">
         {/* Note that right now image urls are randomly generated via Mockaroo */}
-        <img src={profileData.url_picture} alt="Profile Picture" className="profile-picture" />
+        <img src={profileData.url_picture} alt="Profile" className="profile-picture" />
         <p>Upload profile picture below: </p>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <input type="file" accept="image/*" onChange={handleProfilePictureUpload} />
