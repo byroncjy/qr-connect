@@ -23,7 +23,7 @@ const SavedConnections = () => {
   return (
     <div className="saved-connections-container">
       <div className="header">
-        <h2>Saved Connections</h2>
+      <h2>Saved Connections</h2>
       </div>
       <div className="connections-grid">
         {connections.map((connection) => (

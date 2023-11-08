@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import './ConnectionDetails.css';
 
 const ConnectionDetails = () => {
@@ -54,8 +54,8 @@ const ConnectionDetails = () => {
   );
 };
 
-ConnectionDetails.propTypes = {
-  ScannedInfo: PropTypes.string.isRequired
-};
+//ConnectionDetails.propTypes = {
+  //ScannedInfo: PropTypes.string.isRequired
+//};
 
 export default ConnectionDetails;
