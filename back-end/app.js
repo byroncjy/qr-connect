@@ -2,6 +2,7 @@
 const express = require('express') // CommonJS import style!
 const app = express() // instantiate an Express object
 // const path = require('path')
+const connectionsRoutes = require('./connections');
 
 // import some useful middleware
 // const multer = require('multer') // middleware to handle HTTP POST requests with file uploads
@@ -37,6 +38,7 @@ const platformRoutes = require('./platforms')
 // Use route files
 app.use('/users', userRoutes)
 app.use('/users', platformRoutes)
+app.use('/api', connectionsRoutes);
 
 // export the express app we created to make it available to other modules
 module.exports = app

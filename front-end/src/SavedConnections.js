@@ -9,13 +9,13 @@ const SavedConnections = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://api.mockaroo.com/api/1a199910?count=16&key=14ea8470');
+        const response = await axios.get('http://localhost:3001/api/saved-connections');
         setConnections(response.data);
       } catch (error) {
         console.error('Error fetching connections data:', error);
       }
     };
-
+  
     fetchData();
   }, []);
 

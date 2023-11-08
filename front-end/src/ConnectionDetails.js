@@ -1,61 +1,59 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 import './ConnectionDetails.css';
 
-const ConnectionDetails = ({ ScannedInfo }) => {
-  const [imageUrl, setImageUrl] = useState('');
+const ConnectionDetails = () => {
+  const [userDetails, setUserDetails] = useState({});
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams(); 
 
   useEffect(() => {
-    async function fetchImage() {
+    const fetchUserDetails = async () => {
       try {
-        const logoUrl = 'https://picsum.photos/200/300';
-        const response = await axios.get(logoUrl);
-        if (response.status === 200) {
-          setImageUrl(logoUrl);
-        }
+        const response = await axios.get(`http://localhost:3001/api/connection-details/${id}`);
+        setUserDetails(response.data);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching user details:', error);
+      } finally {
+        setLoading(false); 
       }
-    }
+    };
 
-    fetchImage();
-  }, []);
+    if (id) {
+      fetchUserDetails();
+    }
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading user details...</div>;
+  }
+
+  if (!userDetails || Object.keys(userDetails).length === 0) {
+    return <div>User details not found.</div>;
+  }
 
   return (
     <div className='Box'>
       <div className="DetailsContainer">
         <div className="areaA">
-          <img className="PlatForms" src={imageUrl} alt="Platform Icon" />
+          <img className="PlatForms" src={userDetails.profile_pic_url || 'default-avatar.png'} alt={userDetails.name} />
         </div>
-        <div className="areaB">{ScannedInfo}Bot 1</div>
+        <div className="areaB">
+          {userDetails.name || 'User Name'}
+        </div>
         <div className="areaC">
-          <div className="ViewCode">
-            <Link to="/ViewCode">ViewCode</Link>
-          </div>
         </div>
         <div className="areaD">
-          <ul>
-            <li>instagram introduction 1</li>
-            <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&apos;s standard dummy text ever since the 1500s.</li>
-            <li>instagram introduction 1</li>
-          </ul>
         </div>
         <div className="areaE">
-          <ul>
-            <li>instagram introduction 2</li>
-            <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&apos;s standard dummy text ever since the 1500s.</li>
-            <li>instagram introduction 2</li>
-          </ul>
+        </div>
+        <div className="areaF">
+          <Link to="/SavedConnections">Back to Connections</Link>
         </div>
       </div>
     </div>
   );
-};
-
-ConnectionDetails.propTypes = {
-  ScannedInfo: PropTypes.string.isRequired
 };
 
 export default ConnectionDetails;
