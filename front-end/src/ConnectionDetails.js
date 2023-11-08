@@ -4,7 +4,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import './ConnectionDetails.css';
 
-const ConnectionDetails = ({ ScannedInfo }) => {
+const ConnectionDetails = () => {
   const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const ConnectionDetails = ({ ScannedInfo }) => {
         <div className="areaA">
           <img className="PlatForms" src={imageUrl} alt="Platform Icon" />
         </div>
-        <div className="areaB">{ScannedInfo}Bot 1</div>
+        <div className="areaB">Bot 1</div>
         <div className="areaC">
           <div className="ViewCode">
             <Link to="/ViewCode">ViewCode</Link>
