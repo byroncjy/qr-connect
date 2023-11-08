@@ -64,6 +64,7 @@ router.put('/:id', (req, res) => {
       urlPicture
     }
     console.log(userId)
+    console.log(updatedUserData)
     res.status(200).json({ message: 'User information updated successfully', updatedUserData })
   } catch (error) {
     console.error('Error updating user information:', error)

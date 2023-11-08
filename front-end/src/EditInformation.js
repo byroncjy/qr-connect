@@ -29,7 +29,9 @@ const EditInformation = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://my.api.mockaroo.com/edit-information.json?key=f5770b40')
+        // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
+        // Ensure .env file is setup for this to work
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`)        
         const data = response.data
         setPlatformInformationMap(data)
       } catch (error) {
@@ -113,10 +115,10 @@ const EditInformation = () => {
   // Duplicate entries with non-empty info will not be allowed to save
   // Any entry with empty platform or info will not get saved
   const handleSave = async () => {
-    // Saving of profile data: names
+    // Saving of profile data
     try {
       const response = await axios.put(
-        'https://my.api.mockaroo.com/profile.json?key=f5770b40&__method=PUT',
+        `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}`,
         profileData,
         {
           headers: {
@@ -134,34 +136,27 @@ const EditInformation = () => {
     // Saving of platform info
     try {
       // Check for duplicate entries
-      const platformNames = new Set()
-      let hasDuplicates = false
+      const platformNames = new Set();
       for (const item of platformInformationMap) {
         if (item.platform && item.info) {
           if (platformNames.has(item.platform)) {
-            hasDuplicates = true
-            break
+            // Set the error message immediately if a duplicate is found
+            setErrorMessage('Error: Cannot save duplicate entries of the same platform.')
+            return;
           } else {
             platformNames.add(item.platform)
           }
         }
       }
-
-      if (hasDuplicates) {
-        // Set the error message
-        setErrorMessage('Error: Cannot save duplicate entries of the same platform.')
-        return
-      } else {
-        // Clear the error message
-        setErrorMessage('')
-      }
+      // Clear the error message if no duplicates are found
+      setErrorMessage('');
       // Filter out the entries with either empty platform or empty info
       const filteredPlatformInformationMap = platformInformationMap.filter(
         (item) => item.platform !== '' && item.info !== ''
       )
 
       const response = await axios.put(
-        'https://my.api.mockaroo.com/edit-information.json?key=f5770b40&__method=PUT',
+        `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`,
         filteredPlatformInformationMap,
         {
           headers: {
