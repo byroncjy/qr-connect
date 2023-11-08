@@ -1,18 +1,23 @@
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ConnectionDetails.css";
 
 const ConnectionDetails = () => {
-
 	const [scanResult, setScanResult] = useState([]);
-
+	const location = useLocation();
+	const queryParameter = new URLSearchParams(location.search);
+	const qrCodeText = queryParameter.get('');
+        
+	console.log(qrCodeText);
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
-				const scanResultUrl = "https://my.api.mockaroo.com/QRcodeResult.json?key=723ed310";
-				await axios.get(scanResultUrl)
+				//const token = query.get('qrCodeText')
+				//console.log(token)
+				//const scanResultUrl = "https://my.api.mockaroo.com/QRcodeResult.json?key=723ed310";
+				await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/ConnectionDetails/`,{qrCodeText})
 					.then(response => {
 						if (response.status === 200) {
 							setScanResult(response.data);
