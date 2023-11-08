@@ -70,7 +70,13 @@ can be viewed at `http://localhost:3000` with the appropriate route.
 
 A similar process is used for the backend, except that you should run the above
 commands in the `back-end` folder. From there, the server can be accessed at
-`URL`.
+`http://localhost:<port>`, where `port` is located in the `server.js` file.
+
+If you wish to have the express server automatically restart when files are
+changed, you can use the nodemon package and the command `nodemon server`
+instead of `npm start`.
 
 #### Testing
-TBD
+In the `back-end` directory, the `test` directory contains all the tests for the
+back-end. Running `npm test` in the `back-end` directory will run them. Tests
+are written using the chai and mocha packages.
