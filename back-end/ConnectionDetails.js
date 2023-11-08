@@ -3,6 +3,7 @@ import path from 'path'
 import cors from 'cors'
 import jsQR from 'jsqr'
 import { fileURLToPath } from 'url'
+import axios from 'axios'
 import 'dotenv/config'
 import { createCanvas, loadImage } from 'canvas'
 
@@ -44,12 +45,16 @@ app.post('/ScanCode', async (req, res) => {
   }
 })
 
-/*
-app.post('/ConnectionDetails', (req, res) => {
-  const scanResultUrl = 'https://my.api.mockaroo.com/QRcodeResult.json?key=723ed310'
-  res.json({ scanResultUrl })
+app.post('/ConnectionDetails', async (req, res) => {
+  const { qrCodeText } = req.body
+  // 'https://my.api.mockaroo.com/QRcodeResult.json?key=723ed310'
+  try {
+    const userInfo = await axios.get(qrCodeText)
+    res.json(userInfo.data)
+  } catch (error) {
+    console.error('Error fetching scan results:', error)
+  }
 })
-*/
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {

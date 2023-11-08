@@ -14,9 +14,6 @@ const ConnectionDetails = () => {
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
-				//const token = query.get('qrCodeText')
-				//console.log(token)
-				//const scanResultUrl = "https://my.api.mockaroo.com/QRcodeResult.json?key=723ed310";
 				await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/ConnectionDetails/`,{qrCodeText})
 					.then(response => {
 						if (response.status === 200) {

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ScanCode.css";
@@ -59,8 +59,6 @@ function ScanCode() {
 			<img className="Logo" src={imageUrl} alt=""></img>
 			<input type="file" accept="image/*" capture="camera" id="file-input" onChange={handleFileChange} style={{ display: 'none' }} />
 			<label htmlFor="file-input" className="scanButton">Scan</label>
-			
-			<div className=""><Link to="/ConnectionDetails">Connection Details</Link></div>
 		</div>
 	);
 }
