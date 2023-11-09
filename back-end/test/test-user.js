@@ -76,12 +76,61 @@ describe('User Routes', function () {
   // personal information added by the user
   describe('User information', function () {
     describe('Successful GET', function () {
+      it('should respond with an HTTP 200 status and platforms list body', function () {
+        const id = 0
+        chai
+          .request(router)
+          .get(`/user/${id}/platforms`)
+          .end((err, res) => {
+            expect(err).to.be.null
+            expect(res).to.have.status(200)
+            expect(res.body).to.be.a('object')
+          })
+      })
     }),
     describe('Unsuccessful GET', function () {
+      it('should respond with an HTTP 500 status and an error body', function () {
+        chai
+          .request(router)
+          .get(`/user/notanid/platforms`)
+          .end((err, res) => {
+            expect(res).to.have.status(500)
+            expect(res.body).to.be.a('object')
+            expect(res.body).to.have.keys('error')
+          })
+      })
     }),
     describe('Successful PUT', function () {
+      it('should respond with an HTTP 200 status and a confirmation message', function() {
+        const id = 0
+        chai
+          .request(router)
+          .put(`/user/${id}/platforms`)
+          .send({
+            platform_1: 'platform_1',
+            platform_2: 'platform_2'
+          })
+          .end((err, res) => {
+            expect(err).to.be.null
+            expect(res).to.have.status(200)
+            expect(res.body).to.be.a('object')
+            expect(res.body).to.have.keys('message')
+          })
+      })
     }),
     describe('Unsuccessful PUT', function () {
+      it('should respond with an HTTP 500 status and an error body', function () {
+        chai
+          .request(router)
+          .put(`/user/anid/platforms`)
+          .send({})
+          .end((err, res) => {
+            expect(res).to.have.status(500)
+            expect(res.body).to.be.a('object')
+            expect(res.body).to.have.keys('error')
+          })
+      })
+    }),
     })
   })
 })
