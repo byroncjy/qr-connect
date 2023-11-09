@@ -11,10 +11,14 @@ import ConnectionDetails from "./ConnectionDetails";
 import PrivacyPolicy from "./PrivacyPolicy";
 import ContactUs from "./ContactUs";
 import TermOfServices from "./TermOfServices";
+import SelectInformationForm from "./SelectInformationForm"
+import SavedConnections from "./SavedConnections"
+import EditInformation from "./EditInformation"
 import './App.css';
 
 const App = () => {
 	return (
+    <div style={{backgroundColor: "white"}}>
 		<Router>
 			<Header />
 			<Routes>
@@ -28,11 +32,14 @@ const App = () => {
 				<Route path="/ConnectionDetails" element={<ConnectionDetails />} />
 				<Route path="/ContactUs" element={<ContactUs />} />
 				<Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
-				<Route path="/ScanCode" element={<ScanCode />} />
-				<Route path="/ConnectionDetails" element={<ConnectionDetails />} />
+				<Route path="/scan-code" element={<ScanCode />} />
+				<Route path="/select-information" element={<SelectInformationForm />} />
+        <Route path="/saved-connections" element={<SavedConnections />} />
+        <Route path="/edit-information" element={<EditInformation />} />
 			</Routes>
 			<Footer />
 		</Router>
+    </div>
 	);
 };
 

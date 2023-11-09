@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ScanCode.css";
@@ -49,13 +49,13 @@ function ScanCode() {
 
 
 
-
+  // removed temporarily since there is a back button
+  //<div className="toHome"><Link to="/">Home</Link></div>
 	return (
 
 		<div className='Box'>
 			<script type="module" src="/static/ScanCode.js"></script>
 
-			<div className="toHome"><Link to="/">Home</Link></div>
 			<img className="Logo" src={imageUrl} alt=""></img>
 			<input type="file" accept="image/*" capture="camera" id="file-input" onChange={handleFileChange} style={{ display: 'none' }} />
 			<label htmlFor="file-input" className="scanButton">Scan</label>
