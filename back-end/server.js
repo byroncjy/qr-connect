@@ -35,7 +35,7 @@ app.post('/ScanCode', async (req, res) => {
     const code = jsQR(imageData.data, imageData.width, imageData.height)
 
     if (code) {
-      res.json({ qrCodeText: code.data })
+      res.json({ qrCodeText: code.data, qrImageBase64: base64Data })
     } else {
       res.status(400).send('No QR code found.')
     }

@@ -38,7 +38,7 @@ function ScanCode() {
 						qrData: imageDataUrl
 					});
 					
-					navigate(`/ConnectionDetails?=${response.data.qrCodeText}`)
+					navigate(`/ConnectionDetails?=${response.data.qrCodeText}`, { state: { qrCodeText: response.data.qrCodeText, qrImageData: imageDataUrl } })
 					console.log('Response from backend:', response.data);
 				} catch (error) {
 					console.error('Error sending QR data to backend:', error);
@@ -51,7 +51,8 @@ function ScanCode() {
 
 
 
-
+  // removed temporarily since there is a back button
+  //<div className="toHome"><Link to="/">Home</Link></div>
 	return (
 
 		<div className='Box'>

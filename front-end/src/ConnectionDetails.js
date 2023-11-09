@@ -1,13 +1,15 @@
 
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ConnectionDetails.css";
 
 const ConnectionDetails = () => {
 	const [scanResult, setScanResult] = useState([]);
+	const [isQRCodeVisible, setQRCodeVisible] = useState(false);
 	const location = useLocation();
 	const queryParameter = new URLSearchParams(location.search);
+	const { qrImageData } = location.state;
 	const qrCodeText = queryParameter.get('');
         
 	console.log(qrCodeText);
@@ -31,6 +33,14 @@ const ConnectionDetails = () => {
 		fetchScanResult();
 
 	}, []);
+
+	const handleViewCode = () => {
+		setQRCodeVisible(true)
+          }
+
+	const handleHideCode = () => {
+		setQRCodeVisible(false)
+          }
 
 	return (
 		
@@ -60,8 +70,17 @@ const ConnectionDetails = () => {
 
 			<div className="">
 					<div className="viewCode">
-							<Link to="/ViewCode"> View Code </Link>
+							<div onClick={handleViewCode}> View Code </div>
 						</div>
+						
+					</div>
+					{isQRCodeVisible && <img className="newQRCode" src={qrImageData} alt="Scanned QR" />}
+
+					<div>
+					<div className="hideCode">
+					<div onClick={handleHideCode}> Hide Code </div>
+					</div>
+				
 					</div>
 		</div>
 

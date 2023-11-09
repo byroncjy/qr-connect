@@ -4,6 +4,13 @@ img {
   border-radius: 50%;
 }
 
+.newQRCode{
+  width: 20vh;
+  height: 20vh;
+  border-radius: 10%;
+  padding: auto;    
+}
+
 .detailsContainer {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -80,7 +87,7 @@ img {
   border-radius: 20px;
 }
 
-.viewCode {
+.viewCode, .hideCode {
   background-color: white;
   color: black;
   padding: 10px 20px;
