@@ -2,7 +2,7 @@
 
 const app = require("./app"); // Load up the Express application
 
-const port = process.env.PORT || 3000; // The port to listen to for incoming requests
+const port = process.env.PORT || 3001; // The port to listen to for incoming requests
 
 // Call Express's listen function to start listening to the port
 const listener = app.listen(port, function () {
