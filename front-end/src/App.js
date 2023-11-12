@@ -34,8 +34,8 @@ const App = () => {
 				<Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
 				<Route path="/scan-code" element={<ScanCode />} />
 				<Route path="/select-information" element={<SelectInformationForm />} />
-        <Route path="/saved-connections" element={<SavedConnections />} />
-        <Route path="/edit-information" element={<EditInformation />} />
+				<Route path="/saved-connections" element={<SavedConnections />} />
+				<Route path="/edit-information" element={<EditInformation />} />
 			</Routes>
 			<Footer />
 		</Router>

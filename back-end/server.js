@@ -30,7 +30,6 @@ app.post('/ScanCode', async (req, res) => {
     const canvas = createCanvas(image.width, image.height)
     const context = canvas.getContext('2d')
     context.drawImage(image, 0, 0)
-
     const imageData = context.getImageData(0, 0, image.width, image.height)
     const code = jsQR(imageData.data, imageData.width, imageData.height)
 

@@ -87,7 +87,7 @@ img {
   border-radius: 20px;
 }
 
-.viewCode, .hideCode {
+.viewCode, .hideCode, .saveCode {
   background-color: white;
   color: black;
   padding: 10px 20px;
