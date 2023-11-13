@@ -4,6 +4,7 @@ const server = require('./app') // load up the web server
 
 // the port to listen to for incoming requests
 // this is set to 3001, while frontend is 3000
+//const port = process.env.PORT || 3001
 const port = 3001
 
 // call express's listen function to start listening to the port

@@ -3,6 +3,7 @@ const express = require('express') // CommonJS import style!
 const app = express() // instantiate an Express object
 // const path = require('path')
 const connectionsRoutes = require('./connections');
+const unchangedImagesRouter = require('./unchanged-images'); // Ensure this path is correct
 
 // import some useful middleware
 // const multer = require('multer') // middleware to handle HTTP POST requests with file uploads
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming P
 
 // make 'public' directory publicly readable with static content
 app.use('/static', express.static('public'))
+app.use('/images', unchangedImagesRouter);
 
 // route for root document
 app.get('/', (req, res) => {

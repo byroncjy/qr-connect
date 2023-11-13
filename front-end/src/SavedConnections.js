@@ -9,7 +9,7 @@ const SavedConnections = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = process.env.REACT_APP_API_URL; 
+        const apiUrl = process.env.REACT_APP_API_URL_LK; 
         const response = await axios.get(apiUrl);
         setConnections(response.data);
       } catch (error) {
