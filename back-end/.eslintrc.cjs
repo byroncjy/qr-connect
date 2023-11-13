@@ -25,8 +25,11 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: [
-    'react'
+    'react',
+    'chai-friendly'
   ],
   rules: {
+    'no-unused-expressions': 'off',
+    'chai-friendly/no-unused-expressions': 'error'
   }
 }
