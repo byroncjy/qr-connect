@@ -3,6 +3,7 @@ const chaiHttp = require('chai-http');
 const server = require('../app'); 
 
 chai.use(chaiHttp);
+chai.should();
 
 describe('Connections', () => {
   describe('/GET saved-connections', () => {
