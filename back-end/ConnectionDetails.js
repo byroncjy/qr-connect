@@ -30,12 +30,11 @@ app.post('/ScanCode', async (req, res) => {
     const canvas = createCanvas(image.width, image.height)
     const context = canvas.getContext('2d')
     context.drawImage(image, 0, 0)
-
     const imageData = context.getImageData(0, 0, image.width, image.height)
     const code = jsQR(imageData.data, imageData.width, imageData.height)
 
     if (code) {
-      res.json({ qrCodeText: code.data })
+      res.json({ qrCodeText: code.data, qrImageBase64: base64Data })
     } else {
       res.status(400).send('No QR code found.')
     }
@@ -56,7 +55,8 @@ app.post('/ConnectionDetails', async (req, res) => {
   }
 })
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 5002
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
 })
+export default app
