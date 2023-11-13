@@ -19,7 +19,12 @@ router.post('/login', async (req, res) => {
     const token = generateToken();
     res.json({ token });
   });
-  
+
+router.post('/logout', async (req, res) => {
+    // Since JWTs are stateless, we cannot invalidate the token on the server.
+    // However, you can signal the client to remove the token from storage.
+    res.json({ message: 'Logged out successfully' });
+});
   module.exports = router;
 
 // // Mock database
