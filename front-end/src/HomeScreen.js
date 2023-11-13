@@ -11,7 +11,6 @@ const HomeScreen = () => {
   // Use the useEffect hook to fetch the image when the component mounts
   useEffect(() => {
     // Define an async function to fetch the image
-    console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
     const fetchImage = async () => {
       try {
         // Use axios to send a GET request to the backend server to retrieve the image
