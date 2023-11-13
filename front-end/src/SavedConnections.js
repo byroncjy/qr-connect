@@ -9,7 +9,8 @@ const SavedConnections = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://api.mockaroo.com/api/1a199910?count=16&key=14ea8470');
+        const apiUrl = process.env.REACT_APP_API_URL_LK; 
+        const response = await axios.get(apiUrl);
         setConnections(response.data);
       } catch (error) {
         console.error('Error fetching connections data:', error);
@@ -22,7 +23,7 @@ const SavedConnections = () => {
   return (
     <div className="saved-connections-container">
       <div className="header">
-        <h2>Saved Connections</h2>
+      <h2>Saved Connections</h2>
       </div>
       <div className="connections-grid">
         {connections.map((connection) => (
