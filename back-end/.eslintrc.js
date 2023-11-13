@@ -2,7 +2,7 @@ module.exports = {
   env: {
     commonjs: true,
     es2021: true,
-    mocha: true,
+    mocha: true
   },
   extends: [
     'standard'
@@ -24,6 +24,7 @@ module.exports = {
     ecmaVersion: 'latest'
   },
   plugins: [
+    'mocha'
   ],
   rules: {
   }

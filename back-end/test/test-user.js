@@ -29,6 +29,7 @@ describe('User Routes', function () {
           .request(router)
           .get('/user/notanid')
           .end((err, res) => {
+            expect(err).to.not.be.null
             expect(res).to.have.status(500)
             expect(res.body).to.be.a('object')
             expect(res).to.have.keys('error')
@@ -38,6 +39,7 @@ describe('User Routes', function () {
     }),
     describe('Successful PUT', function () {
       it('should respond with an HTTP 200 status and confirmation message', function () {
+        const id = 0
         chai
           .request(router)
           .put(`/user/${id}`)
@@ -58,6 +60,7 @@ describe('User Routes', function () {
     }),
     describe('Unsuccessful PUT', function () {
       it('should respond with an HTTP 500 status and error message', function () {
+        const id = 0
         chai
           .request(router)
           .put(`/user/${id}`)
@@ -92,7 +95,7 @@ describe('User Routes', function () {
       it('should respond with an HTTP 500 status and an error body', function () {
         chai
           .request(router)
-          .get(`/user/notanid/platforms`)
+          .get('/user/notanid/platforms')
           .end((err, res) => {
             expect(res).to.have.status(500)
             expect(res.body).to.be.a('object')
@@ -101,7 +104,7 @@ describe('User Routes', function () {
       })
     }),
     describe('Successful PUT', function () {
-      it('should respond with an HTTP 200 status and a confirmation message', function() {
+      it('should respond with an HTTP 200 status and a confirmation message', function () {
         const id = 0
         chai
           .request(router)
@@ -122,7 +125,7 @@ describe('User Routes', function () {
       it('should respond with an HTTP 500 status and an error body', function () {
         chai
           .request(router)
-          .put(`/user/anid/platforms`)
+          .put('/user/anid/platforms')
           .send({})
           .end((err, res) => {
             expect(res).to.have.status(500)
@@ -130,7 +133,6 @@ describe('User Routes', function () {
             expect(res.body).to.have.keys('error')
           })
       })
-    }),
     })
   })
 })
