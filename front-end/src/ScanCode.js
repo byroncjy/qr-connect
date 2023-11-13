@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ScanCode.css";
 
-
 function ScanCode() {
 	const [imageUrl, setImageUrl] = useState("")
 	const navigate = useNavigate()

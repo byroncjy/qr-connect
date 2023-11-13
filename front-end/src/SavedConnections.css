@@ -22,6 +22,18 @@ body {
   margin-bottom: 20px;
 }
 
+@media (max-width: 768px) {
+  .connections-grid {
+    grid-template-columns: repeat(2, 1fr); 
+  }
+}
+
+@media (max-width: 480px) {
+  .connections-grid {
+    grid-template-columns: 1fr; 
+  }
+}
+
 .connection-box {
   align-items: center;
   background-color: white;
@@ -58,4 +70,10 @@ body {
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .connection-box p {
+    font-size: 14px;
+  }
 }

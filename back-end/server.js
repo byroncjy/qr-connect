@@ -13,6 +13,10 @@ const app = express()
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+// the port to listen to for incoming requests
+// this is set to 3001, while frontend is 3000
+//const port = process.env.PORT || 3001
+const port = 3001
 
 app.use(express.static(path.join(__dirname, '../front-end/public')))
 
