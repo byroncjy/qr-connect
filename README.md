@@ -30,6 +30,8 @@ With our team values and guidelines, our team will collaborate, communicate, and
 1. Run `npm install` to install all dependencies listed in the `package.json` file.
 1. Run `npm start` to launch the React.js server
 
+See the contribution document above for more instructions including testing.
+
 ### Visit the web app in your web browser
 
 - install [React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
