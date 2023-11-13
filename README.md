@@ -31,8 +31,10 @@ With our team values and guidelines, our team will collaborate, communicate, and
 1. Run `npm start` to launch the React.js server
 
 ### Run tests 
-1. Naviagte into the `back-end` directory
+1. Navigate into the `back-end` directory
 1. Run `npm test` to run unit tests 
+
+See the contribution document above for more instructions including testing.
 
 ### Visit the web app in your web browser
 

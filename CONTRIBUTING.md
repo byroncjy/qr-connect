@@ -45,18 +45,38 @@ agree to the rules and standards written below.
 
 ## Contribution Guidelines
 ### Contribution Workflow
-Team members should fork the organization repository. Each feature or fix should
-be added to a new branch. When code is ready to be merged into the organization
-repository, team members should create a pull request that describes the purpose
-of the PR and any related issues/tasks. Once the PR has been reviewed and 
-tested, it can be merged into the same branch on the upstream repository and
-subsequently its `main` branch.
+Team members are expected to use a non-forking feature branch workflow, and pull
+requests should be reviewed and approved by at least one other team member
+before being merged into the master branch. Non-team contributors are encouraged
+to contribute from a fork.
+
+All contributions should be formatted by using the command `eslint --fix <your
+files>` before being submitted for review, using the `.eslintrc.js` file present
+in the repository.
 
 ### Contribution Rules
 Before contributing, if there is not already an issue describing the
 task/problem addressed by your contribution, please create one. Refer to the
 workflow rules above for how to create a pull request.
 
-## TODO: Developer Environment
+## Developer Environment
 ### Local Environment Setup
-### Building, Running, and Testing
+#### Building and Running
+In order to run this project, contributors will need Node.js and npm. For the
+front-end, navigate to the `front-end` folder and install dependencies through
+`npm install` before running `npm start` to launch the React server, which is
+hosted on port 3000. If a browser tab is not automatically opened, the content
+can be viewed at `http://localhost:3000` with the appropriate route.
+
+A similar process is used for the backend, except that you should run the above
+commands in the `back-end` folder. From there, the server can be accessed at
+`http://localhost:<port>`, where `port` is located in the `server.js` file.
+
+If you wish to have the express server automatically restart when files are
+changed, you can use the nodemon package and the command `nodemon server`
+instead of `npm start`.
+
+#### Testing
+In the `back-end` directory, the `test` directory contains all the tests for the
+back-end. Running `npm test` in the `back-end` directory will run them. Tests
+are written using the chai and mocha packages.
