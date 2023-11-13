@@ -7,7 +7,6 @@ const authRoutes = require('./authRoutes');
 const connectionsRoutes = require('./connections');
 const unchangedImagesRouter = require('./unchanged-images'); // Ensure this path is correct
 
-
 // import some useful middleware
 // const multer = require('multer') // middleware to handle HTTP POST requests with file uploads
 require('dotenv').config({ silent: true }) // load environmental variables from a hidden file named .env
