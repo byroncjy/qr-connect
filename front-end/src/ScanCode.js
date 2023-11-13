@@ -7,7 +7,6 @@ import "./ScanCode.css";
 function ScanCode() {
 	const [imageUrl, setImageUrl] = useState("")
 	const navigate = useNavigate()
-	//const navigate = useNavigate()
 	console.log(process.env.REACT_APP_SERVER_HOSTNAME)
 	
 	useEffect(() => {
@@ -51,8 +50,6 @@ function ScanCode() {
 
 
 
-  // removed temporarily since there is a back button
-  //<div className="toHome"><Link to="/">Home</Link></div>
 	return (
 
 		<div className='Box'>
