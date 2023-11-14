@@ -58,9 +58,9 @@ router.put('/:id', (req, res) => {
     const userId = req.params.id
     const { email, first_name: firstName, last_name: lastName, url_picture: urlPicture } = req.body
     // Explicit check for required fields
-    // Note that extra fields will still pass
+    // Note that extra fields will still pass, but all required fields must be present
     if (!email || !firstName || !lastName || !urlPicture) {
-      return res.status(400).json({ error: 'Bad Request: Missing required fields: email, first_name, last_name, url_picture' });
+      return res.status(400).json({ error: 'Bad Request: Missing required fields: email, first_name, last_name, url_picture' })
     }
     const updatedUserData = {
       email,
