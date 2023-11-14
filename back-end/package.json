@@ -4,7 +4,8 @@
   "description": "The back-end of your project will live in this directory.",
   "main": "server.js",
   "scripts": {
-    "test": "c8 mocha --exit"
+    "test": "cross-env NODE_ENV=test c8 mocha --recursive --exit",
+    "test:watch": "nodemon --exec 'npm test'"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +26,7 @@
     "c8": "^8.0.1",
     "chai": "^4.3.10",
     "chai-http": "^4.4.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.53.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-standard": "^17.1.0",
