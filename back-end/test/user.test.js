@@ -14,15 +14,16 @@ describe('User Routes', function () {
   // tests that result in success will ask for id 0, and tests that result in
   // failure will ask for id 1
   const successId = 0
-  const failureId = 1
+  const serverFailureId = 1
+  const badRequestId = 2
   // return 500 status response to failure tests
   beforeEach(function() {
-    const re = new RegExp(`\/users\/${failureId}\/*.*`)
-    const getFailure = nock(/.*/, { allowUnmocked: true })
-      .get(re)
+    const failureRe = new RegExp(`\/users\/${serverFailureId}\/*.*`)
+    const getServerFailure = nock(/.*/, { allowUnmocked: true })
+      .get(failureRe)
       .reply(500, { error: 'Internal Server Error' })
-    const putFailure = nock(/.*/, { allowUnmocked: true })
-      .put(re)
+    const putServerFailure = nock(/.*/, { allowUnmocked: true })
+      .put(failureRe)
       .reply(500, { error: 'Internal Server Error' })
   })
   afterEach(function () {
@@ -48,7 +49,7 @@ describe('User Routes', function () {
       it('should respond with an HTTP 500 status code and an error', function (done) {
         chai
           .request(router)
-          .get(`/users/${failureId}`)
+          .get(`/users/${serverFailureId}`)
           .end((err, res) => {
             expect(res).to.have.status(500)
             expect(res.body).to.be.a('object').that.has.keys('error')
@@ -78,7 +79,7 @@ describe('User Routes', function () {
       it('should respond with an HTTP 500 status and error message', function (done) {
         chai
           .request(router)
-          .put(`/users/${failureId}`)
+          .put(`/users/${successId}`)
           .send({
             bad_data: 'bad_data'
           })
@@ -110,7 +111,7 @@ describe('User Routes', function () {
       it('should respond with an HTTP 500 status and an error body', function (done) {
         chai
           .request(router)
-          .get(`/users/${failureId}/platforms`)
+          .get(`/users/${serverFailureId}/platforms`)
           .end((err, res) => {
             expect(res).to.have.status(500)
             expect(res.body).to.be.a('object').that.has.keys('error')
@@ -124,8 +125,8 @@ describe('User Routes', function () {
           .request(router)
           .put(`/users/${successId}/platforms`)
           .send({
-            platform_1: 'platform_1',
-            platform_2: 'platform_2'
+            platform_1: 'Facebook',
+            platform_2: 'Linkedin'
           })
           .end((err, res) => {
             expect(res).to.have.status(200)
@@ -138,12 +139,12 @@ describe('User Routes', function () {
       it('should respond with an HTTP 500 status and an error body', function (done) {
         chai
           .request(router)
-          .put(`/users/${failureId}/platforms`)
+          .put(`/users/${successId}/platforms`)
           .send({ 
-            bad_data: 'bad_data'
+            platform_1: 'bad_platform'
           })
           .end((err, res) => {
-            expect(res).to.have.status(500)
+            expect(res).to.have.status(400)
             expect(res.body).to.be.a('object').that.has.keys('error')
             done(err)
           })
