@@ -2,8 +2,11 @@
 const express = require('express') // CommonJS import style!
 const app = express() // instantiate an Express object
 // const path = require('path')
+const bodyParser = require('body-parser');
+const authRoutes = require('./authRoutes');
 const connectionsRoutes = require('./connections');
 const unchangedImagesRouter = require('./unchanged-images'); // Ensure this path is correct
+
 
 // import some useful middleware
 // const multer = require('multer') // middleware to handle HTTP POST requests with file uploads
@@ -23,10 +26,11 @@ app.use(cors()) // allow cross-origin resource sharing
 // use express's builtin body-parser middleware to parse any data included in a request
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
-
+app.use(bodyParser.json());
 // make 'public' directory publicly readable with static content
 app.use('/static', express.static('public'))
 app.use('/images', unchangedImagesRouter);
+app.use('/auth', authRoutes);
 
 // route for root document
 app.get('/', (req, res) => {
