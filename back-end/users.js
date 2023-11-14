@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
   const userId = req.params.id
   try {
     const apiUrl = process.env.API_BASE_URL_PROFILE
-    const apiKey = process.env.API_SECRET_KEY
+    const apiKey = process.env.PROFILE_API_KEY
     const response = await axios.get(`${apiUrl}?key=${apiKey}`)
     const data = response.data
     console.log(`User id: ${userId}`)
