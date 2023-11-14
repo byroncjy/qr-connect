@@ -50,6 +50,5 @@ app.use((err, req, res, next) => {
   res.status(500).send('Internal Server Error');
 });
 
-
 // export the express app we created to make it available to other modules
 module.exports = app
