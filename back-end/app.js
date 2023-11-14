@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./authRoutes');
 const connectionsRoutes = require('./connections');
 const unchangedImagesRouter = require('./unchanged-images'); // Ensure this path is correct
+const connectionsdetailsRoutes = require('./connectionsdetails');
 
 // import some useful middleware
 // const multer = require('multer') // middleware to handle HTTP POST requests with file uploads
@@ -44,6 +45,8 @@ const platformRoutes = require('./platforms')
 app.use('/users', userRoutes)
 app.use('/users', platformRoutes)
 app.use('/api', connectionsRoutes);
+app.use('/scanCode', connectionsdetailsRoutes);
+app.use('/ConnectionDetails', connectionsdetailsRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

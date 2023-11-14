@@ -1,65 +1,24 @@
-import express from 'express'
-import path from 'path'
-import cors from 'cors'
-import jsQR from 'jsqr'
-import { fileURLToPath } from 'url'
-import axios from 'axios'
-import 'dotenv/config'
-import { createCanvas, loadImage } from 'canvas'
+#!/usr/bin/env node
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const app = express()
+const server = require('./app') // load up the web server
 
-app.use(cors())
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
 // the port to listen to for incoming requests
 // this is set to 3001, while frontend is 3000
-// const port = process.env.PORT || 3001
-// const port = 3001
+//const port = process.env.PORT || 3001
 
-app.use(express.static(path.join(__dirname, '../front-end/public')))
+//const server = require('./connectiondetails')
+const port = process.env.PORT || 3001
 
-app.get('/ScanCode', (req, res) => {
-  const LogoUrl = 'https://picsum.photos/200/300'
-  res.json({ LogoUrl })
+// call express's listen function to start listening to the port
+const listener = server.listen(port, function () {
+  console.log(`Server running on port: ${port}`)
 })
 
-app.post('/ScanCode', async (req, res) => {
-  const { qrData } = req.body
-  const base64Data = qrData.replace(/^data:image\/(png|jpeg|jpg);base64,/, '')
+// a function to stop listening to the port
+const close = () => {
+  listener.close()
+}
 
-  try {
-    const image = await loadImage(`data:image/png;base64,${base64Data}`)
-    const canvas = createCanvas(image.width, image.height)
-    const context = canvas.getContext('2d')
-    context.drawImage(image, 0, 0)
-    const imageData = context.getImageData(0, 0, image.width, image.height)
-    const code = jsQR(imageData.data, imageData.width, imageData.height)
-
-    if (code) {
-      res.json({ qrCodeText: code.data, qrImageBase64: base64Data })
-    } else {
-      res.status(400).send('No QR code found.')
-    }
-  } catch (error) {
-    console.error(error)
-    res.status(500)
-  }
-})
-
-app.post('/ConnectionDetails', async (req, res) => {
-  const { qrCodeText } = req.body
-  try {
-    const userInfo = await axios.get(qrCodeText)
-    res.json(userInfo.data)
-  } catch (error) {
-    console.error('Error fetching scan results:', error)
-  }
-})
-
-const PORT = process.env.PORT || 5002
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`)
-})
-export default app
+module.exports = {
+  close
+}
