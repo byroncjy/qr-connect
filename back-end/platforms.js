@@ -7,7 +7,7 @@ const router = express.Router()
 router.get('/:id/platforms', async (req, res) => {
   const userId = req.params.id
   try {
-    const apiUrl = process.env.API_BASE_URL
+    const apiUrl = process.env.API_BASE_URL_PROFILE
     const apiKey = process.env.API_SECRET_KEY
     const response = await axios.get(`${apiUrl}?key=${apiKey}`)
     const data = response.data

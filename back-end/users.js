@@ -31,7 +31,7 @@ const upload = multer({ storage })
 router.get('/:id', async (req, res) => {
   const userId = req.params.id
   try {
-    const apiUrl = process.env.API_BASE_URL
+    const apiUrl = process.env.API_BASE_URL_PROFILE
     const apiKey = process.env.API_SECRET_KEY
     const response = await axios.get(`${apiUrl}?key=${apiKey}`)
     const data = response.data
@@ -57,6 +57,11 @@ router.put('/:id', (req, res) => {
     // Simulate updating the database with only these fields
     const userId = req.params.id
     const { email, first_name: firstName, last_name: lastName, url_picture: urlPicture } = req.body
+    // Explicit check for required fields
+    // Note that extra fields will still pass
+    if (!email || !firstName || !lastName || !urlPicture) {
+      return res.status(400).json({ error: 'Bad Request: Missing required fields: email, first_name, last_name, url_picture' });
+    }
     const updatedUserData = {
       email,
       firstName,
