@@ -6,24 +6,24 @@ const axios = require('axios');
 require('dotenv').config();
 const { createCanvas, loadImage } = require('canvas');
 
-const app = express();
+// const app = express();
+const router = express.Router();
+router.use(cors());
+router.use(express.urlencoded({ extended: true }));
+router.use(express.json());
 
-app.use(cors());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-app.get('/ScanCode', (req, res) => {
+router.get('/ScanCode', (req, res) => {
   try {
     const LogoUrl = 'https://picsum.photos/200/300';
     res.json({ LogoUrl });
   } catch (error) {
-    console.error('Error in /ScanCode route:', error);
+    console.error('Error in ScanCode:', error);
     res.status(500).send('Internal Server Error');
   }
 });
 
-app.post('/ScanCode', async (req, res) => {
-  const { qrData } = req.body
+router.post('/ScanCode', async (req, res) => {
+  const { qrData } = req.body;
   const base64Data = qrData.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
 
   try {
@@ -45,7 +45,7 @@ app.post('/ScanCode', async (req, res) => {
   }
 });
 
-app.post('/ConnectionDetails', async (req, res) => {
+router.post('/ConnectionDetails', async (req, res) => {
   const { qrCodeText } = req.body;
   try {
     const userInfo = await axios.get(qrCodeText);
@@ -55,9 +55,11 @@ app.post('/ConnectionDetails', async (req, res) => {
   }
 });
 
+/*
 const PORT = process.env.PORT || 5002;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+*/
 
-module.exports = app;
+module.exports = router;
