@@ -17,8 +17,13 @@ app.use(express.json())
 app.use(express.static(path.join(__dirname, '../front-end/public')))
 
 app.get('/ScanCode', (req, res) => {
-  const LogoUrl = 'https://picsum.photos/200/300'
-  res.json({ LogoUrl })
+  try {
+    const LogoUrl = 'https://picsum.photos/200/300'
+    res.json({ LogoUrl })
+  } catch (error) {
+    console.error('Error in ScanCode:', error)
+    res.status(500).send('Internal Server Error')
+  }
 })
 
 app.post('/ScanCode', async (req, res) => {

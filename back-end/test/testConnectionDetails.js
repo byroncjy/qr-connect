@@ -9,7 +9,7 @@ describe('POST /ConnectionDetails', () => {
   it('fetch user info from QR code', (done) => {
     chai.request(app)
       .post('/ConnectionDetails')
-      .send({ qrCodeText: 'https://my.api.mockaroo.com/QRcodeResult.json?key=723ed310' })
+      .send({ qrCodeText: `${process.env.USER_INFO_API}?key=${process.env.USER_INFO_API_KEY}` })
       .end((err, res) => {
         expect(err).to.be.null
         expect(res).to.have.status(200)

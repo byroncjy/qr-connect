@@ -15,8 +15,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 // the port to listen to for incoming requests
 // this is set to 3001, while frontend is 3000
-//const port = process.env.PORT || 3001
-const port = 3001
+// const port = process.env.PORT || 3001
+// const port = 3001
 
 app.use(express.static(path.join(__dirname, '../front-end/public')))
 
@@ -50,7 +50,6 @@ app.post('/ScanCode', async (req, res) => {
 
 app.post('/ConnectionDetails', async (req, res) => {
   const { qrCodeText } = req.body
-  // 'https://my.api.mockaroo.com/QRcodeResult.json?key=723ed310'
   try {
     const userInfo = await axios.get(qrCodeText)
     res.json(userInfo.data)
