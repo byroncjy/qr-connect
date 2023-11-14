@@ -6,13 +6,14 @@ const router = express.Router();
 router.get('/home-logo-image', async (req, res) => {
   try {
     const response = await axios.get('https://picsum.photos/400', { responseType: 'stream' });
+
+    res.setHeader('content-type', response.headers['content-type']);
+
     response.data.pipe(res);
   } catch (error) {
     console.error('Error fetching image from Picsum:', error);
     res.status(500).send('Error fetching image');
   }
 });
-
-// If you have other static images, define their routes similarly using router
 
 module.exports = router;
