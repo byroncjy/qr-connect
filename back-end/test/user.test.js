@@ -83,7 +83,7 @@ describe('User Routes', function () {
             bad_data: 'bad_data'
           })
           .end((err, res) => {
-            expect(res).to.have.status(500)
+            expect(res).to.have.status(400)
             expect(res.body).to.be.a('object').that.has.keys('error')
             done(err)
           })
