@@ -23,7 +23,7 @@ app.get('/ScanCode', (req, res) => {
 });
 
 app.post('/ScanCode', async (req, res) => {
-  const { qrData } = req.body;
+  const { qrData } = req.body
   const base64Data = qrData.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
 
   try {
