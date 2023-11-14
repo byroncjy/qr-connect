@@ -18,6 +18,10 @@ With our team values and guidelines, our team will collaborate, communicate, and
 [Contribution guidelines for this project.](CONTRIBUTING.md)
 
 ## Instructions for Building and Testing
+
+For Sprint 2, our team is using .env files for both the front and back end to store the keys and urls to our mock api. They must be inputted manually for the code to work, as the FE/BE are both dependent on them. Please refer to our discord channel, team-qr-codes, where we have shared the .env files. 
+Before running the code, please input the files into the front and back end directories respectively. 
+
 ### Build and launch the back end
 
 1. Navigate into the `back-end` directory
