@@ -40,10 +40,12 @@ Before running the code, please input the files into the front and back end dire
 
 See the contribution document above for more instructions including testing.
 
-### Special Note on route /ScanCode
-
-Please use the QR code from this link when uploading QR code on this page:
-[QR code](https://drive.google.com/file/d/1dvsaA8K2iYUIlIdXVr63wdOr0f31qvzo/view?usp=sharing)
+### How to Run the Scan Code and Connection Details Page (Sprint 2) 
+After building and launching the front and back end, in order to try out the scan code and connection details page, please follow the instructions below. 
+1. Download the QR code png file in this repository: [QR code](https://github.com/agiledev-students-fall2023/4-final-project-qr-code-generator-app/blob/master/qrcode.png?raw=true)
+2. Navigate to the 'Scan Code' page by clicking the 'Scan Code' button located on the home page. 
+3. Click on the 'Scan' button. A popup will appear prompting you to select a file for upload. 
+4. Upload the QR code png file. This will lead you to the corresponding Connection Details page. 
 
 ### Visit the web app in your web browser
 
