@@ -1,14 +1,14 @@
-import chai from 'chai'
-import chaiHttp from 'chai-http'
-import app from '../server.js'
+const chai = require('chai')
+const chaiHttp = require('chai-http')
+const server = require('../app')
+const expect = chai.expect
 
-const { expect } = chai
 chai.use(chaiHttp)
 chai.should()
 
 describe('GET /ScanCode', () => {
   it('return a JSON object with the LogoUrl', (done) => {
-    chai.request(app)
+    chai.request(server)
       .get('/ScanCode')
       .end((err, res) => {
         expect(err).to.be.null
