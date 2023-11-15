@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import './EditInformation.css'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./EditInformation.css";
 
 const platformOptions = [
-  { value: '', label: 'Select platform' },
-  { value: 'Phone number', label: 'Phone number' },
-  { value: 'Personal website', label: 'Personal website' },
-  { value: 'Linkedin', label: 'Linkedin' },
-  { value: 'Instagram', label: 'Instagram' },
-  { value: 'Facebook', label: 'Facebook' },
-  { value: 'Twitter', label: 'Twitter' },
-  { value: 'Github', label: 'Github' }
-]
+	{ value: "", label: "Select platform" },
+	{ value: "Phone number", label: "Phone number" },
+	{ value: "Personal website", label: "Personal website" },
+	{ value: "Linkedin", label: "Linkedin" },
+	{ value: "Instagram", label: "Instagram" },
+	{ value: "Facebook", label: "Facebook" },
+	{ value: "Twitter", label: "Twitter" },
+	{ value: "Github", label: "Github" }
+];
 
 const EditInformation = () => {
-  // Array of maps of containing platform, info
-  const [platformInformationMap, setPlatformInformationMap] = useState([])
-  // State to hold profile data
-  const [profileData, setProfileData] = useState({})
-  // State for error message
-  const [errorMessage, setErrorMessage] = useState('')
+	// Array of maps of containing platform, info
+	const [platformInformationMap, setPlatformInformationMap] = useState([]);
+	// State to hold profile data
+	const [profileData, setProfileData] = useState({});
+	// State for error message
+	const [errorMessage, setErrorMessage] = useState("");
 
   // In final implementation, we will retrieve userId of current logged in user
   // For now, we just mock userId
@@ -55,32 +55,32 @@ const EditInformation = () => {
     fetchProfileData()
   }, [])
 
-  // Handle change in platform name
-  const handlePlatformChange = (index, event) => {
-    const { value } = event.target
-    const updatedPlatformInformationMap = [...platformInformationMap]
-    updatedPlatformInformationMap[index].platform = value
-    setPlatformInformationMap(updatedPlatformInformationMap)
-  }
+	// Handle change in platform name
+	const handlePlatformChange = (index, event) => {
+		const { value } = event.target;
+		const updatedPlatformInformationMap = [...platformInformationMap];
+		updatedPlatformInformationMap[index].platform = value;
+		setPlatformInformationMap(updatedPlatformInformationMap);
+	};
 
-  // Handle change in platform information
-  const handleInfoChange = (index, event) => {
-    const updatedPlatformInformationMap = [...platformInformationMap]
-    updatedPlatformInformationMap[index].info = event.target.value
-    setPlatformInformationMap(updatedPlatformInformationMap)
-  }
+	// Handle change in platform information
+	const handleInfoChange = (index, event) => {
+		const updatedPlatformInformationMap = [...platformInformationMap];
+		updatedPlatformInformationMap[index].info = event.target.value;
+		setPlatformInformationMap(updatedPlatformInformationMap);
+	};
 
-  // Handle adding new entry of platform name and information
-  const handleAddPlatformInformation = () => {
-    const updatedPlatformInformationMap = [...platformInformationMap, { platform: '', info: '' }]
-    setPlatformInformationMap(updatedPlatformInformationMap)
-  }
+	// Handle adding new entry of platform name and information
+	const handleAddPlatformInformation = () => {
+		const updatedPlatformInformationMap = [...platformInformationMap, { platform: "", info: "" }];
+		setPlatformInformationMap(updatedPlatformInformationMap);
+	};
 
-  // Handle deleting an entry of platform name and information
-  const handleDeletePlatform = (index) => {
-    const updatedPlatformInformationMap = platformInformationMap.filter((_, i) => i !== index)
-    setPlatformInformationMap(updatedPlatformInformationMap)
-  }
+	// Handle deleting an entry of platform name and information
+	const handleDeletePlatform = (index) => {
+		const updatedPlatformInformationMap = platformInformationMap.filter((_, i) => i !== index);
+		setPlatformInformationMap(updatedPlatformInformationMap);
+	};
 
   // Handles user uploading new profile picture
   // Sends image as multipart form data to backend uploadPicture route
@@ -102,14 +102,14 @@ const EditInformation = () => {
         }
       )
 
-      if (response.status === 200) {
-        // Update the profile picture in the UI
-        setProfileData({ ...profileData, url_picture: URL.createObjectURL(image) })
-      }
-    } catch (error) {
-      console.error('Error uploading profile picture:', error)
-    }
-  }
+			if (response.status === 200) {
+				// Update the profile picture in the UI
+				setProfileData({ ...profileData, url_picture: URL.createObjectURL(image) });
+			}
+		} catch (error) {
+			console.error("Error uploading profile picture:", error);
+		}
+	};
 
   // Handle saving all profile data and platform information (does not include profile picture)
   // Duplicate entries with non-empty info will not be allowed to save
@@ -165,19 +165,19 @@ const EditInformation = () => {
         }
       )
 
-      if (response.status !== 200) {
-        throw new Error(`Network response was not ok. Status Code: ${response.status}`)
-      }
-      // Update the platformInformationMap state
-      setPlatformInformationMap(filteredPlatformInformationMap)
-    } catch (error) {
-      console.error('Error saving data:', error)
-    }
-  }
+			if (response.status !== 200) {
+				throw new Error(`Network response was not ok. Status Code: ${response.status}`);
+			}
+			// Update the platformInformationMap state
+			setPlatformInformationMap(filteredPlatformInformationMap);
+		} catch (error) {
+			console.error("Error saving data:", error);
+		}
+	};
 
-  return (
-    <div className="edit-information-container">
-      <h2>Edit Personal Information</h2>
+	return (
+		<div className="edit-information-container">
+			<h2>Edit Personal Information</h2>
 
       {/* Displays picture and upload picture button */}
       <div className="edit-information-header">
@@ -189,66 +189,66 @@ const EditInformation = () => {
         </div>
       </div>
 
-      <div className="profile-section">
-        <p>Name: </p>
-        <input
-          type="text"
-          placeholder="First name"
-          value={profileData.first_name}
-          onChange={(e) => setProfileData({ ...profileData, first_name: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Last name"
-          value={profileData.last_name}
-          onChange={(e) => setProfileData({ ...profileData, last_name: e.target.value })}
-        />
-        <p>Email: {profileData.email}</p>
-      </div>
-        {/* Display each row of plaform name and information */}
-        {platformInformationMap.map((item, index) => (
-            <div key={index}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <label htmlFor={`platform${index}`}></label>
-                {/* Dropdown */}
-                <select
-                  id={`platform${index}`}
-                  value={item.platform}
-                  onChange={(e) => handlePlatformChange(index, e)}
-                >
-                {platformOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                ))}
-                </select>
+			<div className="profile-section">
+				<p>Name: </p>
+				<input
+					type="text"
+					placeholder="First name"
+					value={profileData.first_name}
+					onChange={(e) => setProfileData({ ...profileData, first_name: e.target.value })}
+				/>
+				<input
+					type="text"
+					placeholder="Last name"
+					value={profileData.last_name}
+					onChange={(e) => setProfileData({ ...profileData, last_name: e.target.value })}
+				/>
+				<p>Email: {profileData.email}</p>
+			</div>
+			{/* Display each row of plaform name and information */}
+			{platformInformationMap.map((item, index) => (
+				<div key={index}>
+					<div style={{ display: "flex", alignItems: "center" }}>
+						<label htmlFor={`platform${index}`}></label>
+						{/* Dropdown */}
+						<select
+							id={`platform${index}`}
+							value={item.platform}
+							onChange={(e) => handlePlatformChange(index, e)}
+						>
+							{platformOptions.map((option) => (
+								<option key={option.value} value={option.value}>
+									{option.label}
+								</option>
+							))}
+						</select>
 
-                {/* If not Select Platform, display text input box */}
-                {item.platform !== '' && (
-                <input
-                    type="text"
-                    placeholder="Link / Information"
-                    value={item.info}
-                    onChange={(e) => handleInfoChange(index, e)}
-                />
-                )}
-                {/* Delete entry */}
-                <button onClick={() => handleDeletePlatform(index)}>X</button>
-              </div>
-            </div>
-        ))}
-        {/* Add new entry */}
-        <button onClick={handleAddPlatformInformation}>Add another platform</button>
-        {/* Save updated platform information */}
-        <button type="button" className="save-button" onClick={handleSave}>
+						{/* If not Select Platform, display text input box */}
+						{item.platform !== "" && (
+							<input
+								type="text"
+								placeholder="Link / Information"
+								value={item.info}
+								onChange={(e) => handleInfoChange(index, e)}
+							/>
+						)}
+						{/* Delete entry */}
+						<button onClick={() => handleDeletePlatform(index)}>X</button>
+					</div>
+				</div>
+			))}
+			{/* Add new entry */}
+			<button onClick={handleAddPlatformInformation}>Add another platform</button>
+			{/* Save updated platform information */}
+			<button type="button" className="save-button" onClick={handleSave}>
             Save
-        </button>
-        {/* Display error message */}
-        {errorMessage && (
-          <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>
-        )}
-    </div>
-  )
-}
+			</button>
+			{/* Display error message */}
+			{errorMessage && (
+				<div style={{ color: "red", marginTop: "10px" }}>{errorMessage}</div>
+			)}
+		</div>
+	);
+};
 
-export default EditInformation
+export default EditInformation;

@@ -1,61 +1,99 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-//import PropTypes from 'prop-types';
-import './ConnectionDetails.css';
+
+import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./ConnectionDetails.css";
 
 const ConnectionDetails = () => {
-  const [imageUrl, setImageUrl] = useState('');
+	const navigate = useNavigate()
+	const [scanResult, setScanResult] = useState([]);
+	const [isQRCodeVisible, setQRCodeVisible] = useState(false);
+	const location = useLocation();
+	const queryParameter = new URLSearchParams(location.search);
+	const { qrImageData } = location.state;
+	const qrCodeText = queryParameter.get('');
+        
+	console.log(qrCodeText);
+	useEffect(() => {
+		async function fetchScanResult() {
+			try {
+				await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/ConnectionDetails/`,{qrCodeText})
+					.then(response => {
+						if (response.status === 200) {
+							setScanResult(response.data);
+							console.log(response.data);
 
-  useEffect(() => {
-    async function fetchImage() {
-      try {
-        const logoUrl = 'https://picsum.photos/200/300';
-        const response = await axios.get(logoUrl);
-        if (response.status === 200) {
-          setImageUrl(logoUrl);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
+						}
+					});
+			} catch (error) {
+				console.error(error);
+			}
+		}
 
-    fetchImage();
-  }, []);
 
-  return (
-    <div className='Box'>
-      <div className="DetailsContainer">
-        <div className="areaA">
-          <img className="PlatForms" src={imageUrl} alt="Platform Icon" />
-        </div>
-        <div className="areaB">Bot 1</div>
-        <div className="areaC">
-          <div className="ViewCode">
-            <Link to="/ViewCode">ViewCode</Link>
-          </div>
-        </div>
-        <div className="areaD">
-          <ul>
-            <li>instagram introduction 1</li>
-            <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&apos;s standard dummy text ever since the 1500s.</li>
-            <li>instagram introduction 1</li>
-          </ul>
-        </div>
-        <div className="areaE">
-          <ul>
-            <li>instagram introduction 2</li>
-            <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&apos;s standard dummy text ever since the 1500s.</li>
-            <li>instagram introduction 2</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  );
+		fetchScanResult();
+
+	}, []);
+
+	const handleViewCode = () => {
+		setQRCodeVisible(true)
+          }
+
+	const handleHideCode = () => {
+		setQRCodeVisible(false)
+          }
+	const handleSaveCode = () => {
+		navigate("/saved-connections")
+		console.log("Navigate to Save Code")
+          }
+
+	return (
+		
+		<div className='Box'>	
+			{scanResult.map((item, index) => (
+				<div className="detailsContainer" key={index}>
+					<div className="areaA">
+						<img className="PlatForms" src={item.webImage} alt="" />
+					</div>
+					<div className="areaB" style={{ backgroundColor: item.mediaColor }}>
+						{item.webName}
+					</div>
+					<div className="areaD">
+						<ul>
+							<li>{item.Description}</li>
+							<li>{item.Description}</li>
+						</ul>
+					</div>
+					<div className="areaE">
+						<ul>
+							<li>{item.Description}</li>
+							<li>{item.Description}</li>
+						</ul>
+					</div>
+				</div>
+			))}
+
+			<div className="">
+					<div className="viewCode">
+							<div onClick={handleViewCode}> View Code </div>
+						</div>
+						
+					</div>
+					{isQRCodeVisible && <img className="newQRCode" src={qrImageData} alt="Scanned QR" />}
+
+			
+					<div className="hideCode">
+					<div onClick={handleHideCode}> Hide Code </div>
+					</div>
+
+					<div className="saveCode">
+					<div onClick={handleSaveCode}> Save Code </div>
+					</div>
+				
+		</div>
+
+	);
 };
 
-//ConnectionDetails.propTypes = {
-  //ScannedInfo: PropTypes.string.isRequired
-//};
-
 export default ConnectionDetails;
+
