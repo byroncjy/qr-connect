@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "The back-end of your project will live in this directory.",
   "scripts": {
-    "test": "c8 mocha --exit"
+    "test": "cross-env NODE_ENV=test c8 mocha --recursive --exit",
+    "test:watch": "nodemon --exec 'npm test'"
   },
   "main": "server.js",
   "keywords": [],
@@ -32,15 +33,18 @@
     "c8": "^8.0.1",
     "chai": "^4.3.10",
     "chai-http": "^4.4.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.53.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-mocha": "^10.2.0",
     "eslint-plugin-n": "^16.3.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
     "mocha": "^10.2.0",
     "nock": "^13.3.8",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "sinon": "^17.0.1"
   }
 }

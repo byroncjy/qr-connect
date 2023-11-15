@@ -30,8 +30,8 @@ const SelectInformationForm = props => {
     const fetchData = async () => {
       console.log('Fetching user information data...')
       try {
-        const response = await axios(
-          'https://my.api.mockaroo.com/info.json?key=820f1130')
+        const apiUrl = process.env.REACT_APP_API_URL
+        const response = await axios.get(`${apiUrl}/users/0/platforms`)
         setData(response.data)
         console.log('Successfully retrieved mock data!')
       } catch (err) {
@@ -71,7 +71,7 @@ const SelectInformationForm = props => {
       {data.map(item =>
         <div className="select-information-checkbox-wrapper" 
               key={`input-div${item.id}`}>
-          <label key={`label${item.id}`}>{item.label}: {item.content}</label>
+          <label key={`label${item.id}`}>{item.platform}: {item.info}</label>
           <label className="select-information-checkbox">
             <input key={`input${item.id}`}
                     id={item.id /* passed to update state */}
