@@ -43,7 +43,7 @@ See the contribution document above for more instructions including testing.
 ### Special Note on route /ScanCode
 
 Please use the QR code from this link when uploading QR code on this page:
-(https://drive.google.com/file/d/1dvsaA8K2iYUIlIdXVr63wdOr0f31qvzo/view?usp=sharing)
+[QR code](https://drive.google.com/file/d/1dvsaA8K2iYUIlIdXVr63wdOr0f31qvzo/view?usp=sharing)
 
 ### Visit the web app in your web browser
 
