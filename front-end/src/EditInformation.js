@@ -20,6 +20,7 @@ const EditInformation = () => {
 	const [profileData, setProfileData] = useState({});
 	// State for error message
 	const [errorMessage, setErrorMessage] = useState("");
+	const [buttonClicked, setButtonClicked] = useState(false); // State to handle button click
 
   // In final implementation, we will retrieve userId of current logged in user
   // For now, we just mock userId
@@ -117,6 +118,13 @@ const EditInformation = () => {
   const handleSave = async () => {
     // Saving of profile data
     try {
+      // Update buttonClicked state to trigger the CSS effect
+      setButtonClicked(true);
+      setTimeout(() => {
+        // Reset buttonClicked state after a delay
+        setButtonClicked(false);
+      }, 1000); // Set the duration of the darkening effect (in milliseconds)
+
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}`,
         profileData,
@@ -240,8 +248,12 @@ const EditInformation = () => {
 			{/* Add new entry */}
 			<button onClick={handleAddPlatformInformation}>Add another platform</button>
 			{/* Save updated platform information */}
-			<button type="button" className="save-button" onClick={handleSave}>
-            Save
+			<button
+				type="button"
+				className={`save-button ${buttonClicked ? "clicked" : ""}`}
+				onClick={handleSave}
+			>
+				Save
 			</button>
 			{/* Display error message */}
 			{errorMessage && (

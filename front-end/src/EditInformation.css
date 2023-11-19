@@ -36,6 +36,10 @@
     background-color: #0056b3;
 }
 
+.save-button.clicked {
+    background-color: #0056b3; /* Darkened color when clicked */
+}
+
 .error-message {
     color: #FF0000;
     margin-top: 10px;
