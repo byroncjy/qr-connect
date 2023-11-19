@@ -184,7 +184,7 @@ const EditInformation = () => {
         {/* Note that right now image urls are randomly generated via Mockaroo */}
         <img src={profileData.url_picture} alt="Profile" className="profile-picture" />
         <p>Upload profile picture below: </p>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className="upload-container">
           <input type="file" accept="image/*" onChange={handleProfilePictureUpload} />
         </div>
       </div>
@@ -208,7 +208,7 @@ const EditInformation = () => {
 			{/* Display each row of plaform name and information */}
 			{platformInformationMap.map((item, index) => (
 				<div key={index}>
-					<div style={{ display: "flex", alignItems: "center" }}>
+					<div className="platform-container">
 						<label htmlFor={`platform${index}`}></label>
 						{/* Dropdown */}
 						<select
@@ -245,7 +245,7 @@ const EditInformation = () => {
 			</button>
 			{/* Display error message */}
 			{errorMessage && (
-				<div style={{ color: "red", marginTop: "10px" }}>{errorMessage}</div>
+				<div className="error-message">{errorMessage}</div>
 			)}
 		</div>
 	);

@@ -36,6 +36,21 @@
     background-color: #0056b3;
 }
 
+.error-message {
+    color: #FF0000;
+    margin-top: 10px;
+}
+
+.upload-container {
+    display: flex;
+    justify-content: center;
+}
+
+.platform-container {
+    display: flex;
+    align-items: center;
+}
+
 .profile-picture {
     width: 100px;
     height: 100px;
