@@ -10,7 +10,7 @@ function ScanCode() {
 	const navigate = useNavigate()
 	console.log(process.env.REACT_APP_SERVER_HOSTNAME)
 
-	
+
 	useEffect(() => {
 		async function fetchImage() {
 			try {
@@ -38,7 +38,7 @@ function ScanCode() {
 					const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/ScanCode`, {
 						qrData: imageDataUrl
 					});
-					
+
 					navigate(`/ConnectionDetails?=${response.data.qrCodeText}`, { state: { qrCodeText: response.data.qrCodeText, qrImageData: imageDataUrl } })
 					console.log('Response from backend:', response.data);
 				} catch (error) {
@@ -61,14 +61,14 @@ function ScanCode() {
 			<label htmlFor="file-input" className="scanButton">Scan</label>
 
 			<div>
-    <QRCode 
-      value="https://google.com" 
-      size={64} 
-      bgColor={"#ffffff"} 
-      fgColor={"#000000"} 
-      level={"L"}
-    />
-  </div>
+				<QRCode
+					value="https://google.com"
+					size={64}
+					bgColor={"#ffffff"}
+					fgColor={"#000000"}
+					level={"L"}
+				/>
+			</div>
 		</div>
 	);
 }
