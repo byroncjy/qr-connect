@@ -124,10 +124,10 @@ describe('User Routes', function () {
         chai
           .request(router)
           .put(`/users/${successId}/platforms`)
-          .send({
-            platform_1: 'Facebook',
-            platform_2: 'Linkedin'
-          })
+          .send([
+            { platform: 'Linkedin', info: 'johndoe254' },
+            { platform: 'Instagram', info: '@johndoe' }
+          ])
           .end((err, res) => {
             expect(res).to.have.status(200)
             expect(res.body).to.be.a('object').that.has.keys('message')
@@ -140,9 +140,9 @@ describe('User Routes', function () {
         chai
           .request(router)
           .put(`/users/${successId}/platforms`)
-          .send({ 
-            platform_1: 'bad_platform'
-          })
+          .send([
+            { platform: 'bad_platform', info: 'johndoe254' }
+          ])
           .end((err, res) => {
             expect(res).to.have.status(400)
             expect(res.body).to.be.a('object').that.has.keys('error')
