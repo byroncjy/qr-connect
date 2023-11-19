@@ -3,10 +3,9 @@ const path = require('path');
 const cors = require('cors');
 const jsQR = require('jsqr');
 const axios = require('axios');
+//const QRCode = require('qrcode.react');
 require('dotenv').config();
 const { createCanvas, loadImage } = require('canvas');
-
-// const app = express();
 const router = express.Router();
 router.use(cors());
 router.use(express.urlencoded({ extended: true }));
