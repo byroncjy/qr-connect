@@ -36,6 +36,25 @@
     background-color: #0056b3;
 }
 
+.save-button.clicked {
+    background-color: #0056b3; /* Darkened color when clicked */
+}
+
+.error-message {
+    color: #FF0000;
+    margin-top: 10px;
+}
+
+.upload-container {
+    display: flex;
+    justify-content: center;
+}
+
+.platform-container {
+    display: flex;
+    align-items: center;
+}
+
 .profile-picture {
     width: 100px;
     height: 100px;

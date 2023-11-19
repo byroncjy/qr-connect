@@ -41,8 +41,9 @@ router.put('/:id/platforms', (req, res) => {
     // We can accept fewer platforms as long as all authorized, since from user side
     //  this means they have replaced some platforms
     const unauthorizedPlatforms = Object.values(platformInformation)
-      .filter(platform => !authorizedPlatforms.includes(platform))
+      .filter(entry => !(authorizedPlatforms.includes(entry.platform)))
     if (unauthorizedPlatforms.length > 0) {
+      console.log(unauthorizedPlatforms)
       return res.status(400).json({ error: 'Unauthorized platforms detected' })
     }
 

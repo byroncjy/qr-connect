@@ -20,6 +20,7 @@ const EditInformation = () => {
 	const [profileData, setProfileData] = useState({});
 	// State for error message
 	const [errorMessage, setErrorMessage] = useState("");
+	const [buttonClicked, setButtonClicked] = useState(false); // State to handle button click
 
   // In final implementation, we will retrieve userId of current logged in user
   // For now, we just mock userId
@@ -117,6 +118,13 @@ const EditInformation = () => {
   const handleSave = async () => {
     // Saving of profile data
     try {
+      // Update buttonClicked state to trigger the CSS effect
+      setButtonClicked(true);
+      setTimeout(() => {
+        // Reset buttonClicked state after a delay
+        setButtonClicked(false);
+      }, 1000); // Set the duration of the darkening effect (in milliseconds)
+
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}`,
         profileData,
@@ -184,7 +192,7 @@ const EditInformation = () => {
         {/* Note that right now image urls are randomly generated via Mockaroo */}
         <img src={profileData.url_picture} alt="Profile" className="profile-picture" />
         <p>Upload profile picture below: </p>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className="upload-container">
           <input type="file" accept="image/*" onChange={handleProfilePictureUpload} />
         </div>
       </div>
@@ -208,7 +216,7 @@ const EditInformation = () => {
 			{/* Display each row of plaform name and information */}
 			{platformInformationMap.map((item, index) => (
 				<div key={index}>
-					<div style={{ display: "flex", alignItems: "center" }}>
+					<div className="platform-container">
 						<label htmlFor={`platform${index}`}></label>
 						{/* Dropdown */}
 						<select
@@ -240,12 +248,16 @@ const EditInformation = () => {
 			{/* Add new entry */}
 			<button onClick={handleAddPlatformInformation}>Add another platform</button>
 			{/* Save updated platform information */}
-			<button type="button" className="save-button" onClick={handleSave}>
-            Save
+			<button
+				type="button"
+				className={`save-button ${buttonClicked ? "clicked" : ""}`}
+				onClick={handleSave}
+			>
+				Save
 			</button>
 			{/* Display error message */}
 			{errorMessage && (
-				<div style={{ color: "red", marginTop: "10px" }}>{errorMessage}</div>
+				<div className="error-message">{errorMessage}</div>
 			)}
 		</div>
 	);
