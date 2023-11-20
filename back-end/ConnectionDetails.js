@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const jsQR = require('jsqr');
 const axios = require('axios');
 //const QRCode = require('qrcode.react');
@@ -10,6 +11,14 @@ const router = express.Router();
 router.use(cors());
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
+
+
+const mongoUri = 'mongodb+srv://qrcodeadmin:qrcodegenerator@qrcodegenerator.eexnidy.mongodb.net/';
+
+mongoose.connect(mongoUri)
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err));
+
 
 router.get('/ScanCode', (req, res) => {
   try {
