@@ -13,13 +13,13 @@ router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
 
-const mongoUri = 'mongodb+srv://qrcodeadmin:qrcodegenerator@qrcodegenerator.eexnidy.mongodb.net/';
+const mongoUrl = process.env.MONGO_URL
 
-mongoose.connect(mongoUri)
+mongoose.connect(mongoUrl)
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 
-
+  
 router.get('/ScanCode', (req, res) => {
   try {
     const LogoUrl = 'https://picsum.photos/200/300';
