@@ -59,36 +59,43 @@ const SelectInformationForm = props => {
       <div className="select-information-header">
         <h2>Select Information</h2>
       </div>
-      <label>Select All</label>
-      <label className="select-information-checkbox">
-          <input type="checkbox"
-                  checked={allChecked}
-                  onChange={handleSelectAll} />
-        <span className="slider"></span>
-      </label>
-      <hr/>
-      <div>
-      {data.map(item =>
-        <div className="select-information-checkbox-wrapper" 
-              key={`input-div${item.id}`}>
-          <label key={`label${item.id}`}>{item.platform}: {item.info}</label>
-          <label className="select-information-checkbox">
-            <input key={`input${item.id}`}
-                    id={item.id /* passed to update state */}
-                    type="checkbox"
-                    checked={checked[item.id - 1] || false /* was triggering an
-                    uncontrolled component warning without second part */}
-                    onChange={e => handleCheckBox(e)} />
-            <span className="slider"></span>
-          </label>
+      <div className="select-information-body">
+        <div className="select-information-all-item">
+          <div className="select-information-all-label">
+            <label>Select All</label>
+          </div>
+          <div className="select-information-all-checkbox">
+            <label>
+              <input type="checkbox"
+                     checked={allChecked}
+                     onChange={handleSelectAll}/>
+            </label>
+          </div>
         </div>
-      )}
+        {data.map((item,index) =>
+        <div className="select-information-item" key={item.id || index}>
+          <div className="select-information-label">
+            <label className="select-information-label">
+              {item.platform}: {item.info}
+            </label>
+          </div>
+          <div className="select-information-checkbox">
+            <input id={item.id || index/* passed to update state */}
+                   type="checkbox"
+                   checked={checked[item.id - 1] || false /* was triggering an
+                   uncontrolled component warning without second part */}
+                   onChange={e => handleCheckBox(e)} />
+          </div>
+        </div>
+        )}
       </div>
-      {/* does nothing yet ... eventually should return `checked` to the QR
-        Code Generator, probably? */}
-      <button className="select-information-submit-button"
-              type="button"
-              onClick={handleSubmit}>Generate My QR Code!</button>
+      <div className="select-information-submit-item">
+        <button className="select-information-submit-button" 
+                type="button" 
+                onClick={handleSubmit}>
+          Generate My QR Code
+       </button>
+      </div>
     </div>
   )
 }
