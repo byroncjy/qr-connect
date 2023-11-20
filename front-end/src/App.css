@@ -1,6 +1,10 @@
 html,
 body {
-  background-color: #282c34;
+  background-color: #fff;
+}
+
+#root {
+    min-height: calc(100% - 112px);
 }
 
 html {
