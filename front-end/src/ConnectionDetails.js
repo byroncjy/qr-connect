@@ -42,10 +42,30 @@ const ConnectionDetails = () => {
 	const handleHideCode = () => {
 		setQRCodeVisible(false)
           }
+	/*
 	const handleSaveCode = () => {
-		navigate("/saved-connections")
-		console.log("Navigate to Save Code")
+		const userProfile = {
+			scanResults: scanResult.map(item => ({
+				webImage: item.webImage,
+				mediaColor: item.mediaColor,
+				webName: item.webName,
+				descriptions: [item.Description, item.Description] // Assuming to store the description twice as per example
+			}))
+		      };
+		      axios.post('/saveProfile', userProfile)
+			.then(response => {
+			    console.log('Profile saved successfully:', response.data);
+			    
+			    navigate("/saved-connections");
+			    console.log("Navigate to Save Code");
+			})
+			.catch(error => {
+			    console.error('Error in saving user profile:', error);
+			
+			});
+	
           }
+	*/
 
 	return (
 		
