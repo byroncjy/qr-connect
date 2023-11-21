@@ -12,12 +12,12 @@ const ConnectionDetails = () => {
 	const queryParameter = new URLSearchParams(location.search);
 	const { qrImageData } = location.state;
 	const qrCodeText = queryParameter.get('');
-        
+
 	console.log(qrCodeText);
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
-				await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/ConnectionDetails/`,{qrCodeText})
+				await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/ConnectionDetails/`, { qrCodeText })
 					.then(response => {
 						if (response.status === 200) {
 							setScanResult(response.data);
@@ -37,39 +37,39 @@ const ConnectionDetails = () => {
 
 	const handleViewCode = () => {
 		setQRCodeVisible(true)
-          }
+	}
 
 	const handleHideCode = () => {
 		setQRCodeVisible(false)
-          }
-	/*
+	}
+
 	const handleSaveCode = () => {
 		const userProfile = {
 			scanResults: scanResult.map(item => ({
 				webImage: item.webImage,
 				mediaColor: item.mediaColor,
 				webName: item.webName,
-				descriptions: [item.Description, item.Description] // Assuming to store the description twice as per example
+				//descriptions: [item.Description, item.Description] // Assuming to store the description twice as per example
 			}))
-		      };
-		      axios.post('/saveProfile', userProfile)
+		};
+		axios.post('/saveProfile', userProfile)
 			.then(response => {
-			    console.log('Profile saved successfully:', response.data);
-			    
-			    navigate("/saved-connections");
-			    console.log("Navigate to Save Code");
+				console.log('Profile saved successfully:', response.data);
+
+				navigate("/saved-connections");
+				console.log("Navigate to Save Code");
 			})
 			.catch(error => {
-			    console.error('Error in saving user profile:', error);
-			
+				console.error('Error in saving user profile:', error);
+
 			});
-	
-          }
-	*/
+
+	}
+
 
 	return (
-		
-		<div className='Box'>	
+
+		<div className='Box'>
 			{scanResult.map((item, index) => (
 				<div className="detailsContainer" key={index}>
 					<div className="areaA">
@@ -94,22 +94,22 @@ const ConnectionDetails = () => {
 			))}
 
 			<div className="">
-					<div className="viewCode">
-							<div onClick={handleViewCode}> View Code </div>
-						</div>
-						
-					</div>
-					{isQRCodeVisible && <img className="newQRCode" src={qrImageData} alt="Scanned QR" />}
+				<div className="viewCode">
+					<div onClick={handleViewCode}> View Code </div>
+				</div>
 
-			
-					<div className="hideCode">
-					<div onClick={handleHideCode}> Hide Code </div>
-					</div>
+			</div>
+			{isQRCodeVisible && <img className="newQRCode" src={qrImageData} alt="Scanned QR" />}
 
-					<div className="saveCode">
-					<div onClick={handleSaveCode}> Save Code </div>
-					</div>
-				
+
+			<div className="hideCode">
+				<div onClick={handleHideCode}> Hide Code </div>
+			</div>
+
+			<div className="saveCode">
+				<div onClick={handleSaveCode}> Save Code </div>
+			</div>
+
 		</div>
 
 	);

@@ -5,9 +5,11 @@ const UserProfile = require('./models/UserProfileSchema');
 router.post('/saveProfile', async (req, res) => {
     try {
         const userProfileData = new UserProfile({
-            platform: req.body.platform,
-            username: req.body.username
-            
+          scanResults: req.body.scanResults.map(item => ({
+                    webImage: item.webImage,
+                    mediaColor: item.mediaColor,
+                    webName: item.webName,
+                }))
         });
 
         const savedProfile = await userProfileData.save();
