@@ -6,7 +6,7 @@ const AccountSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  passwordHash: {
+  password_hash: {
     type: String,
     required: true
   }
@@ -32,16 +32,16 @@ const ConnectionSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  firstName_connected_person: {
+  connection_first_name: {
     type: String,
     required: true
   },
-  lastName_connected_person: {
+  connection_last_name: {
     type: String,
     required: true
   },
   platforms: [PlatformSchema],
-  connectedDate: {
+  connected_date: {
     type: Date,
     default: Date.now
   }
@@ -52,11 +52,11 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  firstName: {
+  first_name: {
     type: String,
     required: true
   },
-  lastName: {
+  last_name: {
     type: String,
     required: true
   },
@@ -65,6 +65,6 @@ const UserSchema = new mongoose.Schema({
   connections: [ConnectionSchema]
 });
 
-const User = mongoose.model('UserProfile', UserSchema);
+const User = mongoose.model('User', UserSchema);
 
 module.exports = User;
