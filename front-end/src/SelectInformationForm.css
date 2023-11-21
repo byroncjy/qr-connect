@@ -21,10 +21,11 @@
 
 .select-information-label, .select-information-all-label {
     flex: 9;
+    display: flex;
 }
 
-.select-information-all-label-text {
-    vertical-align: middle;
+.select-information-label-text, .select-information-all-label-text {
+    align-self: center;
 }
 
 .select-information-checkbox, .select-information-all-checkbox {

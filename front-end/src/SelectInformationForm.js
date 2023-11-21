@@ -77,7 +77,7 @@ const SelectInformationForm = props => {
         {data.map((item,index) =>
         <div className="select-information-item" key={item.id || index}>
           <div className="select-information-label">
-            <label>
+            <label className="select-information-label-text">
                 {item.platform}: {item.info}
             </label>
           </div>
