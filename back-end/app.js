@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./authRoutes');
 const connectionsRoutes = require('./connections');
 const unchangedImagesRouter = require('./unchanged-images'); // Ensure this path is correct
-const connectionsdetailsRoutes = require('./Connectiondetails');
+const connectionsdetailsRoutes = require('./ConnectionDetails');
 
 // import some useful middleware
 // const multer = require('multer') // middleware to handle HTTP POST requests with file uploads

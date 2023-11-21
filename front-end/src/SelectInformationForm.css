@@ -1,21 +1,22 @@
+.select-information-form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .select-information-header {
     text-align: center;
     padding-bottom: 10px;
 }
 
-.select-information-body {
-    display: flex;
-    flex-direction: column;
-}
-
 .select-information-item, .select-information-all-item {
     display: flex;
     padding: 5px 10px;
+    margin: 0% 2.5%;
 }
 
 .select-information-all-item {
     border-bottom: medium solid black;
-    margin: 0% 2.5%;
 }
 
 .select-information-label, .select-information-all-label {
@@ -31,13 +32,18 @@
     text-align: right;
 }
 
+.select-information-submit-item {
+    margin-top: auto;
+}
+
 .select-information-submit-button {
     width: 100%;
     border: none;
-    padding: 10px 0px;
+    padding: 20px 0px;
     background-color: #007bff;
     transition: background-color 0.3s;
     color: white;
+    font-size: 16px;
 }
 
 .select-information-submit-button:hover, .select-information-submit-button:active {
