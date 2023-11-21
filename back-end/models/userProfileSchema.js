@@ -1,48 +1,70 @@
 const mongoose = require('mongoose');
 
+const AccountSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  passwordHash: {
+    type: String,
+    required: true
+  }
+});
+
 const PlatformSchema = new mongoose.Schema({
-    id: {
-        type: Number,
-        required: true
-    },
-    name: {
-        type: String,
-        required: true
-    }
+  platform_id: {
+    type: Number,
+    required: true
+  },
+  platform_name: {
+    type: String,
+    required: true
+  },
+  platform_value: {
+    type: String,
+    required: true
+  }
 });
 
 const ConnectionSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    platforms: [PlatformSchema],
-    connectedAt: {
-        type: Date,
-        default: Date.now
-    }
-
+  connection_id: {
+    type: Number,
+    required: true
+  },
+  firstName_connected_person: {
+    type: String,
+    required: true
+  },
+  lastName_connected_person: {
+    type: String,
+    required: true
+  },
+  platforms: [PlatformSchema],
+  connectedDate: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-const UserProfileSchema = new mongoose.Schema({
-    userId: {
-        type: Number,
-        required: true
-    },
-    firstName: {
-        type: String,
-        required: true
-    },
-    lastName: {
-        type: String,
-        required: true
-    },
-    username: {
-        type: String
-    },
-    connections: [ConnectionSchema]
+const UserSchema = new mongoose.Schema({
+  user_id: {
+    type: Number,
+    required: true
+  },
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
+  account: AccountSchema,
+  platforms: [PlatformSchema],
+  connections: [ConnectionSchema]
 });
 
-const UserProfile = mongoose.model('UserProfile', UserProfileSchema);
+const User = mongoose.model('UserProfile', UserSchema);
 
-module.exports = UserProfile;
+module.exports = User;
