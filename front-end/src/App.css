@@ -4,7 +4,9 @@ body {
 }
 
 #root {
-    min-height: calc(100% - 112px);
+  min-height: calc(100% - 112px); /* 112px is height of footer */
+  display: flex;
+  flex-direction: column;
 }
 
 html {
