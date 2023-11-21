@@ -34,6 +34,6 @@
     transition: background-color 0.3s;
 }
 
-.home-link:hover {
+.home-link:hover, .home-link:active {
     background-color: #ddd;
 }

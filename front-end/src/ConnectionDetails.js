@@ -6,6 +6,7 @@ import "./ConnectionDetails.css";
 
 const ConnectionDetails = () => {
 	const navigate = useNavigate()
+	console.log(navigate)
 	const [scanResult, setScanResult] = useState([]);
 	const [isQRCodeVisible, setQRCodeVisible] = useState(false);
 	const location = useLocation();
@@ -44,14 +45,31 @@ const ConnectionDetails = () => {
 	}
 
 	const handleSaveCode = () => {
+		/*
 		const userProfile = {
-			scanResults: scanResult.map(item => ({
-				webImage: item.webImage,
-				mediaColor: item.mediaColor,
-				webName: item.webName,
-				//descriptions: [item.Description, item.Description] // Assuming to store the description twice as per example
+			user_id: ,
+			first_name: ,
+			last_name: ,
+			platforms: ,
+			connections: scanResult.map(item => ({
+			  connection_id: ,
+			  connection_first_name: ,
+			  connection_last_name: ,
+			  connections: scanResult.map(item => ({
+				connection_id: ,
+				connection_first_name: item.firstName, 
+				connection_last_name: item.lastName,
+				platforms: item.platforms.map(platform => ({
+				  platform_id: platform.id, 
+				  platform_name: platform.name, 
+				  platform_value: platform.value
+				})),
+			  connected_date: new Date()
 			}))
-		};
+		        };
+		        */
+    
+    /*        
 		axios.post('/saveProfile', userProfile)
 			.then(response => {
 				console.log('Profile saved successfully:', response.data);
@@ -63,6 +81,7 @@ const ConnectionDetails = () => {
 				console.error('Error in saving user profile:', error);
 
 			});
+			*/
 
 	}
 

@@ -7,13 +7,11 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const { createCanvas, loadImage } = require('canvas');
 
-// const app = express();
 
 const router = express.Router();
 router.use(cors());
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
-
 const mongoUrl = process.env.MONGO_URL
 
 mongoose.connect(mongoUrl)
@@ -33,7 +31,6 @@ router.get('/ScanCode', (req, res) => {
 router.post('/ScanCode', async (req, res) => {
   const { qrData } = req.body;
   const base64Data = qrData.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
-
   try {
     const image = await loadImage(`data:image/png;base64,${base64Data}`);
     const canvas = createCanvas(image.width, image.height);
