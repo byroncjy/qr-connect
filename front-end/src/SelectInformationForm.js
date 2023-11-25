@@ -16,7 +16,6 @@ const SelectInformationForm = props => {
 
   const handleCheckBox = e => {
     const checkedCopy = [...checked]
-    // data from mockaroo is 1-indexed
     checkedCopy[e.target.id - 1] = e.target.checked
     setChecked(checkedCopy)
   }
