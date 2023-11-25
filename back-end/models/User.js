@@ -43,7 +43,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  account: accountSchema,
   platforms: [platformSchema],
   connections: [connectionSchema]
 });
