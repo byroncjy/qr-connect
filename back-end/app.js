@@ -3,10 +3,13 @@ const express = require('express') // CommonJS import style!
 const app = express() // instantiate an Express object
 // const path = require('path')
 const bodyParser = require('body-parser');
-const authRoutes = require('./authRoutes');
-const connectionsRoutes = require('./connections');
-const unchangedImagesRouter = require('./unchanged-images'); // Ensure this path is correct
-const connectionsdetailsRoutes = require('./ConnectionDetails');
+// Import route files
+const userRoutes = require('./users')
+const platformRoutes = require('./platforms')
+const authRoutes = require('./authRoutes')
+const connectionsRoutes = require('./connections')
+const unchangedImagesRouter = require('./unchanged-images') // Ensure this path is correct
+const connectionsdetailsRoutes = require('./ConnectionDetails')
 
 // import some useful middleware
 // const multer = require('multer') // middleware to handle HTTP POST requests with file uploads
@@ -36,10 +39,6 @@ app.use('/auth', authRoutes);
 app.get('/', (req, res) => {
   res.send('Hello from root')
 })
-
-// Import route files
-const userRoutes = require('./users')
-const platformRoutes = require('./platforms')
 
 // Use route files
 app.use('/users', userRoutes)
