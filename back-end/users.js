@@ -17,14 +17,14 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     // take apart the uploaded file's name so we can create a new one based on it
     const extension = path.extname(file.originalname)
-    const basenameWithoutExtension = path.basename(
+    const basename = path.basename(
       file.originalname,
       extension
     )
     // create a new filename with a timestamp in the middle
-    const newName = `${basenameWithoutExtension}-${Date.now()}${extension}`
+    const filename = `${basename}-${Date.now()}${extension}`
     // tell multer to use this new filename for the uploaded file
-    cb(null, newName)
+    cb(null, filename)
   }
 })
 const upload = multer({ storage })
@@ -35,13 +35,13 @@ router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).exec()
     // Extracts and returns only user profile data
-    const userProfileData = {
+    const user_profile = {
       email: user.email,
       first_name: user.first_name,
       last_name: user.last_name,
       profile_picture: user.profile_picture
     }
-    res.json(userProfileData)
+    res.json(user_profile)
   } catch (err) {
     console.error(`Error fetching user profile data: ${err}`)
     res.status(500).json({ error: 'Internal Server Error' })
@@ -59,10 +59,10 @@ router.put('/:id', async (req, res) => {
       user.email = req.body.email
     }
     if (req.body.firstName) {
-      user.first_name = req.body.firstName
+      user.first_name = req.body.first_name
     }
     if (req.body.lastName) {
-      user.last_name = req.body.lastName
+      user.last_name = req.body.last_name
     }
     if (req.body.profile_picture) {
       user.profile_picture = req.body.profile_picture
