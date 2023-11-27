@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode'; 
 import './SavedConnections.css';
 
 const SavedConnections = () => {
@@ -9,8 +10,20 @@ const SavedConnections = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = process.env.REACT_APP_API_URL_LK; 
-        const response = await axios.get(apiUrl);
+        const token = localStorage.getItem('userToken'); // Retrieve token from local storage
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        // Decode token to get user ID
+        const decoded = jwtDecode(token); 
+        const userId = decoded.userId;
+
+        const apiUrl = `${process.env.REACT_APP_API_URL_LK}/user-connections/${userId}`;
+        const response = await axios.get(apiUrl, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setConnections(response.data);
       } catch (error) {
         console.error('Error fetching connections data:', error);
@@ -19,7 +32,7 @@ const SavedConnections = () => {
 
     fetchData();
   }, []);
-
+  
   return (
     <div className="saved-connections-container">
       <div className="header">
@@ -27,7 +40,7 @@ const SavedConnections = () => {
       </div>
       <div className="connections-grid">
         {connections.map((connection) => (
-          <Link key={connection.id} to={`/ConnectionDetails/${connection.id}`} className="connection-box">
+          <Link key={connection.id} to={`/ConnectionDetails/${connection._id}`} className="connection-box">
             <img src={connection.profile_pic_url} alt={connection.name} />
             <p>{connection.name}</p>
           </Link>

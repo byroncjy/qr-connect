@@ -5,10 +5,25 @@ const router = express.Router();
 
 
 // Function to generate JWT
-const generateToken = () => { //Since we don't have a database implemented, the backend will not validate the credentials and will allow access with any username and password.
+/*const generateToken = () => { //Since we don't have a database implemented, the backend will not validate the credentials and will allow access with any username and password.
     return jwt.sign({}, 'secretKey', { expiresIn: '24h' }); 
-  };
+  };*/
   
+const generateToken = (userId) => {
+    return jwt.sign({ userId }, 'secretKey', { expiresIn: '24h' }); 
+};
+
+
+const authenticateToken = (req, res, next) => {
+  const token = req.headers['authorization'];
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, 'secretKey', (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.userId = user.userId;
+    next();
+  });
+};
   // Signup route
 router.post('/signup', async (req, res) => {
     const token = generateToken();
@@ -27,6 +42,7 @@ router.post('/logout', async (req, res) => {
 });
   module.exports = router;
 
+  
 // // Mock database
 // const users = [];
 
