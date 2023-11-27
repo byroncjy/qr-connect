@@ -16,7 +16,6 @@ const SelectInformationForm = props => {
 
   const handleCheckBox = e => {
     const checkedCopy = [...checked]
-    // data from mockaroo is 1-indexed
     checkedCopy[e.target.id - 1] = e.target.checked
     setChecked(checkedCopy)
   }
@@ -48,6 +47,7 @@ const SelectInformationForm = props => {
   }, [data])
 
   // check if all checked after `checked` changes (confusing i know)
+  // extra comment
   useEffect(() => {
     if (checked.length) {
       setAllChecked(checked.reduce((acc, head) => acc && head))

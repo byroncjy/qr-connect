@@ -89,6 +89,9 @@ const ConnectionDetails = () => {
 	return (
 
 		<div className='Box'>
+			<div className="userName">
+				<div>First and Last Name</div>
+			</div>
 			{scanResult.map((item, index) => (
 				<div className="detailsContainer" key={index}>
 					<div className="areaA">

@@ -114,6 +114,17 @@ a {
   color: inherit;
 }
 
+.userName{
+          border: 1px solid black;
+          cursor: pointer;
+          border-radius: 10px;
+          background-color: white;
+          color: black;
+          font-size: 20px;
+          padding: 10px 20px;
+          margin: 10%; 
+}
+
 .Box {
   display: flex;
   flex-direction: column;
