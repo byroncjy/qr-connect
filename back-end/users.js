@@ -6,7 +6,7 @@ const path = require('path')
 const multer = require('multer') // middleware to handle HTTP POST requests with file uploads
 const router = express.Router()
 
-const User = require('./models/User.js')
+const { User } = require('./models/User.js')
 
 // Multer handles file uploads
 // enable file uploads saved to disk in a directory named 'public/uploads'

@@ -51,6 +51,10 @@ const userSchema = new mongoose.Schema({
   connections: [connectionSchema]
 });
 
-const User = mongoose.model('User', userSchema);
+const Platform = mongoose.model('Platform', platformSchema)
+const Connection = mongoose.model('Connection', connectionSchema)
+const User = mongoose.model('User', userSchema)
 
-module.exports = User;
+exports.Platform = Platform
+exports.Connection = Connection
+exports.User = User
