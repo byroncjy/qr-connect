@@ -136,12 +136,12 @@ describe('User Routes', function () {
       })
     }),
     describe('Unsuccessful PUT', function () {
-      it('should respond with an HTTP 500 status and an error body', function (done) {
+      it('should respond with an HTTP 400 status and an error body', function (done) {
         chai
           .request(router)
           .put(`/users/${successId}/platforms`)
           .send([
-            { platform: 'bad_platform', info: 'johndoe254' }
+            { platform: 'bad_platform_without_info'}
           ])
           .end((err, res) => {
             expect(res).to.have.status(400)

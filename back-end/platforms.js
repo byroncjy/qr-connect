@@ -26,25 +26,30 @@ router.put('/:id/platforms', (req, res) => {
   try {
     const userId = req.params.id
     const platformInformation = req.body
-    // Authorized platform values
-    const authorizedPlatforms = [
-      'Phone number',
-      'Personal website',
-      'Linkedin',
-      'Instagram',
-      'Facebook',
-      'Twitter',
-      'Github'
-    ]
+    // // Authorized platform values
+    // const authorizedPlatforms = [
+    //   'Phone number',
+    //   'Personal website',
+    //   'Linkedin',
+    //   'Instagram',
+    //   'Facebook',
+    //   'Twitter',
+    //   'Github'
+    // ]
 
-    // Check if any unauthorized platforms are present in the request body
-    // We can accept fewer platforms as long as all authorized, since from user side
-    //  this means they have replaced some platforms
-    const unauthorizedPlatforms = Object.values(platformInformation)
-      .filter(entry => !(authorizedPlatforms.includes(entry.platform)))
-    if (unauthorizedPlatforms.length > 0) {
-      console.log(unauthorizedPlatforms)
-      return res.status(400).json({ error: 'Unauthorized platforms detected' })
+    // After allowing for custom platforms, no longer check for unauthorized platforms
+
+    // Check if all elements in the array have only 'platform' and 'info' fields
+    // This will eventually be done with validator.js
+    const isValid = platformInformation.every(
+      item =>
+        Object.keys(item).length === 2 && // Check if only two keys exist
+        item.hasOwnProperty('platform') &&
+        item.hasOwnProperty('info')
+    );
+
+    if (!isValid) {
+      return res.status(400).json({ error: 'Invalid input. Only "platform" and "info" fields are allowed.' });
     }
 
     // Simulate updating the database with the received platform information
