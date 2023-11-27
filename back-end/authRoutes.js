@@ -15,6 +15,7 @@ const generateToken = (user) => {
   const jwtSecret = process.env.JWT_SECRET || 'yourDefaultJwtSecret';
   return jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '24h' });
 };
+//
 
 // Construct MongoDB Connection String
 const mongoDBUser = process.env.MONGODB_USER;
