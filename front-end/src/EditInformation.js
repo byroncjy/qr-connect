@@ -169,6 +169,7 @@ const EditInformation = () => {
       // Clear the error message if no duplicates are found
       setErrorMessage('');
       // Filter out the entries with either empty platform or empty info
+      // Also only extract out platform and info, not isCustom
       const filteredPlatformInformationMap = platformInformationMap
         .filter((item) => item.platform !== '' && item.info !== '')
 		.map(({ platform, info }) => ({ platform, info }))
@@ -285,7 +286,7 @@ const EditInformation = () => {
                             </>
                         )}
 						{/* Delete entry */}
-						<button onClick={() => handleDeletePlatform(index)}>Delete</button>
+						<button onClick={() => handleDeletePlatform(index)}>X</button>
 					</div>
 				</div>
 			))}
