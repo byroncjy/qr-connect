@@ -83,6 +83,16 @@ const EditInformation = () => {
 		setPlatformInformationMap(updatedPlatformInformationMap);
 	};
 
+	// Handle adding a new row for a custom platform
+    const handleAddCustomPlatform = () => {
+        const updatedPlatformInformationMap = [
+            ...platformInformationMap,
+			// add isCustom flag
+            { platform: "", info: "", isCustom: true}, 
+        ];
+        setPlatformInformationMap(updatedPlatformInformationMap);
+    };
+
   // Handles user uploading new profile picture
   // Sends image as multipart form data to backend uploadPicture route
   // Then saves a local browser url that temporarily holds the image to profileData
@@ -159,9 +169,9 @@ const EditInformation = () => {
       // Clear the error message if no duplicates are found
       setErrorMessage('');
       // Filter out the entries with either empty platform or empty info
-      const filteredPlatformInformationMap = platformInformationMap.filter(
-        (item) => item.platform !== '' && item.info !== ''
-      )
+      const filteredPlatformInformationMap = platformInformationMap
+        .filter((item) => item.platform !== '' && item.info !== '')
+		.map(({ platform, info }) => ({ platform, info }))
 
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`,
@@ -223,36 +233,68 @@ const EditInformation = () => {
 			{platformInformationMap.map((item, index) => (
 				<div key={index}>
 					<div className="platform-container">
-						<label htmlFor={`platform${index}`}></label>
-						{/* Dropdown */}
-						<select
-							id={`platform${index}`}
-							value={item.platform}
-							onChange={(e) => handlePlatformChange(index, e)}
-						>
-							{platformOptions.map((option) => (
-								<option key={option.value} value={option.value}>
-									{option.label}
-								</option>
-							))}
-						</select>
+						{/* Conditionally render based on whether it's a custom platform */}
+                        {item.isCustom ? (
+                            <>
+                                {/* Two text boxes for custom platform */}
+                                <input
+                                    type="text"
+                                    placeholder="Platform"
+                                    value={item.platform}
+                                    onChange={(e) =>
+                                        handlePlatformChange(index, e)
+                                    }
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Link / Information"
+                                    value={item.info}
+                                    onChange={(e) => handleInfoChange(index, e)}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                {/* Dropdown + text box for non-custom platforms */}
+                                <select
+                                    value={item.platform}
+                                    onChange={(e) =>
+                                        handlePlatformChange(index, e)
+                                    }
+                                >
+                                    {platformOptions.map((option) => (
+                                        <option
+                                            key={option.value}
+                                            value={option.value}
+                                        >
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
 
-						{/* If not Select Platform, display text input box */}
-						{item.platform !== "" && (
-							<input
-								type="text"
-								placeholder="Link / Information"
-								value={item.info}
-								onChange={(e) => handleInfoChange(index, e)}
-							/>
-						)}
+                                {/* Text input for non-custom platforms */}
+                                {item.platform !== "" && (
+                                    <input
+                                        type="text"
+                                        placeholder="Link / Information"
+                                        value={item.info}
+                                        onChange={(e) =>
+                                            handleInfoChange(index, e)
+                                        }
+                                    />
+                                )}
+                            </>
+                        )}
 						{/* Delete entry */}
-						<button onClick={() => handleDeletePlatform(index)}>X</button>
+						<button onClick={() => handleDeletePlatform(index)}>Delete</button>
 					</div>
 				</div>
 			))}
 			{/* Add new entry */}
 			<button onClick={handleAddPlatformInformation}>Add platform</button>
+			
+			{/* Add button for adding custom platform */}
+            <button onClick={handleAddCustomPlatform}>Add custom platform</button>
+
 			{/* Save updated platform information */}
 			<button
 				type="button"
