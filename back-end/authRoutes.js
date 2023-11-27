@@ -4,7 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const User = require('./models/User'); // Ensure the path to your User model is correct
+const User = require('./models/User');
 
 const app = express();
 
