@@ -191,12 +191,18 @@ const EditInformation = () => {
       <div className="edit-information-header">
         {/* Note that right now image urls are randomly generated via Mockaroo */}
         <img src={profileData.url_picture} alt="Profile" className="profile-picture" />
-        <p>Upload profile picture below: </p>
         <div className="upload-container">
-          <input type="file" accept="image/*" onChange={handleProfilePictureUpload} />
+			<label htmlFor="file-upload" className="custom-file-upload">
+				Upload picture
+			</label>
+			<input
+				id="file-upload"
+				type="file"
+				accept="image/*"
+				onChange={handleProfilePictureUpload}
+			/>
         </div>
       </div>
-
 			<div className="profile-section">
 				<p>Name: </p>
 				<input
@@ -246,7 +252,7 @@ const EditInformation = () => {
 				</div>
 			))}
 			{/* Add new entry */}
-			<button onClick={handleAddPlatformInformation}>Add another platform</button>
+			<button onClick={handleAddPlatformInformation}>Add platform</button>
 			{/* Save updated platform information */}
 			<button
 				type="button"

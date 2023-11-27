@@ -62,3 +62,24 @@
     border-radius: 50%; /* This creates a circular shape */
     object-fit: cover; /* This ensures the image covers the entire container */
 }
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 1px 5px;
+    cursor: pointer;
+    color: rgb(8, 20, 34);
+    background-color: #fff;
+    border: 1px solid rgb(8, 20, 34);
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+.custom-file-upload:hover {
+    background-color: #0056b3;
+}
+
+.upload-container input[type="file"] {
+    display: none;
+}
+
+
