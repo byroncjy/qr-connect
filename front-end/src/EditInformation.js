@@ -35,7 +35,26 @@ const EditInformation = () => {
         // Ensure .env file is setup for this to work
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`)        
         const data = response.data
-        setPlatformInformationMap(data)
+        // Map the fetched data to maintain the structure
+        const updatedPlatformInformationMap = data.map((entry) => {
+          // Check if the entry name exists in the platformOptions list
+          // If doesn't exist, set isCustom flag
+          const isCustom = !platformOptions.some((option) => option.value === entry.name)
+
+          if (isCustom) {
+            return {
+              name: entry.name,
+              value: entry.value,
+              isCustom: true,
+            }
+          } else {
+            return {
+              name: entry.name,
+              value: entry.value,
+            }
+          }
+        })
+        setPlatformInformationMap(updatedPlatformInformationMap)
       } catch (error) {
         console.error('Error fetching platform data:', error)
       }
