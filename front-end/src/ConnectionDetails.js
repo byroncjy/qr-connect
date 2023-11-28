@@ -33,7 +33,7 @@ const ConnectionDetails = () => {
 
 		fetchScanResult();
 
-	}, []);
+	}, [qrCodeText]);
 
 	const handleViewCode = () => {
 		setQRCodeVisible(true)
