@@ -25,7 +25,7 @@ const EditInformation = () => {
 
   // In final implementation, we will retrieve userId of current logged in user
   // For now, we just mock userId
-  const userId = 20
+  const userId = '6562c186a4a586c6e19a4eef'
 
   // Fetch all saved data from backend upon load
   useEffect(() => {
@@ -35,6 +35,7 @@ const EditInformation = () => {
         // Ensure .env file is setup for this to work
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`)        
         const data = response.data
+        console.log(data)
         setPlatformInformationMap(data)
       } catch (error) {
         console.error('Error fetching platform data:', error)
@@ -247,56 +248,55 @@ const EditInformation = () => {
 				<div key={index}>
 					<div className="platform-container">
 						{/* Conditionally render based on whether it's a custom platform */}
-                        {item.isCustom? (
-                            <>
-                                {/* Two text boxes for custom platform */}
-                                <input
-                                    type="text"
-                                    placeholder="Platform"
-                                    value={item.platform}
-                                    onChange={(e) =>
-                                        handleCustomPlatformChange(index, e)
-                                    }
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Link / Information"
-                                    value={item.info}
-                                    onChange={(e) => handleInfoChange(index, e)}
-                                />
-                            </>
-                        ) : (
-                            <>
-                                {/* Dropdown + text box for non-custom platforms */}
-                                <select
-                                    value={item.platform}
-                                    onChange={(e) => {
-										handlePlatformChange(index, e);
-									}}
-                                >
-                                    {platformOptions.map((option) => (
-                                        <option
-                                            key={option.value}
-                                            value={option.value}
-                                        >
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
-
-                                {/* Text input for non-custom platforms */}
-                                {item.platform !== "" && (
-                                    <input
-                                        type="text"
-                                        placeholder="Link / Information"
-                                        value={item.info}
-                                        onChange={(e) =>
-                                            handleInfoChange(index, e)
-                                        }
-                                    />
-                                )}
-                            </>
-                        )}
+            {item.isCustom? (
+              <>
+                {/* Two text boxes for custom platform */}
+                <input
+                  type="text"
+                  placeholder="Platform"
+                  value={item.platform}
+                  onChange={(e) =>
+                      handleCustomPlatformChange(index, e)
+                  }
+                />
+                <input
+                  type="text"
+                  placeholder="Link / Information"
+                  value={item.info}
+                  onChange={(e) => handleInfoChange(index, e)}
+                />
+              </>
+            ) : (
+              <>
+                {/* Dropdown + text box for non-custom platforms */}
+                <select
+                  value={item.platform}
+                  onChange={(e) => {
+                    handlePlatformChange(index, e);
+                  }}
+                >
+                  {platformOptions.map((option) => (
+                    <option
+                      key={option.value}
+                      value={option.value}
+                    >
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                  {/* Text input for non-custom platforms */}
+                  {item.platform !== "" && (
+                    <input
+                      type="text"
+                      placeholder="Link / Information"
+                      value={item.info}
+                      onChange={(e) =>
+                        handleInfoChange(index, e)
+                      }
+                    />
+                  )}
+                </>
+            )}
 						{/* Delete entry */}
 						<button onClick={() => handleDeletePlatform(index)}>X</button>
 					</div>
