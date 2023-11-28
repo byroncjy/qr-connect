@@ -10,7 +10,8 @@ const platformOptions = [
 	{ value: "Instagram", label: "Instagram" },
 	{ value: "Facebook", label: "Facebook" },
 	{ value: "Twitter", label: "Twitter" },
-	{ value: "Github", label: "Github" }
+	{ value: "Github", label: "Github" },
+	{ value: "Custom", label: "Custom" }
 ];
 
 const EditInformation = () => {
@@ -60,7 +61,26 @@ const EditInformation = () => {
 	const handlePlatformChange = (index, event) => {
 		const { value } = event.target;
 		const updatedPlatformInformationMap = [...platformInformationMap];
-		updatedPlatformInformationMap[index].platform = value;
+		
+		// If Custom was chosen, set to blank text box and set isCustom flag
+		if (value === "Custom") {
+			updatedPlatformInformationMap[index] = {
+				platform: "",
+				info: "",
+				isCustom: true,
+			};
+		} else {
+			updatedPlatformInformationMap[index].platform = value;
+			updatedPlatformInformationMap[index].isCustom = false;
+		}
+		setPlatformInformationMap(updatedPlatformInformationMap);
+	};
+
+	// Handle change in custom platform text box
+	const handleCustomPlatformChange = (index, event) => {
+		const updatedPlatformInformationMap = [...platformInformationMap];
+		updatedPlatformInformationMap[index].platform = event.target.value;
+		updatedPlatformInformationMap[index].isCustom = true;
 		setPlatformInformationMap(updatedPlatformInformationMap);
 	};
 
@@ -82,16 +102,6 @@ const EditInformation = () => {
 		const updatedPlatformInformationMap = platformInformationMap.filter((_, i) => i !== index);
 		setPlatformInformationMap(updatedPlatformInformationMap);
 	};
-
-	// Handle adding a new row for a custom platform
-    const handleAddCustomPlatform = () => {
-        const updatedPlatformInformationMap = [
-            ...platformInformationMap,
-			// add isCustom flag
-            { platform: "", info: "", isCustom: true}, 
-        ];
-        setPlatformInformationMap(updatedPlatformInformationMap);
-    };
 
   // Handles user uploading new profile picture
   // Sends image as multipart form data to backend uploadPicture route
@@ -168,51 +178,55 @@ const EditInformation = () => {
       }
       // Clear the error message if no duplicates are found
       setErrorMessage('');
+
+      console.log(platformInformationMap)
       // Filter out the entries with either empty platform or empty info
-      // Also only extract out platform and info, not isCustom
       const filteredPlatformInformationMap = platformInformationMap
         .filter((item) => item.platform !== '' && item.info !== '')
+	
+      // For the data to be sent to backend, only send platform and info fields, without isCustom
+      const platformInfoData = filteredPlatformInformationMap
 		.map(({ platform, info }) => ({ platform, info }))
 
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`,
-        filteredPlatformInformationMap,
+        platformInfoData,
         {
           headers: {
             'Content-Type': 'application/json'
           }
         }
       )
-			if (response.status !== 200) {
-				throw new Error(`Network response was not ok. Status Code: ${response.status}`);
-			}
-			// Update the platformInformationMap state
-			setPlatformInformationMap(filteredPlatformInformationMap);
-		} catch (error) {
-			console.error("Error saving data:", error);
-		}
-	};
+	if (response.status !== 200) {
+		throw new Error(`Network response was not ok. Status Code: ${response.status}`);
+	}
+
+	// Update the platformInformationMap state with all fields included
+	setPlatformInformationMap(filteredPlatformInformationMap);
+	} catch (error) {
+		console.error("Error saving data:", error);
+	}
+  };
 
 	return (
 		<div className="edit-information-container">
-			<h2>Edit Personal Information</h2>
-
-      {/* Displays picture and upload picture button */}
-      <div className="edit-information-header">
-        {/* Note that right now image urls are randomly generated via Mockaroo */}
-        <img src={profileData.url_picture} alt="Profile" className="profile-picture" />
-        <div className="upload-container">
-			<label htmlFor="file-upload" className="custom-file-upload">
-				Upload picture
-			</label>
-			<input
-				id="file-upload"
-				type="file"
-				accept="image/*"
-				onChange={handleProfilePictureUpload}
-			/>
-        </div>
-      </div>
+			{/* Displays picture and upload picture button */}
+			<div className="edit-information-header">
+				<h2>Edit Personal Information</h2>
+				{/* Note that right now image urls are randomly generated via Mockaroo */}
+				<img src={profileData.url_picture} alt="Profile" className="profile-picture" />
+				<div className="upload-container">
+					<label htmlFor="file-upload" className="custom-file-upload">
+						Upload picture
+					</label>
+					<input
+						id="file-upload"
+						type="file"
+						accept="image/*"
+						onChange={handleProfilePictureUpload}
+					/>
+				</div>
+			</div>
 			<div className="profile-section">
 				<p>Name: </p>
 				<input
@@ -229,12 +243,12 @@ const EditInformation = () => {
 				/>
 				<p>Email: {profileData.email}</p>
 			</div>
-			{/* Display each row of plaform name and information */}
+			{/* Display each row of platform name and information */}
 			{platformInformationMap.map((item, index) => (
 				<div key={index}>
 					<div className="platform-container">
 						{/* Conditionally render based on whether it's a custom platform */}
-                        {item.isCustom ? (
+                        {item.isCustom? (
                             <>
                                 {/* Two text boxes for custom platform */}
                                 <input
@@ -242,7 +256,7 @@ const EditInformation = () => {
                                     placeholder="Platform"
                                     value={item.platform}
                                     onChange={(e) =>
-                                        handlePlatformChange(index, e)
+                                        handleCustomPlatformChange(index, e)
                                     }
                                 />
                                 <input
@@ -257,9 +271,9 @@ const EditInformation = () => {
                                 {/* Dropdown + text box for non-custom platforms */}
                                 <select
                                     value={item.platform}
-                                    onChange={(e) =>
-                                        handlePlatformChange(index, e)
-                                    }
+                                    onChange={(e) => {
+										handlePlatformChange(index, e);
+									}}
                                 >
                                     {platformOptions.map((option) => (
                                         <option
@@ -291,9 +305,6 @@ const EditInformation = () => {
 			))}
 			{/* Add new entry */}
 			<button onClick={handleAddPlatformInformation}>Add platform</button>
-			
-			{/* Add button for adding custom platform */}
-            <button onClick={handleAddCustomPlatform}>Add custom platform</button>
 
 			{/* Save updated platform information */}
 			<button
