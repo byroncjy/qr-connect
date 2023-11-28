@@ -303,7 +303,9 @@ const EditInformation = () => {
 				</div>
 			))}
 			{/* Add new entry */}
-			<button onClick={handleAddPlatformInformation}>Add platform</button>
+			<button onClick={handleAddPlatformInformation} className="add-platform-button">
+				Add platform
+			</button>
 
 			{/* Save updated platform information */}
 			<button

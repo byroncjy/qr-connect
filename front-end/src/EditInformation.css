@@ -22,7 +22,7 @@
 
 .save-button {
     width: 100%;
-    padding: 10px;
+    padding: 13px;
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -30,6 +30,7 @@
     cursor: pointer;
     transition: background-color 0.3s;
     margin-top: 10px;
+    font-size: 16px; /* Adjust font size */
 }
 
 .save-button:hover {
@@ -38,6 +39,23 @@
 
 .save-button.clicked {
     background-color: #0056b3; /* Darkened color when clicked */
+}
+
+.add-platform-button {
+    width: 100%;
+    padding: 10px; /* Increase padding to make the button bigger */
+    background-color: #fff;
+    color: rgb(8, 20, 34);
+    border: 1px solid rgb(8, 20, 34);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+    font-size: 16px; /* Adjust font size */
+}
+
+.add-platform-button:hover {
+    background-color: #0056b3;
 }
 
 .error-message {
@@ -94,5 +112,3 @@
 .upload-container input[type="file"] {
     display: none;
 }
-
-
