@@ -14,7 +14,7 @@ const ConnectionDetails = () => {
 	const { qrImageData } = location.state;
 	const qrCodeText = queryParameter.get('');
 
-	console.log(qrCodeText);
+	//console.log(qrCodeText);
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
@@ -33,8 +33,7 @@ const ConnectionDetails = () => {
 
 
 		fetchScanResult();
-		console.log(scanResult);
-	}, []);
+	}, [qrCodeText]);
 
 	const handleViewCode = () => {
 		setQRCodeVisible(true)
