@@ -4,7 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const User = require('./models/User'); // Ensure this path is correct
+const { User } = require('./models/User.js'); // Ensure this path is correct
 const mongoDBConnectionString = `mongodb+srv://${process.env.MONGODB_USER}:${encodeURIComponent(process.env.MONGODB_PASS)}@${process.env.MONGODB_URI}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
 
 
