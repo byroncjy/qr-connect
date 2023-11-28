@@ -9,15 +9,15 @@ const mongoDBConnectionString = `mongodb+srv://${process.env.MONGODB_USER}:${enc
 
 
 // Connect to MongoDB
-mongoose.connect(mongoDBConnectionString, {
-  useNewUrlParser: true, 
-  useUnifiedTopology: true,
-  user: process.env.MONGODB_USER,
-  pass: process.env.MONGODB_PASS,
-  dbName: process.env.MONGODB_DATABASE
-})
-.then(() => console.log('MongoDB connected...'))
-.catch(err => console.error('MongoDB connection error:', err));
+// mongoose.connect(mongoDBConnectionString, {
+//   useNewUrlParser: true, 
+//   useUnifiedTopology: true,
+//   user: process.env.MONGODB_USER,
+//   pass: process.env.MONGODB_PASS,
+//   dbName: process.env.MONGODB_DATABASE
+// })
+// .then(() => console.log('MongoDB connected...'))
+// .catch(err => console.error('MongoDB connection error:', err));
 
 // Middleware to parse JSON
 router.use(express.json());
