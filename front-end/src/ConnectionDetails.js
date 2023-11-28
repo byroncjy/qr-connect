@@ -35,7 +35,7 @@ const ConnectionDetails = () => {
 		fetchScanResult();
 		console.log(scanResult);
 	}, []);
-	//setScanResult({"id":1,"first_name":"Grover","last_name":"Taffs","platforms":[{"name":"Instgram","value":"www.example.com"},{"name":"FaceBook","value":"www.facebook.com"},{"name":"Instgram","value":"www.instgram.com"}]});
+
 	const handleViewCode = () => {
 		setQRCodeVisible(true)
 	}
@@ -47,16 +47,12 @@ const ConnectionDetails = () => {
 	const handleSaveCode = () => {
 
 		const newUserConnection = {
-			first_name: scanResult.first_name,
-			last_name: scanResult.last_name,
-			platforms: scanResult.platforms.map(platform => ({
-			name: platform.name,
-			value: platform.value
-			})),
+			friend_id: scanResult.friend_id['$oid'],
+			platforms: scanResult.platforms,
 			connected_date: new Date() 
          };
 	
-		console.log(newUserConnection)
+          console.log("New User Connection:", newUserConnection);
 		
 		axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/saveConnection`, newUserConnection)
 		.then(response => {
@@ -77,9 +73,7 @@ const ConnectionDetails = () => {
 		<div className='Box'>
         {scanResult && (
             <>
-                <div className="userName">
-                    <div>{scanResult.first_name} {scanResult.last_name}</div>
-                </div>
+               
 
                 {scanResult.platforms && scanResult.platforms.map((platform, index) => (
                     <div className="detailsContainer" key={index}>

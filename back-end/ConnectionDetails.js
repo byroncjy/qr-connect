@@ -4,7 +4,6 @@ const cors = require('cors');
 const jsQR = require('jsqr');
 const axios = require('axios');
 const mongoose = require('mongoose');
-const { Connection } = require('./models/User');
 require('dotenv').config();
 const { createCanvas, loadImage } = require('canvas');
 
@@ -15,9 +14,7 @@ router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 const mongoUrl = process.env.MONGO_URL
 
-mongoose.connect(mongoUrl)
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err));
+
 
 router.get('/ScanCode', (req, res) => {
   try {

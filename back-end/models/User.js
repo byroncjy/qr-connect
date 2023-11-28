@@ -12,12 +12,8 @@ const platformSchema = new mongoose.Schema({
 });
 
 const connectionSchema = new mongoose.Schema({
-  first_name: {
-    type: String,
-    required: true
-  },
-  last_name: {
-    type: String,
+  friend_id: {
+    type: mongoose.ObjectId,
     required: true
   },
   platforms: [platformSchema],
