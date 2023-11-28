@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import './SavedConnections.css';
 
 const SavedConnections = () => {
@@ -9,8 +10,21 @@ const SavedConnections = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = process.env.REACT_APP_API_URL_LK; 
-        const response = await axios.get(apiUrl);
+        const token = localStorage.getItem('userToken');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        // Decode token to get user ID
+        const decoded = jwtDecode(token);
+        const userId = decoded.userId;
+
+        // API URL updated to match the new backend route
+        const apiUrl = `${process.env.REACT_APP_API_URL_LK}/connections/${userId}`;
+        const response = await axios.get(apiUrl, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setConnections(response.data);
       } catch (error) {
         console.error('Error fetching connections data:', error);
@@ -23,7 +37,7 @@ const SavedConnections = () => {
   return (
     <div className="saved-connections-container">
       <div className="header">
-      <h2>Saved Connections</h2>
+        <h2>Saved Connections</h2>
       </div>
       <div className="connections-grid">
         {connections.map((connection) => (
