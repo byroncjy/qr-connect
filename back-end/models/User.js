@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const { ObjectId } = mongoose.Schema.Types;
 const platformSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -10,6 +10,7 @@ const platformSchema = new mongoose.Schema({
     required: true
   }
 });
+
 
 const connectionSchema = new mongoose.Schema({
   friend_id: {
