@@ -59,11 +59,12 @@ router.post('/ConnectionDetails', async (req, res) => {
 
 router.post('/user/searchUser', async (req, res) => {
   try {
-    const userId = req.body.userId
+    const { userId } = req.body
     console.log(`UserID: ${userId}, Valid: ${isValidObjectId(userId)}`)
 
-    const user = await User.findOne({ _id: userId })
-    console.log('User found:', user)
+    //const user = await User.findOne({ _id: userId })
+    const user = await User.find()
+    console.log('User found:', user[0].connections)
 
     if (!user) {
       return res.status(404).send('User not found')
