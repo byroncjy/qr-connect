@@ -35,7 +35,6 @@ const EditInformation = () => {
         // Ensure .env file is setup for this to work
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`)        
         const data = response.data
-        console.log(data)
         setPlatformInformationMap(data)
       } catch (error) {
         console.error('Error fetching platform data:', error)
@@ -125,11 +124,19 @@ const EditInformation = () => {
       )
 
 			if (response.status === 200) {
-				// Update the profile picture in the UI
-				setProfileData({ ...profileData, url_picture: URL.createObjectURL(image) });
+				// If successful PUT, retrieve it and set it immediately to display
+        try {
+          // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
+          // Ensure .env file is setup for this to work
+          const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/profilePicture`)        
+          const data = response.data
+          setProfileData({ ...profileData, profile_picture: data.profile_picture })
+        } catch (error) {
+          console.error('Error fetching profile picture:', error)
+        }
 			}
 		} catch (error) {
-			console.error("Error uploading profile picture:", error);
+			console.error("Error uploading profile picture:", error)
 		}
 	};
 
@@ -188,7 +195,6 @@ const EditInformation = () => {
       const requestBody = {
         platforms: filteredPlatformInformationMap.map(({ name, value }) => ({ name, value }))
       }
-      console.log(requestBody)
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`,
         requestBody,
@@ -214,8 +220,14 @@ const EditInformation = () => {
 			{/* Displays picture and upload picture button */}
 			<div className="edit-information-header">
 				<h2>Edit Personal Information</h2>
-				{/* Note that right now image urls are randomly generated via Mockaroo */}
-				<img src={profileData.url_picture} alt="Profile" className="profile-picture" />
+				{/* Display profile picture if not undefined */}
+				{profileData.profile_picture && (
+          <img
+            src={`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/static/uploads/${profileData.profile_picture}`}
+            alt="Profile"
+            className="profile-picture"
+          />
+        )}
 				<div className="upload-container">
 					<label htmlFor="file-upload" className="custom-file-upload">
 						Upload picture
