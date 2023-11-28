@@ -47,7 +47,7 @@ const ConnectionDetails = () => {
 	const handleSaveCode = () => {
 
 		const newUserConnection = {
-			friend_id: scanResult.friend_id['$oid'],
+			friend_id: scanResult.friend_id,
 			platforms: scanResult.platforms,
 			connected_date: new Date() 
          };
