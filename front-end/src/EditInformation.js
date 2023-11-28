@@ -66,12 +66,12 @@ const EditInformation = () => {
 		// If Custom was chosen, set to blank text box and set isCustom flag
 		if (value === "Custom") {
 			updatedPlatformInformationMap[index] = {
-				platform: "",
-				info: "",
+				name: "",
+				value: "",
 				isCustom: true,
 			};
 		} else {
-			updatedPlatformInformationMap[index].platform = value;
+			updatedPlatformInformationMap[index].name = value;
 			updatedPlatformInformationMap[index].isCustom = false;
 		}
 		setPlatformInformationMap(updatedPlatformInformationMap);
@@ -80,7 +80,7 @@ const EditInformation = () => {
 	// Handle change in custom platform text box
 	const handleCustomPlatformChange = (index, event) => {
 		const updatedPlatformInformationMap = [...platformInformationMap];
-		updatedPlatformInformationMap[index].platform = event.target.value;
+		updatedPlatformInformationMap[index].name = event.target.value;
 		updatedPlatformInformationMap[index].isCustom = true;
 		setPlatformInformationMap(updatedPlatformInformationMap);
 	};
@@ -88,13 +88,13 @@ const EditInformation = () => {
 	// Handle change in platform information
 	const handleInfoChange = (index, event) => {
 		const updatedPlatformInformationMap = [...platformInformationMap];
-		updatedPlatformInformationMap[index].info = event.target.value;
+		updatedPlatformInformationMap[index].value = event.target.value;
 		setPlatformInformationMap(updatedPlatformInformationMap);
 	};
 
 	// Handle adding new entry of platform name and information
 	const handleAddPlatformInformation = () => {
-		const updatedPlatformInformationMap = [...platformInformationMap, { platform: "", info: "" }];
+		const updatedPlatformInformationMap = [...platformInformationMap, { name: "", value: "" }];
 		setPlatformInformationMap(updatedPlatformInformationMap);
 	};
 
@@ -167,13 +167,13 @@ const EditInformation = () => {
       // Check for duplicate entries
       const platformNames = new Set();
       for (const item of platformInformationMap) {
-        if (item.platform && item.info) {
-          if (platformNames.has(item.platform)) {
+        if (item.name && item.value) {
+          if (platformNames.has(item.name)) {
             // Set the error message immediately if a duplicate is found
             setErrorMessage('Error: Cannot save duplicate entries of the same platform.')
             return;
           } else {
-            platformNames.add(item.platform)
+            platformNames.add(item.name)
           }
         }
       }
@@ -182,11 +182,11 @@ const EditInformation = () => {
 
       // Filter out the entries with either empty platform or empty info
       const filteredPlatformInformationMap = platformInformationMap
-        .filter((item) => item.platform !== '' && item.info !== '')
+        .filter((item) => item.name !== '' && item.value !== '')
 	
       // For the data to be sent to backend, only send platform and info fields, without isCustom
       const platformInfoData = filteredPlatformInformationMap
-		.map(({ platform, info }) => ({ platform, info }))
+		.map(({ name, value }) => ({ name, value }))
 
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`,
@@ -254,7 +254,7 @@ const EditInformation = () => {
                 <input
                   type="text"
                   placeholder="Platform"
-                  value={item.platform}
+                  value={item.name}
                   onChange={(e) =>
                       handleCustomPlatformChange(index, e)
                   }
@@ -262,7 +262,7 @@ const EditInformation = () => {
                 <input
                   type="text"
                   placeholder="Link / Information"
-                  value={item.info}
+                  value={item.value}
                   onChange={(e) => handleInfoChange(index, e)}
                 />
               </>
@@ -270,7 +270,7 @@ const EditInformation = () => {
               <>
                 {/* Dropdown + text box for non-custom platforms */}
                 <select
-                  value={item.platform}
+                  value={item.name}
                   onChange={(e) => {
                     handlePlatformChange(index, e);
                   }}
@@ -285,11 +285,11 @@ const EditInformation = () => {
                   ))}
                 </select>
                   {/* Text input for non-custom platforms */}
-                  {item.platform !== "" && (
+                  {item.name !== "" && (
                     <input
                       type="text"
                       placeholder="Link / Information"
-                      value={item.info}
+                      value={item.value}
                       onChange={(e) =>
                         handleInfoChange(index, e)
                       }
