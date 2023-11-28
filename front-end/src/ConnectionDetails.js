@@ -30,6 +30,8 @@ const ConnectionDetails = () => {
 				console.error(error);
 			}
 		}
+
+		
 		fetchScanResult();
 	}, [qrCodeText]);
 
