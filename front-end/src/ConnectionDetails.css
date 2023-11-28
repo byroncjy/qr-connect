@@ -75,6 +75,8 @@ img {
   border: 1px solid black;
   cursor: pointer;
   border-radius: 20px;
+  font-size: 10px;
+  text-align: center;
 }
 
 .areaE {
@@ -85,6 +87,8 @@ img {
   border: 1px solid black;
   cursor: pointer;
   border-radius: 20px;
+  font-size: 10px;
+  text-align: center;
 }
 
 .viewCode, .hideCode, .saveCode {

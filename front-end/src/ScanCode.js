@@ -24,6 +24,14 @@ function ScanCode() {
 
 	}, []);
 
+	axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/user/searchUser`, { userId: '6562c186a4a586c6e19a4eef' })
+	.then(response => {
+	console.log('Platform Data:', response.data);
+	})
+	.catch(error => {
+	console.error('Error fetching data:', error);
+	});
+
 	function handleFileChange(event) {
 		const file = event.target.files[0];
 		if (file) {

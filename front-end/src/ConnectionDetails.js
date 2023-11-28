@@ -85,11 +85,6 @@ const ConnectionDetails = () => {
                                 <li>{platform.value}</li>
                             </ul>
                         </div>
-                        <div className="areaE">
-                            <ul>
-                                <li>{platform.value}</li>
-                            </ul>
-                        </div>
                     </div>
                 ))}
             </>

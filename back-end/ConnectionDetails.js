@@ -1,81 +1,78 @@
-const express = require('express');
-const path = require('path');
-const cors = require('cors');
-const jsQR = require('jsqr');
-const axios = require('axios');
- const { Connection, User } = require('./models/User');
-require('dotenv').config();
-const { createCanvas, loadImage } = require('canvas');
+const express = require('express')
+const cors = require('cors')
+const jsQR = require('jsqr')
+const axios = require('axios')
+const { User } = require('./models/User')
+require('dotenv').config()
+const { createCanvas, loadImage } = require('canvas')
+const { isValidObjectId } = require('mongoose')
 
-
-const router = express.Router();
-router.use(cors());
-router.use(express.urlencoded({ extended: true }));
-router.use(express.json());
-const mongoUrl = process.env.MONGO_URL
-
-
+const router = express.Router()
+router.use(cors())
+router.use(express.urlencoded({ extended: true }))
+router.use(express.json())
 
 router.get('/ScanCode', (req, res) => {
   try {
-    const LogoUrl = 'https://picsum.photos/200/300';
-    res.json({ LogoUrl });
+    const LogoUrl = 'https://picsum.photos/200/300'
+    res.json({ LogoUrl })
   } catch (error) {
-    console.error('Error in ScanCode:', error);
-    res.status(500).send('Internal Server Error');
+    console.error('Error in ScanCode:', error)
+    res.status(500).send('Internal Server Error')
   }
-});
+})
 
 router.post('/ScanCode', async (req, res) => {
-  const { qrData } = req.body;
-  const base64Data = qrData.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+  const { qrData } = req.body
+  const base64Data = qrData.replace(/^data:image\/(png|jpeg|jpg);base64,/, '')
 
   try {
-    const image = await loadImage(`data:image/png;base64,${base64Data}`);
-    const canvas = createCanvas(image.width, image.height);
-    const context = canvas.getContext('2d');
-    context.drawImage(image, 0, 0);
-    const imageData = context.getImageData(0, 0, image.width, image.height);
-    const code = jsQR(imageData.data, imageData.width, imageData.height);
+    const image = await loadImage(`data:image/png;base64,${base64Data}`)
+    const canvas = createCanvas(image.width, image.height)
+    const context = canvas.getContext('2d')
+    context.drawImage(image, 0, 0)
+    const imageData = context.getImageData(0, 0, image.width, image.height)
+    const code = jsQR(imageData.data, imageData.width, imageData.height)
 
     if (code) {
-      res.json({ qrCodeText: code.data, qrImageBase64: base64Data });
+      res.json({ qrCodeText: code.data, qrImageBase64: base64Data })
     } else {
-      res.status(400).send('No QR code found.');
+      res.status(400).send('No QR code found.')
     }
   } catch (error) {
-    console.error(error);
-    res.status(500);
+    console.error(error)
+    res.status(500)
   }
-});
+})
 
 router.post('/ConnectionDetails', async (req, res) => {
-  const { qrCodeText } = req.body;
+  const { qrCodeText } = req.body
+  console.log(qrCodeText)
   try {
-    const userInfo = await axios.get(qrCodeText);
-    res.json(userInfo.data);
+    const response = await axios.post(`${process.env.BACK_END_HOST}/user/searchUser`, { userId: qrCodeText })
+    res.json(response.data)
   } catch (error) {
-    console.error('Error fetching scan results:', error);
+    console.error('Error in internal request:', error)
+    res.status(500).json({ message: 'Internal Server Error' })
   }
-});
+})
 
-router.get('/user/:userId/platforms', async (req, res) => {
+router.post('/user/searchUser', async (req, res) => {
   try {
-      const userId = req.params.userId;
+    const userId = req.body.userId
+    console.log(`UserID: ${userId}, Valid: ${isValidObjectId(userId)}`)
 
-      const user = await User.findById(userId).populate('connections.platforms');
+    const user = await User.findOne({ _id: userId })
+    console.log('User found:', user)
 
-      if (!user) {
-          return res.status(404).send('User not found');
-      }
+    if (!user) {
+      return res.status(404).send('User not found')
+    }
 
-
-      const platforms = user.connections.map(connection => connection.platforms).flat();
-
-      res.status(200).json(platforms);
+    res.status(200).json(user)
   } catch (error) {
-      res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message })
   }
-});
+})
 
-module.exports = router;
+module.exports = router
