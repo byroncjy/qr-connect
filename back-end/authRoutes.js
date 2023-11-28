@@ -74,6 +74,11 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.post('/logout', (req, res) => {
+  console.log('User logged out');
+  res.status(200).json({ message: 'Logout successful' });
+});
+
 // Authentication Middleware
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
