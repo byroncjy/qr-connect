@@ -5,11 +5,11 @@ module.exports = {
     },
     extends: [
       'standard',
-      'plugin:react/recommended',
+      'plugin:react/recommended'
       commonjs: true,
       es2021: true,
       mocha: true
-    ],
+    },
     extends: [
       'standard'
     ],
@@ -36,7 +36,7 @@ module.exports = {
     ],
     rules: {
       'no-unused-expressions': 'off',
-      'chai-friendly/no-unused-expressions': 'error',
+      'chai-friendly/no-unused-expressions': 'error'
       ecmaVersion: 'latest'
     },
     plugins: [
