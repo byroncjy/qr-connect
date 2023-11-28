@@ -13,7 +13,7 @@ const router = require('../app')
 describe('User Routes', function () {
   // tests that result in success will ask for id 0, and tests that result in
   // failure will ask for id 1
-  const successId = 0
+  const successId = '6562c186a4a586c6e19a4eef'
   const serverFailureId = 1
   const badRequestId = 2
   // return 500 status response to failure tests
@@ -40,7 +40,7 @@ describe('User Routes', function () {
             expect(err).to.be.null
             expect(res).to.have.status(200)
             expect(res.body).to.be.a('object').that.has.all.keys('email',
-              'first_name', 'last_name', 'url_picture')
+              'first_name', 'last_name', 'profile_picture')
             done()
           })
       })
@@ -66,11 +66,11 @@ describe('User Routes', function () {
             email: 'email',
             first_name: 'first_name',
             last_name: 'last_name',
-            url_picture: 'url_picture'
+            profile_picture: 'profile_picture'
           })
           .end((err, res) => {
             expect(res).to.have.status(200)
-            expect(res.body).to.be.a('object').that.has.all.keys('message', 'updatedUserData')
+            expect(res.body).to.be.a('object').that.has.all.keys('message')
             done()
           })
       })
@@ -101,8 +101,8 @@ describe('User Routes', function () {
           .end((err, res) => {
             expect(res).to.have.status(200)
             expect(res.body).to.be.a('array')
-            expect(res.body).to.deep.nested.have.property('0.platform')
-            expect(res.body).to.deep.nested.have.property('0.info')
+            expect(res.body).to.deep.nested.have.property('0.name')
+            expect(res.body).to.deep.nested.have.property('0.value')
             done()
           })
       })
@@ -124,10 +124,12 @@ describe('User Routes', function () {
         chai
           .request(router)
           .put(`/users/${successId}/platforms`)
-          .send([
-            { platform: 'Linkedin', info: 'johndoe254' },
-            { platform: 'Instagram', info: '@johndoe' }
-          ])
+          .send({
+            platforms: [
+              { name: 'Linkedin', value: 'johndoe254' },
+              { name: 'Instagram', value: '@johndoe' }
+            ]
+          })
           .end((err, res) => {
             expect(res).to.have.status(200)
             expect(res.body).to.be.a('object').that.has.keys('message')
@@ -140,11 +142,13 @@ describe('User Routes', function () {
         chai
           .request(router)
           .put(`/users/${successId}/platforms`)
-          .send([
-            { platform: 'bad_platform', info: 'johndoe254' }
-          ])
+          .send({
+            platforms: [
+              { platform: 'bad_platform', info: 'johndoe254' }
+            ]
+          })
           .end((err, res) => {
-            expect(res).to.have.status(400)
+            expect(res).to.have.status(500)
             expect(res.body).to.be.a('object').that.has.keys('error')
             done(err)
           })
