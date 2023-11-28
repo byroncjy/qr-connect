@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Schema.Types;
+const platformSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -9,6 +10,7 @@ const { ObjectId } = mongoose.Schema.Types;
     required: true
   }
 });
+
 
 const connectionSchema = new mongoose.Schema({
   friend_id: {
