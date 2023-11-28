@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 // Static content
 app.use('/static', express.static('public'));
 
-// connect to MongoDB with Mongoose
+//connect to MongoDB with Mongoose
 const mongoose = require('mongoose')
 const User = require('./models/User.js')
 
