@@ -23,35 +23,16 @@ router.put('/:id/platforms', async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
 
-    const platforms = req.body.platforms
-    // Authorized platform values
-    const authorized = [
-      'Phone number',
-      'Personal website',
-      'Linkedin',
-      'Instagram',
-      'Facebook',
-      'Twitter',
-      'Github'
-    ]
-
-    // Check that all platforms are on the whitelist
-    const valid = Object.values(platforms).every(platform => authorized.includes(platform.name))
-    if (!valid) {
-      return res.status(400).json({ error: 'Unauthorized platforms detected' })
-    }
-
     // Update the database with the received platform information
     // Need to convert plain objects to Platforms before adding
     const converted = []
-    platforms.forEach(platform => {
+    req.body.platforms.forEach(platform => {
       converted.push(new Platform({
         name: platform.name,
         value: platform.value
       }))
     })
     user.platforms = converted
-    console.log(converted[0] instanceof Platform)
     await user.save()
 
     res.status(200).json({ message: 'Platform information updated successfully' })

@@ -12,7 +12,7 @@ const { User } = require('./models/User.js')
 // enable file uploads saved to disk in a directory named 'public/uploads'
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '../front-end/public/uploads')
+    cb(null, './public/uploads')
   },
   filename: function (req, file, cb) {
     // take apart the uploaded file's name so we can create a new one based on it
