@@ -34,6 +34,19 @@ try {
   console.error(`Error connecting to MongoDB: ${err}`)
 }
 
+// connect to MongoDB with Mongoose
+const mongoose = require('mongoose')
+const User = require('./models/User.js')
+
+try {
+  const connection_string = 
+    `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_URI}/${process.env.MONGODB_DATABASE}`
+  mongoose.connect(connection_string)
+  console.log('Connected to MongoDB')
+} catch (err) {
+  console.error(`Error connecting to MongoDB: ${err}`)
+}
+
 /**
  * Typically, all middlewares would be included before routes
  * In this file, however, most middlewares are after most routes
