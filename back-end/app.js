@@ -34,9 +34,6 @@ try {
   console.error(`Error connecting to MongoDB: ${err}`)
 }
 
-// connect to MongoDB with Mongoose
-const mongoose = require('mongoose')
-const User = require('./models/User.js')
 
 
 /**
