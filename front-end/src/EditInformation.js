@@ -185,12 +185,13 @@ const EditInformation = () => {
         .filter((item) => item.name !== '' && item.value !== '')
 	
       // For the data to be sent to backend, only send platform and info fields, without isCustom
-      const platformInfoData = filteredPlatformInformationMap
-		.map(({ name, value }) => ({ name, value }))
-
+      const requestBody = {
+        platforms: filteredPlatformInformationMap.map(({ name, value }) => ({ name, value }))
+      }
+      console.log(requestBody)
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`,
-        platformInfoData,
+        requestBody,
         {
           headers: {
             'Content-Type': 'application/json'
