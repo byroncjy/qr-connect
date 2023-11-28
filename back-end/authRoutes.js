@@ -4,33 +4,32 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const User = require('./models/User');
+const User = require('./models/User'); // Ensure this path is correct
+const mongoDBConnectionString = `mongodb+srv://${process.env.MONGODB_USER}:${encodeURIComponent(process.env.MONGODB_PASS)}@${process.env.MONGODB_URI}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
 
-const app = express();
 
-app.use(express.json()); // Middleware to parse JSON
+// Connect to MongoDB
+mongoose.connect(mongoDBConnectionString, {
+  useNewUrlParser: true, 
+  useUnifiedTopology: true,
+  user: process.env.MONGODB_USER,
+  pass: process.env.MONGODB_PASS,
+  dbName: process.env.MONGODB_DATABASE
+})
+.then(() => console.log('MongoDB connected...'))
+.catch(err => console.error('MongoDB connection error:', err));
+
+// Middleware to parse JSON
+router.use(express.json());
 
 // Function to generate JWT
 const generateToken = (user) => {
   const jwtSecret = process.env.JWT_SECRET || 'yourDefaultJwtSecret';
   return jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '24h' });
 };
-//
-
-// Construct MongoDB Connection String
-const mongoDBUser = process.env.MONGODB_USER;
-const mongoDBPass = process.env.MONGODB_PASS;
-const mongoDBUri = process.env.MONGODB_URI;
-const mongoDBDatabase = process.env.MONGODB_DATABASE;
-const mongoDBConnectionString = `mongodb+srv://${mongoDBUser}:${mongoDBPass}@${mongoDBUri}/${mongoDBDatabase}?retryWrites=true&w=majority`;
-
-// Connect to MongoDB
-mongoose.connect(mongoDBConnectionString, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected...'))
-  .catch(err => console.error('MongoDB connection error:', err));
 
 // Signup route
-app.post('/api/signup', async (req, res) => {
+router.post('/signup', async (req, res) => {
   try {
     const { email, password, first_name, last_name } = req.body;
 
@@ -55,7 +54,7 @@ app.post('/api/signup', async (req, res) => {
 });
 
 // Login route
-app.post('/api/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -90,7 +89,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Example of a protected route
-app.get('/api/protected', authenticateToken, (req, res) => {
+router.get('/protected', authenticateToken, (req, res) => {
   res.json({ message: `Hello ${req.user.userId}` });
 });
 
