@@ -179,7 +179,6 @@ const EditInformation = () => {
       // Clear the error message if no duplicates are found
       setErrorMessage('');
 
-      console.log(platformInformationMap)
       // Filter out the entries with either empty platform or empty info
       const filteredPlatformInformationMap = platformInformationMap
         .filter((item) => item.platform !== '' && item.info !== '')
