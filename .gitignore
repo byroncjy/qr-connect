@@ -82,6 +82,9 @@ node_modules/
 jspm_packages/
 **/jspm_packages
 
+# Public directory
+back-end/public/uploads/
+
 # Results of React build script
 build/
 **/build/

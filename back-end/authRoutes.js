@@ -1,113 +1,90 @@
+require('dotenv').config(); // Load environment variables from .env file
 const express = require('express');
-//const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const router = express.Router();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const { User } = require('./models/User.js'); // Ensure this path is correct
 
+
+// Middleware to parse JSON
+router.use(express.json());
 
 // Function to generate JWT
-/*const generateToken = () => { //Since we don't have a database implemented, the backend will not validate the credentials and will allow access with any username and password.
-    return jwt.sign({}, 'secretKey', { expiresIn: '24h' }); 
-  };*/
-  
-const generateToken = (userId) => {
-    return jwt.sign({ userId }, 'secretKey', { expiresIn: '24h' }); 
+const generateToken = (user) => {
+  const jwtSecret = process.env.JWT_SECRET || 'yourDefaultJwtSecret';
+  return jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '24h' });
 };
 
+// Signup route
+router.post('/signup', async (req, res) => {
+  try {
+    const { email, password, first_name, last_name } = req.body;
 
+    if (!email || !password || !first_name || !last_name) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: 'User already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ email, password: hashedPassword, first_name, last_name });
+    await user.save();
+
+    const token = generateToken(user);
+    res.status(201).json({ token });
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating user', error: error.message });
+  }
+});
+
+// Login route
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const token = generateToken(user);
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).json({ message: 'Login error', error: error.message });
+  }
+});
+
+router.post('/logout', (req, res) => {
+  console.log('User logged out');
+  res.status(200).json({ message: 'Logout successful' });
+});
+
+// Authentication Middleware
 const authenticateToken = (req, res, next) => {
-  const token = req.headers['authorization'];
-  if (token == null) return res.sendStatus(401);
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
-  jwt.verify(token, 'secretKey', (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.userId = user.userId;
+  if (!token) return res.status(401).json({ message: 'Access denied' });
+
+  jwt.verify(token, process.env.JWT_SECRET || 'yourDefaultJwtSecret', (err, user) => {
+    if (err) return res.status(403).json({ message: 'Invalid token' });
+    req.user = user;
     next();
   });
 };
-  // Signup route
-router.post('/signup', async (req, res) => {
-    const token = generateToken();
-    res.status(201).json({ token });
-  });
-  
-router.post('/login', async (req, res) => {
-    const token = generateToken();
-    res.json({ token });
-  });
 
-router.post('/logout', async (req, res) => {
-    // Since JWTs are stateless, we cannot invalidate the token on the server.
-    // However, you can signal the client to remove the token from storage.
-    res.json({ message: 'Logged out successfully' });
+// Example of a protected route
+router.get('/protected', authenticateToken, (req, res) => {
+  res.json({ message: `Hello ${req.user.userId}` });
 });
-  module.exports = router;
 
-  
-// // Mock database
-// const users = [];
 
-// // Function to generate JWT
-// const generateToken = (user) => {
-//   // Replace 'secretKey' with a real secret key in a production environment
-//   return jwt.sign({ data: user.username }, 'secretKey', { expiresIn: '24h' }); 
-// };
-
-// // Function to find a user by username
-// const findUserByUsername = (username) => {
-//   return users.find(user => user.username === username);
-// };
-
-// // Function to add a new user
-// const addUser = (username, hashedPassword) => {
-//   const newUser = {
-//     id: users.length + 1,
-//     username,
-//     password: hashedPassword
-//   };
-//   users.push(newUser);
-//   return newUser;
-// };
-
-// // Signup route
-// router.post('/signup', async (req, res) => {
-//   try {
-//     const { username, password } = req.body;
-//     // Check if the user already exists
-//     if (findUserByUsername(username)) {
-//       return res.status(400).json({ message: 'User already exists' });
-//     }
-//     // Hash password
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     // Save user
-//     const newUser = addUser(username, hashedPassword);
-//     // Generate token
-//     const token = generateToken(newUser);
-//     res.status(201).json({ token });
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error creating new user' });
-//   }
-// });
-
-// // Login route
-// router.post('/login', async (req, res) => {
-//   try {
-//     const { username, password } = req.body;
-//     // Find user by username
-//     const user = findUserByUsername(username);
-//     if (!user) {
-//       return res.status(401).json({ message: 'Invalid credentials' });
-//     }
-//     // Check if password matches
-//     const match = await bcrypt.compare(password, user.password);
-//     if (!match) {
-//       return res.status(401).json({ message: 'Invalid credentials' });
-//     }
-//     // Generate token
-//     const token = generateToken(user);
-//     res.json({ token });
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error logging in' });
-//   }
-// });
-
-// module.exports = router;
+module.exports = router;
