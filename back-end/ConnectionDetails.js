@@ -4,6 +4,7 @@ const cors = require('cors');
 const jsQR = require('jsqr');
 const axios = require('axios');
 const mongoose = require('mongoose');
+const { Connection } = require('./models/User');
 require('dotenv').config();
 const { createCanvas, loadImage } = require('canvas');
 
@@ -31,6 +32,7 @@ router.get('/ScanCode', (req, res) => {
 router.post('/ScanCode', async (req, res) => {
   const { qrData } = req.body;
   const base64Data = qrData.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+
   try {
     const image = await loadImage(`data:image/png;base64,${base64Data}`);
     const canvas = createCanvas(image.width, image.height);

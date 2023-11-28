@@ -7,7 +7,7 @@ const authRoutes = require('./authRoutes');
 const connectionsRoutes = require('./connections');
 const unchangedImagesRouter = require('./unchanged-images'); // Ensure this path is correct
 const connectionsdetailsRoutes = require('./Connectiondetails');
-const addProfileRoutes = require('./addUserProfile'); 
+const addNewConnectionRoutes = require('./addUserProfile'); 
 
 // import some useful middleware
 // const multer = require('multer') // middleware to handle HTTP POST requests with file uploads
@@ -47,7 +47,7 @@ app.use('/users', userRoutes)
 app.use('/users', platformRoutes)
 app.use('/api', connectionsRoutes);
 app.use('/', connectionsdetailsRoutes);
-app.use('/', addProfileRoutes);
+app.use('/', addNewConnectionRoutes);
 
 
 app.use((err, req, res, next) => {

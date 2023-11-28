@@ -6,7 +6,6 @@ import "./ScanCode.css";
 function ScanCode() {
 	const [imageUrl, setImageUrl] = useState("")
 	const navigate = useNavigate()
-	console.log(process.env.REACT_APP_SERVER_HOSTNAME)
 	
 	useEffect(() => {
 		async function fetchImage() {
@@ -37,7 +36,7 @@ function ScanCode() {
 					});
 					
 					navigate(`/ConnectionDetails?=${response.data.qrCodeText}`, { state: { qrCodeText: response.data.qrCodeText, qrImageData: imageDataUrl } })
-					console.log('Response from backend:', response.data);
+					//console.log('Response from backend:', response.data);
 				} catch (error) {
 					console.error('Error sending QR data to backend:', error);
 				}

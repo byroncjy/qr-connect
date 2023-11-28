@@ -7,7 +7,7 @@ import "./ConnectionDetails.css";
 const ConnectionDetails = () => {
 	const navigate = useNavigate()
 	console.log(navigate)
-	const [scanResult, setScanResult] = useState([]);
+	const [scanResult, setScanResult] = useState(null);
 	const [isQRCodeVisible, setQRCodeVisible] = useState(false);
 	const location = useLocation();
 	const queryParameter = new URLSearchParams(location.search);
@@ -33,9 +33,9 @@ const ConnectionDetails = () => {
 
 
 		fetchScanResult();
-
+		console.log(scanResult);
 	}, []);
-
+	//setScanResult({"id":1,"first_name":"Grover","last_name":"Taffs","platforms":[{"name":"Instgram","value":"www.example.com"},{"name":"FaceBook","value":"www.facebook.com"},{"name":"Instgram","value":"www.instgram.com"}]});
 	const handleViewCode = () => {
 		setQRCodeVisible(true)
 	}
@@ -45,75 +45,61 @@ const ConnectionDetails = () => {
 	}
 
 	const handleSaveCode = () => {
-		/*
-		const userProfile = {
-			user_id: ,
-			first_name: ,
-			last_name: ,
-			platforms: ,
-			connections: scanResult.map(item => ({
-			  connection_id: ,
-			  connection_first_name: ,
-			  connection_last_name: ,
-			  connections: scanResult.map(item => ({
-				connection_id: ,
-				connection_first_name: item.firstName, 
-				connection_last_name: item.lastName,
-				platforms: item.platforms.map(platform => ({
-				  platform_id: platform.id, 
-				  platform_name: platform.name, 
-				  platform_value: platform.value
-				})),
-			  connected_date: new Date()
-			}))
-		        };
-		        */
+
+		const newUserConnection = {
+			first_name: scanResult.first_name,
+			last_name: scanResult.last_name,
+			platforms: scanResult.platforms.map(platform => ({
+			name: platform.name,
+			value: platform.value
+			})),
+			connected_date: new Date() 
+         };
+	
+		console.log(newUserConnection)
+		
+		axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/saveConnection`, newUserConnection)
+		.then(response => {
+		console.log('Profile saved successfully:', response.data);
+		//navigate("/saved-connections");
+		console.log("Navigate to Save Code");
+		})
+		.catch(error => {
+		console.error('Error in saving user profile:', error);
+		});
+		
+      }
+
     
-    /*        
-		axios.post('/saveProfile', userProfile)
-			.then(response => {
-				console.log('Profile saved successfully:', response.data);
-
-				navigate("/saved-connections");
-				console.log("Navigate to Save Code");
-			})
-			.catch(error => {
-				console.error('Error in saving user profile:', error);
-
-			});
-			*/
-
-	}
-
 
 	return (
 
 		<div className='Box'>
-			<div className="userName">
-				<div>First and Last Name</div>
-			</div>
-			{scanResult.map((item, index) => (
-				<div className="detailsContainer" key={index}>
-					<div className="areaA">
-						<img className="PlatForms" src={item.webImage} alt="" />
-					</div>
-					<div className="areaB" style={{ backgroundColor: item.mediaColor }}>
-						{item.webName}
-					</div>
-					<div className="areaD">
-						<ul>
-							<li>{item.Description}</li>
-							<li>{item.Description}</li>
-						</ul>
-					</div>
-					<div className="areaE">
-						<ul>
-							<li>{item.Description}</li>
-							<li>{item.Description}</li>
-						</ul>
-					</div>
-				</div>
-			))}
+        {scanResult && (
+            <>
+                <div className="userName">
+                    <div>{scanResult.first_name} {scanResult.last_name}</div>
+                </div>
+
+                {scanResult.platforms && scanResult.platforms.map((platform, index) => (
+                    <div className="detailsContainer" key={index}>
+                        <div className="areaB">
+                            {platform.name}
+                        </div>
+                        <div className="areaD">
+                            <ul>
+                                <li>{platform.value}</li>
+                            </ul>
+                        </div>
+                        <div className="areaE">
+                            <ul>
+                                <li>{platform.value}</li>
+                            </ul>
+                        </div>
+                    </div>
+                ))}
+            </>
+        )}
 
 			<div className="">
 				<div className="viewCode">

@@ -12,8 +12,12 @@ const platformSchema = new mongoose.Schema({
 });
 
 const connectionSchema = new mongoose.Schema({
-  friend_id: {
-    type: ObjectId,
+  first_name: {
+    type: String,
+    required: true
+  },
+  last_name: {
+    type: String,
     required: true
   },
   platforms: [platformSchema],
@@ -39,10 +43,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  profile_picture: {
+    type: String,
+    default: ''
+  },
   platforms: [platformSchema],
   connections: [connectionSchema]
 });
 
-const User = mongoose.model('User', userSchema);
+const Platform = mongoose.model('Platform', platformSchema)
+const Connection = mongoose.model('Connection', connectionSchema)
+const User = mongoose.model('User', userSchema)
 
-module.exports = User;
+exports.Platform = Platform
+exports.Connection = Connection
+exports.User = User

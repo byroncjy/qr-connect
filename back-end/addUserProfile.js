@@ -1,18 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const UserProfile = require('./models/UserProfileSchema');
+const { Connection } = require('./models/User');
 
-router.post('/saveProfile', async (req, res) => {
-    try {
-        const userProfileData = new UserProfile({
-          
+router.post('/saveConnection', async (req, res) => {
+          try {
+              const userNewConnection = new Connection({
+                first_name: req.body.first_name,
+                last_name: req.body.last_name,
+                platforms: req.body.platforms,
+              });
+        
+              const SavedConnection = await userNewConnection.save();
+              res.status(200).json(SavedConnection);
+          } catch (error) {
+              res.status(400).json({ message: error.message });
+          }
         });
-
-        const savedProfile = await userProfileData.save();
-        res.status(200).json(savedProfile);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-});
 
 module.exports = router;
