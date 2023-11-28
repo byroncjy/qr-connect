@@ -13,7 +13,7 @@ const platformSchema = new mongoose.Schema({
 
 const connectionSchema = new mongoose.Schema({
   friend_id: {
-    type: ObjectId,
+    type: mongoose.ObjectId,
     required: true
   },
   platforms: [platformSchema],
