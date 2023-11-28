@@ -44,8 +44,9 @@ try {
 // Routes
 app.use('/images', unchangedImagesRouter);
 app.use('/api/auth', authRoutes);
+// These are both set to users to make backend route more intuitive
 app.use('/users', userRoutes);
-app.use('/platforms', platformRoutes);
+app.use('/users', platformRoutes);
 app.use('/api', connectionsRoutes);
 app.use('/', connectionsdetailsRoutes);
 

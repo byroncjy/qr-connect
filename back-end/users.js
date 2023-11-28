@@ -6,7 +6,7 @@ const path = require('path')
 const multer = require('multer') // middleware to handle HTTP POST requests with file uploads
 const router = express.Router()
 
-const User = require('./models/User.js')
+const { User } = require('./models/User.js')
 
 // Multer handles file uploads
 // enable file uploads saved to disk in a directory named 'public/uploads'
@@ -72,6 +72,21 @@ router.put('/:id', async (req, res) => {
     res.status(200).json({ message: 'User information updated successfully.' })
   } catch (err) {
     console.error(`Error updating user information: ${err}`)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
+
+// Route for getting profile_picture
+router.get('/:id/profilePicture', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).exec()
+    // Extracts and returns only user profile data
+    const user_profile = {
+      profile_picture: user.profile_picture
+    }
+    res.json(user_profile)
+  } catch (err) {
+    console.error(`Error fetching user profile picture: ${err}`)
     res.status(500).json({ error: 'Internal Server Error' })
   }
 })
