@@ -7,14 +7,14 @@ import "./ConnectionDetails.css";
 const ConnectionDetails = () => {
 	const navigate = useNavigate()
 	console.log(navigate)
-	const [scanResult, setScanResult] = useState(null);
+	const [scanResult, setScanResult] = useState([]);
 	const [isQRCodeVisible, setQRCodeVisible] = useState(false);
 	const location = useLocation();
 	const queryParameter = new URLSearchParams(location.search);
 	const { qrImageData } = location.state;
 	const qrCodeText = queryParameter.get('');
 
-	//console.log(qrCodeText);
+
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
