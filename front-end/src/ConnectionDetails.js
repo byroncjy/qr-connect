@@ -70,6 +70,7 @@ const ConnectionDetails = () => {
 	return (
 
 		<div className='Box'>
+			
         {scanResult && (
             <>
                
@@ -89,12 +90,12 @@ const ConnectionDetails = () => {
             </>
         )}
 			
-				<div className="">
+				<div className="button-container">
 					<div className="viewCode">
 						<div onClick={handleViewCode}> View Code </div>
 					</div>
 
-				</div>
+				
 				{isQRCodeVisible && <img className="newQRCode" src={qrImageData} alt="Scanned QR" />}
 
 
@@ -105,8 +106,10 @@ const ConnectionDetails = () => {
 				<div className="saveCode">
 					<div onClick={handleSaveCode}> Save Code </div>
 				</div>
-			
-		</div>
+
+				</div>
+			</div>
+		
 
 	);
 };
