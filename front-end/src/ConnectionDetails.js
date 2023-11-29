@@ -88,24 +88,24 @@ const ConnectionDetails = () => {
                 ))}
             </>
         )}
+			
+				<div className="">
+					<div className="viewCode">
+						<div onClick={handleViewCode}> View Code </div>
+					</div>
 
-			<div className="">
-				<div className="viewCode">
-					<div onClick={handleViewCode}> View Code </div>
+				</div>
+				{isQRCodeVisible && <img className="newQRCode" src={qrImageData} alt="Scanned QR" />}
+
+
+				<div className="hideCode">
+					<div onClick={handleHideCode}> Hide Code </div>
 				</div>
 
-			</div>
-			{isQRCodeVisible && <img className="newQRCode" src={qrImageData} alt="Scanned QR" />}
-
-
-			<div className="hideCode">
-				<div onClick={handleHideCode}> Hide Code </div>
-			</div>
-
-			<div className="saveCode">
-				<div onClick={handleSaveCode}> Save Code </div>
-			</div>
-
+				<div className="saveCode">
+					<div onClick={handleSaveCode}> Save Code </div>
+				</div>
+			
 		</div>
 
 	);
