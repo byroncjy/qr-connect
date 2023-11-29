@@ -44,10 +44,9 @@ const ConnectionDetails = () => {
 		setQRCodeVisible(false)
 	}
 
-	const handleSaveCode = () => {
-
+	const handleSaveCode = () => {	
 		const newUserConnection = {
-			friend_id: scanResult.friend_id,
+			friend_id: qrCodeText,
 			platforms: scanResult.platforms,
 			connected_date: new Date() 
          };

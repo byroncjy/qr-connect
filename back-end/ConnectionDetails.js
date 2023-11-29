@@ -63,7 +63,7 @@ router.post('/user/searchUser', async (req, res) => {
     console.log(`UserID: ${userId}, Valid: ${isValidObjectId(userId)}`)
 
     const user = await User.findOne({ _id: userId })
-
+    //const user = await User.find()
     console.log('User found:', user)
 
     if (!user) {

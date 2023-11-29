@@ -10,8 +10,6 @@ const connectionsRoutes = require('./connections');
 const unchangedImagesRouter = require('./unchanged-images'); // Ensure this path is correct
 const connectionsdetailsRoutes = require('./Connectiondetails');
 const addNewConnectionRoutes = require('./addUserProfile'); 
-const unchangedImagesRouter = require('./unchanged-images');
-const connectionsdetailsRoutes = require('./ConnectionDetails');
 const userRoutes = require('./users');
 const platformRoutes = require('./platforms');
 
@@ -52,11 +50,8 @@ app.use('/users', userRoutes);
 app.use('/users', platformRoutes);
 app.use('/api', connectionsRoutes);
 app.use('/', connectionsdetailsRoutes);
-<<<<<<< HEAD
 app.use('/', addNewConnectionRoutes);
 
-=======
->>>>>>> a923d3a1dbccdbac55e7e4e82ccf78870b14d016
 
 // Root route
 app.get('/', (req, res) => {
