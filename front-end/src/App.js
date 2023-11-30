@@ -14,6 +14,7 @@ import TermOfServices from "./TermOfServices";
 import SelectInformationForm from "./SelectInformationForm"
 import SavedConnections from "./SavedConnections"
 import EditInformation from "./EditInformation"
+import GenerateQRCode from "./GenerateQRCode";
 import './App.css';
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
 				<Route path="/select-information" element={<SelectInformationForm />} />
 				<Route path="/saved-connections" element={<SavedConnections />} />
 				<Route path="/edit-information" element={<EditInformation />} />
+				<Route path="/GenerateQRCode" element={<GenerateQRCode />} />
 			</Routes>
 			<Footer />
 		</Router>
