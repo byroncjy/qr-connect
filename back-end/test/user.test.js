@@ -1,4 +1,5 @@
 // assertions
+const path = require('path')
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 const expect = chai.expect
@@ -7,7 +8,6 @@ chai.use(chaiHttp)
 const nock = require('nock')
 // routes
 const router = require('../app')
-const path = require('path')
 
 // tests related to sending requests about a users
 describe('User Routes', function () {
@@ -200,21 +200,21 @@ describe('User Routes', function () {
         })
       })
 
-      // describe('Unsuccessful PUT', function () {
-      //   it('should respond with an HTTP 500 status and an error body', function (done) {
-      //     // Modify this part based on your test requirements for an unsuccessful PUT
-      //     chai
-      //       .request(router)
-      //       .put(`/users/${successId}/uploadPicture`)
-      //       .set('Content-Type', 'multipart/form-data') // Set the content type
-      //       .attach('file', path.join(__dirname, '../public/profile-picture-test.png'))
-      //       .end((err, res) => {
-      //         expect(res).to.have.status(200)
-      //         expect(res.body).to.be.a('object').that.has.keys('message')
-      //         done()
-      //       })
-      //   })
-      // })
+      describe('Unsuccessful PUT (invalid ID)', function () {
+        it('should respond with an HTTP 500 status and an error body', function (done) {
+          chai
+            .request(router)
+            // This uses an invalid id
+            .put(`/users/${serverFailureId}/uploadPicture`)
+            .set('Content-Type', 'multipart/form-data') // Set the content type
+            .attach('file', path.join(__dirname, '../public/profile-picture-test.png'))
+            .end((err, res) => {
+              expect(res).to.have.status(500)
+              expect(res.body).to.be.a('object').that.has.keys('error')
+              done(err)
+            })
+        })
+      })
     })
   })
 })
