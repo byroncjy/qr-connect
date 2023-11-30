@@ -11,7 +11,7 @@ const router = require('../app')
 
 // tests related to sending requests about a users
 describe('User Routes', function () {
-  // tests that result in success will ask for id 0, and tests that result in
+  // tests that result in success will ask for valid id, and tests that result in
   // failure will ask for id 1
   const successId = '6562c186a4a586c6e19a4eef'
   const serverFailureId = 1
@@ -76,7 +76,7 @@ describe('User Routes', function () {
       })
     }),
     describe('Unsuccessful PUT', function () {
-      it('should respond with an HTTP 500 status and error message', function (done) {
+      it('should respond with an HTTP 400 status and error message', function (done) {
         chai
           .request(router)
           .put(`/users/${successId}`)
@@ -144,7 +144,7 @@ describe('User Routes', function () {
           .put(`/users/${successId}/platforms`)
           .send({
             platforms: [
-              { platform: 'bad_platform', info: 'johndoe254' }
+              { wrong_name: 'bad_platform', wrong_info: 'johndoe254' }
             ]
           })
           .end((err, res) => {
