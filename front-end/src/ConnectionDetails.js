@@ -90,7 +90,7 @@ const ConnectionDetails = () => {
             </>
         )}
 			
-				<div className="button-container">
+				
 					<div className="viewCode">
 						<div onClick={handleViewCode}> View Code </div>
 					</div>
@@ -107,7 +107,7 @@ const ConnectionDetails = () => {
 					<div onClick={handleSaveCode}> Save Code </div>
 				</div>
 
-				</div>
+				
 			</div>
 		
 
