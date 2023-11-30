@@ -7,12 +7,16 @@
     flex-direction: column;
     align-items: center;
     font-family: Arial, sans-serif;
-    position: relative; /* Changed from relative to absolute */
-    left: 0; /* Align to the left side of the viewport */
+    position: static;
+    
+    left: 0; 
     bottom: 0; /* Stick to the bottom of the viewport */
 }
-
-
+.footer-fixed {
+    position: fixed;
+    left: 0; 
+    bottom: 0; /* Stick to the bottom of the viewport */
+}
 .footer-text {
     margin-bottom: 10px;
     text-align: center;
