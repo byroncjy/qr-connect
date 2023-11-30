@@ -58,10 +58,10 @@ router.put('/:id', async (req, res) => {
     if (req.body.email) {
       user.email = req.body.email
     }
-    if (req.body.firstName) {
+    if (req.body.first_name) {
       user.first_name = req.body.first_name
     }
-    if (req.body.lastName) {
+    if (req.body.last_name) {
       user.last_name = req.body.last_name
     }
     if (req.body.profile_picture) {
