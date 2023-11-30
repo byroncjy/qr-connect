@@ -7,7 +7,7 @@ chai.use(chaiHttp)
 const nock = require('nock')
 // routes
 const router = require('../app')
-
+const path = require('path')
 
 // tests related to sending requests about a users
 describe('User Routes', function () {
@@ -153,6 +153,68 @@ describe('User Routes', function () {
             done(err)
           })
       })
+    })
+  })
+  describe('Profile Picture', function () {
+    describe('GET profilePicture', function () {
+      describe('Successful GET', function () {
+        it('should respond with an HTTP 200 status and profile picture data', function (done) {
+          chai
+            .request(router)
+            .get(`/users/${successId}/profilePicture`)
+            .end((err, res) => {
+              expect(res).to.have.status(200)
+              expect(res.body).to.be.a('object').that.has.keys('profile_picture')
+              done()
+            })
+        })
+      })
+
+      describe('Unsuccessful GET', function () {
+        it('should respond with an HTTP 500 status and an error body', function (done) {
+          chai
+            .request(router)
+            .get(`/users/${serverFailureId}/profilePicture`)
+            .end((err, res) => {
+              expect(res).to.have.status(500)
+              expect(res.body).to.be.a('object').that.has.keys('error')
+              done(err);
+            })
+        })
+      })
+    })
+
+    describe('PUT uploadPicture', function () {
+      describe('Successful PUT', function () {
+        it('should respond with an HTTP 200 status and a confirmation message', function (done) {
+          chai
+            .request(router)
+            .put(`/users/${successId}/uploadPicture`)
+            .set('Content-Type', 'multipart/form-data') // Set the content type
+            .attach('file', path.join(__dirname, '../public/profile-picture-test.png'))
+            .end((err, res) => {
+              expect(res).to.have.status(200)
+              expect(res.body).to.be.a('object').that.has.keys('message')
+              done()
+            })
+        })
+      })
+
+      // describe('Unsuccessful PUT', function () {
+      //   it('should respond with an HTTP 500 status and an error body', function (done) {
+      //     // Modify this part based on your test requirements for an unsuccessful PUT
+      //     chai
+      //       .request(router)
+      //       .put(`/users/${successId}/uploadPicture`)
+      //       .set('Content-Type', 'multipart/form-data') // Set the content type
+      //       .attach('file', path.join(__dirname, '../public/profile-picture-test.png'))
+      //       .end((err, res) => {
+      //         expect(res).to.have.status(200)
+      //         expect(res.body).to.be.a('object').that.has.keys('message')
+      //         done()
+      //       })
+      //   })
+      // })
     })
   })
 })
