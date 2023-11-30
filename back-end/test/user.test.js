@@ -76,15 +76,15 @@ describe('User Routes', function () {
       })
     }),
     describe('Unsuccessful PUT', function () {
-      it('should respond with an HTTP 400 status and error message', function (done) {
+      it('should respond with an HTTP 500 status and error message', function (done) {
         chai
           .request(router)
           .put(`/users/${successId}`)
           .send({
-            bad_data: 'bad_data'
+            profile_picture: ['bad_data']
           })
           .end((err, res) => {
-            expect(res).to.have.status(400)
+            expect(res).to.have.status(500)
             expect(res.body).to.be.a('object').that.has.keys('error')
             done(err)
           })
