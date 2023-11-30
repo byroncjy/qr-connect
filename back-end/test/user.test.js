@@ -61,6 +61,7 @@ describe('User Routes', function () {
           })
       })
     }),
+    // Invalid input: Sending an array under profile_picture field
     describe('Unsuccessful PUT', function () {
       it('should respond with an HTTP 500 status and error message', function (done) {
         chai
@@ -130,7 +131,7 @@ describe('User Routes', function () {
           .put(`/users/${validUserId}/platforms`)
           .send({
             platforms: [
-              { wrong_name: 'bad_platform', wrong_info: 'johndoe254' }
+              { wrong_name: 'bad_platform', wrong_value: 'johndoe254' }
             ]
           })
           .end((err, res) => {
@@ -179,6 +180,7 @@ describe('User Routes', function () {
             .request(router)
             .put(`/users/${validUserId}/uploadPicture`)
             .set('Content-Type', 'multipart/form-data') // Set the content type
+            // This is the path of our test image, ensure this exists!
             .attach('file', path.join(__dirname, '../test/public/profile-picture-test.png'))
             .end((err, res) => {
               expect(res).to.have.status(200)
@@ -188,6 +190,7 @@ describe('User Routes', function () {
         })
       })
 
+      // Valid id, but no actual file attached under file field
       describe('Unsuccessful PUT (no file attached)', function () {
         it('should respond with an HTTP 400 status and an error body', function (done) {
           chai
