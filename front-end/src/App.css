@@ -1,32 +1,34 @@
-html,
-body {
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+/* Resets */
+html, body {
+  height: 100%; /* Ensures the full height is used */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+  background-color: #fff; /* Set the background color */
 }
 
-#root {
-  min-height: calc(100% - 112px); /* 112px is height of footer */
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
+/* Box sizing rules */
 html {
   box-sizing: border-box;
 }
 
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: inherit;
-  margin: 0;
-  padding: 0;
 }
 
+/* Root container */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Use viewport height */
+}
+
+/* Main app styling */
 .App {
   text-align: center;
+  flex: 1; /* Allows the App component to grow */
+  display: flex;
+  flex-direction: column;
+  margin-bottom: auto; /* Pushes the footer to the bottom */
 }
 
 .App-logo {
@@ -44,6 +46,7 @@ html {
   background-color: white;
   padding: 20px;
 }
+
 .App-link {
   color: #61dafb;
 }

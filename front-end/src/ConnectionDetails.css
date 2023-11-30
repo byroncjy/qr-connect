@@ -18,7 +18,7 @@ img {
   grid-template-rows: auto auto repeat(8, 1fr);
   gap: 20px;
   width: 80vw;
-  height: 30vh;
+  height: 70vh;
   box-sizing: border-box;
   font-size: 12px;
 }
@@ -130,7 +130,32 @@ a {
           margin: 10%; 
 }
 
+.button-container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(6, auto);
+  box-sizing: border-box;
+  gap: 10px;
+  height: 100vh;
+}
 
+.viewCode, .hideCode, .saveCode {
+  grid-column: 4 / 6;
+}
+
+.viewCode {
+  grid-row: 1;
+}
+
+
+
+.hideCode {
+  grid-row: 3;
+}
+
+.saveCode {
+  grid-row: 4;
+}
 
 
 
@@ -140,4 +165,5 @@ a {
   text-decoration: none;
   color: inherit;
   margin-bottom: 50vh;
+  flex: 1; 
 }
