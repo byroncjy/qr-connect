@@ -167,7 +167,7 @@ describe('User Routes', function () {
             .end((err, res) => {
               expect(res).to.have.status(500)
               expect(res.body).to.be.a('object').that.has.keys('error')
-              done(err);
+              done(err)
             })
         })
       })
