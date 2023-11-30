@@ -20,6 +20,13 @@
     border-radius: 4px;
 }
 
+.profile-section input[type="text"] {
+    width: calc(45% - 10px); /* Set the width as desired */
+    margin-right: 6px; /* Adjust margin for spacing */
+    padding: 10px; /* Adjust padding */
+    font-size: 16px; /* Adjust font size */
+}
+
 .save-button {
     width: 100%;
     padding: 13px;
