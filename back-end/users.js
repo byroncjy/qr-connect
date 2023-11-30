@@ -76,6 +76,21 @@ router.put('/:id', async (req, res) => {
   }
 })
 
+// Route for getting profile_picture
+router.get('/:id/profilePicture', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).exec()
+    // Extracts and returns only user profile data
+    const user_profile = {
+      profile_picture: user.profile_picture
+    }
+    res.json(user_profile)
+  } catch (err) {
+    console.error(`Error fetching user profile picture: ${err}`)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
+
 // Route for updating profile picture
 router.put('/:id/uploadPicture', upload.single('file'), async (req, res) => {
   // Assuming the file is successfully uploaded

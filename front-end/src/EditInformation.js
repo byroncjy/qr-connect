@@ -10,7 +10,8 @@ const platformOptions = [
 	{ value: "Instagram", label: "Instagram" },
 	{ value: "Facebook", label: "Facebook" },
 	{ value: "Twitter", label: "Twitter" },
-	{ value: "Github", label: "Github" }
+	{ value: "Github", label: "Github" },
+	{ value: "Custom", label: "Custom" }
 ];
 
 const EditInformation = () => {
@@ -24,7 +25,7 @@ const EditInformation = () => {
 
   // In final implementation, we will retrieve userId of current logged in user
   // For now, we just mock userId
-  const userId = 20
+  const userId = '6562c186a4a586c6e19a4eef'
 
   // Fetch all saved data from backend upon load
   useEffect(() => {
@@ -34,7 +35,26 @@ const EditInformation = () => {
         // Ensure .env file is setup for this to work
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`)        
         const data = response.data
-        setPlatformInformationMap(data)
+        // Map the fetched data to maintain the structure
+        const updatedPlatformInformationMap = data.map((entry) => {
+          // Check if the entry name exists in the platformOptions list
+          // If doesn't exist, set isCustom flag
+          const isCustom = !platformOptions.some((option) => option.value === entry.name)
+
+          if (isCustom) {
+            return {
+              name: entry.name,
+              value: entry.value,
+              isCustom: true,
+            }
+          } else {
+            return {
+              name: entry.name,
+              value: entry.value,
+            }
+          }
+        })
+        setPlatformInformationMap(updatedPlatformInformationMap)
       } catch (error) {
         console.error('Error fetching platform data:', error)
       }
@@ -60,20 +80,39 @@ const EditInformation = () => {
 	const handlePlatformChange = (index, event) => {
 		const { value } = event.target;
 		const updatedPlatformInformationMap = [...platformInformationMap];
-		updatedPlatformInformationMap[index].platform = value;
+		
+		// If Custom was chosen, set to blank text box and set isCustom flag
+		if (value === "Custom") {
+			updatedPlatformInformationMap[index] = {
+				name: "",
+				value: "",
+				isCustom: true,
+			};
+		} else {
+			updatedPlatformInformationMap[index].name = value;
+			updatedPlatformInformationMap[index].isCustom = false;
+		}
+		setPlatformInformationMap(updatedPlatformInformationMap);
+	};
+
+	// Handle change in custom platform text box
+	const handleCustomPlatformChange = (index, event) => {
+		const updatedPlatformInformationMap = [...platformInformationMap];
+		updatedPlatformInformationMap[index].name = event.target.value;
+		updatedPlatformInformationMap[index].isCustom = true;
 		setPlatformInformationMap(updatedPlatformInformationMap);
 	};
 
 	// Handle change in platform information
 	const handleInfoChange = (index, event) => {
 		const updatedPlatformInformationMap = [...platformInformationMap];
-		updatedPlatformInformationMap[index].info = event.target.value;
+		updatedPlatformInformationMap[index].value = event.target.value;
 		setPlatformInformationMap(updatedPlatformInformationMap);
 	};
 
 	// Handle adding new entry of platform name and information
 	const handleAddPlatformInformation = () => {
-		const updatedPlatformInformationMap = [...platformInformationMap, { platform: "", info: "" }];
+		const updatedPlatformInformationMap = [...platformInformationMap, { name: "", value: "" }];
 		setPlatformInformationMap(updatedPlatformInformationMap);
 	};
 
@@ -104,11 +143,19 @@ const EditInformation = () => {
       )
 
 			if (response.status === 200) {
-				// Update the profile picture in the UI
-				setProfileData({ ...profileData, url_picture: URL.createObjectURL(image) });
+				// If successful PUT, retrieve it and set it immediately to display
+        try {
+          // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
+          // Ensure .env file is setup for this to work
+          const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/profilePicture`)        
+          const data = response.data
+          setProfileData({ ...profileData, profile_picture: data.profile_picture })
+        } catch (error) {
+          console.error('Error fetching profile picture:', error)
+        }
 			}
 		} catch (error) {
-			console.error("Error uploading profile picture:", error);
+			console.error("Error uploading profile picture:", error)
 		}
 	};
 
@@ -146,57 +193,72 @@ const EditInformation = () => {
       // Check for duplicate entries
       const platformNames = new Set();
       for (const item of platformInformationMap) {
-        if (item.platform && item.info) {
-          if (platformNames.has(item.platform)) {
+        if (item.name && item.value) {
+          if (platformNames.has(item.name)) {
             // Set the error message immediately if a duplicate is found
             setErrorMessage('Error: Cannot save duplicate entries of the same platform.')
             return;
           } else {
-            platformNames.add(item.platform)
+            platformNames.add(item.name)
           }
         }
       }
       // Clear the error message if no duplicates are found
       setErrorMessage('');
-      // Filter out the entries with either empty platform or empty info
-      const filteredPlatformInformationMap = platformInformationMap.filter(
-        (item) => item.platform !== '' && item.info !== ''
-      )
 
+      // Filter out the entries with either empty platform or empty info
+      const filteredPlatformInformationMap = platformInformationMap
+        .filter((item) => item.name !== '' && item.value !== '')
+	
+      // For the data to be sent to backend, only send platform and info fields, without isCustom
+      const requestBody = {
+        platforms: filteredPlatformInformationMap.map(({ name, value }) => ({ name, value }))
+      }
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`,
-        filteredPlatformInformationMap,
+        requestBody,
         {
           headers: {
             'Content-Type': 'application/json'
           }
         }
       )
+	if (response.status !== 200) {
+		throw new Error(`Network response was not ok. Status Code: ${response.status}`);
+	}
 
-			if (response.status !== 200) {
-				throw new Error(`Network response was not ok. Status Code: ${response.status}`);
-			}
-			// Update the platformInformationMap state
-			setPlatformInformationMap(filteredPlatformInformationMap);
-		} catch (error) {
-			console.error("Error saving data:", error);
-		}
-	};
+	// Update the platformInformationMap state with all fields included
+	setPlatformInformationMap(filteredPlatformInformationMap);
+	} catch (error) {
+		console.error("Error saving data:", error);
+	}
+  };
 
 	return (
 		<div className="edit-information-container">
-			<h2>Edit Personal Information</h2>
-
-      {/* Displays picture and upload picture button */}
-      <div className="edit-information-header">
-        {/* Note that right now image urls are randomly generated via Mockaroo */}
-        <img src={profileData.url_picture} alt="Profile" className="profile-picture" />
-        <p>Upload profile picture below: </p>
-        <div className="upload-container">
-          <input type="file" accept="image/*" onChange={handleProfilePictureUpload} />
-        </div>
-      </div>
-
+			{/* Displays picture and upload picture button */}
+			<div className="edit-information-header">
+				<h2>Edit Personal Information</h2>
+				{/* Display profile picture if not undefined */}
+				{profileData.profile_picture && (
+          <img
+            src={`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/static/uploads/${profileData.profile_picture}`}
+            alt="Profile"
+            className="profile-picture"
+          />
+        )}
+				<div className="upload-container">
+					<label htmlFor="file-upload" className="custom-file-upload">
+						Upload picture
+					</label>
+					<input
+						id="file-upload"
+						type="file"
+						accept="image/*"
+						onChange={handleProfilePictureUpload}
+					/>
+				</div>
+			</div>
 			<div className="profile-section">
 				<p>Name: </p>
 				<input
@@ -213,40 +275,70 @@ const EditInformation = () => {
 				/>
 				<p>Email: {profileData.email}</p>
 			</div>
-			{/* Display each row of plaform name and information */}
+			{/* Display each row of platform name and information */}
 			{platformInformationMap.map((item, index) => (
 				<div key={index}>
 					<div className="platform-container">
-						<label htmlFor={`platform${index}`}></label>
-						{/* Dropdown */}
-						<select
-							id={`platform${index}`}
-							value={item.platform}
-							onChange={(e) => handlePlatformChange(index, e)}
-						>
-							{platformOptions.map((option) => (
-								<option key={option.value} value={option.value}>
-									{option.label}
-								</option>
-							))}
-						</select>
-
-						{/* If not Select Platform, display text input box */}
-						{item.platform !== "" && (
-							<input
-								type="text"
-								placeholder="Link / Information"
-								value={item.info}
-								onChange={(e) => handleInfoChange(index, e)}
-							/>
-						)}
+						{/* Conditionally render based on whether it's a custom platform */}
+            {item.isCustom? (
+              <>
+                {/* Two text boxes for custom platform */}
+                <input
+                  type="text"
+                  placeholder="Platform"
+                  value={item.name}
+                  onChange={(e) =>
+                      handleCustomPlatformChange(index, e)
+                  }
+                />
+                <input
+                  type="text"
+                  placeholder="Link / Information"
+                  value={item.value}
+                  onChange={(e) => handleInfoChange(index, e)}
+                />
+              </>
+            ) : (
+              <>
+                {/* Dropdown + text box for non-custom platforms */}
+                <select
+                  value={item.name}
+                  onChange={(e) => {
+                    handlePlatformChange(index, e);
+                  }}
+                >
+                  {platformOptions.map((option) => (
+                    <option
+                      key={option.value}
+                      value={option.value}
+                    >
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                  {/* Text input for non-custom platforms */}
+                  {item.name !== "" && (
+                    <input
+                      type="text"
+                      placeholder="Link / Information"
+                      value={item.value}
+                      onChange={(e) =>
+                        handleInfoChange(index, e)
+                      }
+                    />
+                  )}
+                </>
+            )}
 						{/* Delete entry */}
 						<button onClick={() => handleDeletePlatform(index)}>X</button>
 					</div>
 				</div>
 			))}
 			{/* Add new entry */}
-			<button onClick={handleAddPlatformInformation}>Add another platform</button>
+			<button onClick={handleAddPlatformInformation} className="add-platform-button">
+				Add platform
+			</button>
+
 			{/* Save updated platform information */}
 			<button
 				type="button"
