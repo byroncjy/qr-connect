@@ -4,38 +4,24 @@ const chai = require('chai')
 const chaiHttp = require('chai-http')
 const expect = chai.expect
 chai.use(chaiHttp)
-// fakes
-const nock = require('nock')
 // routes
 const router = require('../app')
 
-// tests related to sending requests about a users
+// tests related to sending requests about a user's information
 describe('User Routes', function () {
-  // tests that result in success will ask for valid id, and tests that result in
-  // failure will ask for id 1
-  const successId = '6562c186a4a586c6e19a4eef'
-  const serverFailureId = 1
-  const badRequestId = 2
-  // return 500 status response to failure tests
-  beforeEach(function() {
-    const failureRe = new RegExp(`\/users\/${serverFailureId}\/*.*`)
-    const getServerFailure = nock(/.*/, { allowUnmocked: true })
-      .get(failureRe)
-      .reply(500, { error: 'Internal Server Error' })
-    const putServerFailure = nock(/.*/, { allowUnmocked: true })
-      .put(failureRe)
-      .reply(500, { error: 'Internal Server Error' })
-  })
-  afterEach(function () {
-    nock.cleanAll()
-  })
+  // userIds
+  // validUserId is an actual valid objectId in the test database
+  const validUserId = '6562c186a4a586c6e19a4eef'
+  // invalidUserId is an obviously invalid objectId that wouldn't exist in database
+  const invalidUserId = '0_invalid_user_id_0'
+
   // email, first/last name, pfp
   describe('Account Information', function () {
     describe('Successful GET', function () {
       it('should respond with an HTTP 200 status code and an object in the body', function (done) {
         chai
           .request(router)
-          .get(`/users/${successId}`)
+          .get(`/users/${validUserId}`)
           .end(function(err, res) {
             expect(err).to.be.null
             expect(res).to.have.status(200)
@@ -49,7 +35,7 @@ describe('User Routes', function () {
       it('should respond with an HTTP 500 status code and an error', function (done) {
         chai
           .request(router)
-          .get(`/users/${serverFailureId}`)
+          .get(`/users/${invalidUserId}`)
           .end((err, res) => {
             expect(res).to.have.status(500)
             expect(res.body).to.be.a('object').that.has.keys('error')
@@ -61,7 +47,7 @@ describe('User Routes', function () {
       it('should respond with an HTTP 200 status and confirmation message', function (done) {
         chai
           .request(router)
-          .put(`/users/${successId}`)
+          .put(`/users/${validUserId}`)
           .send({
             email: 'email',
             first_name: 'first_name',
@@ -70,7 +56,7 @@ describe('User Routes', function () {
           })
           .end((err, res) => {
             expect(res).to.have.status(200)
-            expect(res.body).to.be.a('object').that.has.all.keys('message')
+            expect(res.body).to.be.a('object').that.has.keys('message')
             done()
           })
       })
@@ -79,7 +65,7 @@ describe('User Routes', function () {
       it('should respond with an HTTP 500 status and error message', function (done) {
         chai
           .request(router)
-          .put(`/users/${successId}`)
+          .put(`/users/${validUserId}`)
           .send({
             profile_picture: ['bad_data']
           })
@@ -97,7 +83,7 @@ describe('User Routes', function () {
       it('should respond with an HTTP 200 status and platforms list body', function (done) {
         chai
           .request(router)
-          .get(`/users/${successId}/platforms`)
+          .get(`/users/${validUserId}/platforms`)
           .end((err, res) => {
             expect(res).to.have.status(200)
             expect(res.body).to.be.a('array')
@@ -111,7 +97,7 @@ describe('User Routes', function () {
       it('should respond with an HTTP 500 status and an error body', function (done) {
         chai
           .request(router)
-          .get(`/users/${serverFailureId}/platforms`)
+          .get(`/users/${invalidUserId}/platforms`)
           .end((err, res) => {
             expect(res).to.have.status(500)
             expect(res.body).to.be.a('object').that.has.keys('error')
@@ -123,7 +109,7 @@ describe('User Routes', function () {
       it('should respond with an HTTP 200 status and a confirmation message', function (done) {
         chai
           .request(router)
-          .put(`/users/${successId}/platforms`)
+          .put(`/users/${validUserId}/platforms`)
           .send({
             platforms: [
               { name: 'Linkedin', value: 'johndoe254' },
@@ -138,10 +124,10 @@ describe('User Routes', function () {
       })
     }),
     describe('Unsuccessful PUT', function () {
-      it('should respond with an HTTP 400 status and an error body', function (done) {
+      it('should respond with an HTTP 500 status and an error body', function (done) {
         chai
           .request(router)
-          .put(`/users/${successId}/platforms`)
+          .put(`/users/${validUserId}/platforms`)
           .send({
             platforms: [
               { wrong_name: 'bad_platform', wrong_info: 'johndoe254' }
@@ -155,6 +141,7 @@ describe('User Routes', function () {
       })
     })
   })
+
   // Profile picture routes: /profilePicture, /uploadPicture
   describe('Profile Picture', function () {
     describe('GET profilePicture', function () {
@@ -162,7 +149,7 @@ describe('User Routes', function () {
         it('should respond with an HTTP 200 status and profile picture data', function (done) {
           chai
             .request(router)
-            .get(`/users/${successId}/profilePicture`)
+            .get(`/users/${validUserId}/profilePicture`)
             .end((err, res) => {
               expect(res).to.have.status(200)
               expect(res.body).to.be.a('object').that.has.keys('profile_picture')
@@ -175,7 +162,7 @@ describe('User Routes', function () {
         it('should respond with an HTTP 500 status and an error body', function (done) {
           chai
             .request(router)
-            .get(`/users/${serverFailureId}/profilePicture`)
+            .get(`/users/${invalidUserId}/profilePicture`)
             .end((err, res) => {
               expect(res).to.have.status(500)
               expect(res.body).to.be.a('object').that.has.keys('error')
@@ -190,13 +177,28 @@ describe('User Routes', function () {
         it('should respond with an HTTP 200 status and a confirmation message', function (done) {
           chai
             .request(router)
-            .put(`/users/${successId}/uploadPicture`)
+            .put(`/users/${validUserId}/uploadPicture`)
             .set('Content-Type', 'multipart/form-data') // Set the content type
-            .attach('file', path.join(__dirname, '../public/profile-picture-test.png'))
+            .attach('file', path.join(__dirname, '../test/public/profile-picture-test.png'))
             .end((err, res) => {
               expect(res).to.have.status(200)
               expect(res.body).to.be.a('object').that.has.keys('message')
               done()
+            })
+        })
+      })
+
+      describe('Unsuccessful PUT (no file attached)', function () {
+        it('should respond with an HTTP 400 status and an error body', function (done) {
+          chai
+            .request(router)
+            .put(`/users/${validUserId}/uploadPicture`)
+            .set('Content-Type', 'multipart/form-data') // Set the content type
+            .field('file', '')
+            .end((err, res) => {
+              expect(res).to.have.status(400)
+              expect(res.body).to.be.a('object').that.has.keys('error')
+              done(err)
             })
         })
       })
@@ -206,9 +208,9 @@ describe('User Routes', function () {
           chai
             .request(router)
             // This uses an invalid id
-            .put(`/users/${serverFailureId}/uploadPicture`)
+            .put(`/users/${invalidUserId}/uploadPicture`)
             .set('Content-Type', 'multipart/form-data') // Set the content type
-            .attach('file', path.join(__dirname, '../public/profile-picture-test.png'))
+            .attach('file', path.join(__dirname, '../test/public/profile-picture-test.png'))
             .end((err, res) => {
               expect(res).to.have.status(500)
               expect(res.body).to.be.a('object').that.has.keys('error')
