@@ -19,7 +19,6 @@ import './App.css';
 
 const App = () => {
 	return (
-    <div style={{backgroundColor: "white"}}>
 		<Router>
 			<Header />
 			<Routes>
@@ -41,7 +40,6 @@ const App = () => {
 			</Routes>
 			<Footer />
 		</Router>
-    </div>
 	);
 };
 

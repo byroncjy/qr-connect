@@ -124,10 +124,10 @@ describe('User Routes', function () {
         chai
           .request(router)
           .put(`/users/${successId}/platforms`)
-          .send({
-            platform_1: 'Facebook',
-            platform_2: 'Linkedin'
-          })
+          .send([
+            { platform: 'Linkedin', info: 'johndoe254' },
+            { platform: 'Instagram', info: '@johndoe' }
+          ])
           .end((err, res) => {
             expect(res).to.have.status(200)
             expect(res.body).to.be.a('object').that.has.keys('message')
@@ -136,13 +136,13 @@ describe('User Routes', function () {
       })
     }),
     describe('Unsuccessful PUT', function () {
-      it('should respond with an HTTP 500 status and an error body', function (done) {
+      it('should respond with an HTTP 400 status and an error body', function (done) {
         chai
           .request(router)
           .put(`/users/${successId}/platforms`)
-          .send({ 
-            platform_1: 'bad_platform'
-          })
+          .send([
+            { platform: 'bad_platform_without_info'}
+          ])
           .end((err, res) => {
             expect(res).to.have.status(400)
             expect(res.body).to.be.a('object').that.has.keys('error')
