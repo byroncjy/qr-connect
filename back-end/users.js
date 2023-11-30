@@ -1,4 +1,5 @@
 const express = require('express')
+const { param, body, validationResult, matchedData } = require('express-validator')
 const axios = require('axios')
 const mongoose = require('mongoose')
 const { ObjectId } = require('mongodb')
@@ -49,27 +50,37 @@ router.get('/:id', async (req, res) => {
 })
 
 // Route for updating user information
-router.put('/:id', async (req, res) => {
+router.put('/:id', 
+  param('id').trim().notEmpty().isMongoId(), 
+  body('email').optional().trim().notEmpty().isEmail(),
+  body('*_name').optional().escape(),
+  async (req, res) => {
   try {
-    // Update user information
-    // since this is just an update and not a create we don't need to guarantee
-    // every field.
-    const user = await User.findById(req.params.id).exec()
-    if (req.body.email) {
-      user.email = req.body.email
-    }
-    if (req.body.firstName) {
-      user.first_name = req.body.first_name
-    }
-    if (req.body.lastName) {
-      user.last_name = req.body.last_name
-    }
-    if (req.body.profile_picture) {
-      user.profile_picture = req.body.profile_picture
-    }
-    await user.save()
+    const result = validationResult(req)
+    if (result.notEmpty()) {
+      res.status(400).json({ error: 'Invalid user ID' })
+    } else {
+      const data = matchedData(req)
+      // Update user information
+      // since this is just an update and not a create we don't need to guarantee
+      // every field.
+      const user = await User.findById(data.id).exec()
+      if (data.email) {
+        user.email = data.email
+      }
+      if (data.firstName) {
+        user.first_name = data.first_name
+      }
+      if (data.lastName) {
+        user.last_name = data.last_name
+      }
+      if (data.profile_picture) {
+        user.profile_picture = data.profile_picture
+      }
+      await user.save()
 
-    res.status(200).json({ message: 'User information updated successfully.' })
+      res.status(200).json({ message: 'User information updated successfully.' })
+    }
   } catch (err) {
     console.error(`Error updating user information: ${err}`)
     res.status(500).json({ error: 'Internal Server Error' })
