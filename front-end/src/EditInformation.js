@@ -43,7 +43,7 @@ const EditInformation = () => {
 
   useEffect(() => {
     // const storedUserId = localStorage.getItem("userId");
-    const userId = '6562c186a4a586c6e19a4eef'
+    const userId = '65660283aae41cbfe98fb9f4'
     setUserId(userId); // Set userId in state
     fetchData(userId);
     fetchProfileData(userId);
