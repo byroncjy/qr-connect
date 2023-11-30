@@ -155,6 +155,7 @@ describe('User Routes', function () {
       })
     })
   })
+  // Profile picture routes: /profilePicture, /uploadPicture
   describe('Profile Picture', function () {
     describe('GET profilePicture', function () {
       describe('Successful GET', function () {
