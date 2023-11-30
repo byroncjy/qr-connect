@@ -13,7 +13,7 @@ describe('User Routes', function () {
   // validUserId is an actual valid objectId in the test database
   const validUserId = '6562c186a4a586c6e19a4eef'
   // invalidUserId is an obviously invalid objectId that wouldn't exist in database
-  const invalidUserId = '0_invalid_user_id_0'
+  const invalidUserId = '6562c186a4a586c6e19a4eea'
 
   // email, first/last name, pfp
   describe('Account Information', function () {
