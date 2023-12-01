@@ -29,7 +29,7 @@ const EditInformation = () => {
   // For now, we just mock userId
   useEffect(() => {
     // Here, we would change it to retrieve userId from /protected backend route
-    const userId = '65660283aae41cbfe98fb9f4'
+    const userId = '6562c186a4a586c6e19a4eef'
     setUserId(userId); // Set userId in state
     fetchData(userId);
     fetchProfileData(userId);

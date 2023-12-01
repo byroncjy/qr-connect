@@ -19,6 +19,16 @@
     border-radius: 4px;
 }
 
+.profile-section {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.profile-section p {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .profile-section input[type="text"] {
     width: calc(45% - 10px); /* Set the width as desired */
     margin-right: 6px; /* Adjust margin for spacing */
