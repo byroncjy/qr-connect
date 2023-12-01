@@ -53,14 +53,18 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', 
   param('id').trim().notEmpty().isMongoId(), 
   body('email').optional().trim().notEmpty().isEmail(),
-  body('*_name').optional().escape(),
+  body('first_name').optional().trim().notEmpty().escape(),
+  body('last_name').optional().trim().notEmpty().escape(),
   async (req, res) => {
   try {
     const result = validationResult(req)
-    if (result.notEmpty()) {
+    console.log(result)
+    if (!(result.isEmpty())) {
       res.status(400).json({ error: 'Invalid request' })
     } else {
       const data = matchedData(req)
+      console.log(data)
+      console.log(req.body.first_name)
       // Update user information
       // since this is just an update and not a create we don't need to guarantee
       // every field.

@@ -27,7 +27,7 @@ router.put('/:id/platforms',
   async (req, res) => {
   try {
     const result = validationResult(req)
-    if (result.notEmpty()) {
+    if (!(result.isEmpty())) {
       res.status(400).json({ error: 'Invalid request' })
     } else {
       const user = await User.findById(req.params.id)
