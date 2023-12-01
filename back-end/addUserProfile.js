@@ -8,7 +8,7 @@ router.post('/saveConnection', async (req, res) => {
   try {
     const userId = req.body.userId
     const connectionData = {
-      friend_id: mongoose.Types.ObjectId(req.body.friend_id),
+      friend_id: new mongoose.Types.ObjectId(req.body.friend_id),
       platforms: req.body.platforms,
       connected_date: req.body.connected_date
     }

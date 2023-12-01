@@ -19,6 +19,7 @@ const Signup = () => {
     }
 
     try {
+      console.log('API URL:', process.env.REACT_APP_API_URL);
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/signup`, {
         method: 'POST',
         headers: {
