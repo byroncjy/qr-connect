@@ -18,8 +18,7 @@ const SelectInformation = props => {
 
   const handleCheckBox = e => {
     const checkedCopy = [...checked]
-    // data from mockaroo is 1-indexed
-    checkedCopy[e.target.id - 1] = e.target.checked
+    checkedCopy[e.target.id] = e.target.checked
     setChecked(checkedCopy)
   }
 
@@ -80,7 +79,7 @@ const SelectInformation = props => {
         <div className="select-information-item" key={`item_${index}`}>
           <div className="select-information-label">
             <label className="select-information-label-text">
-                {platform.platform_name}: {platform.platform_value}
+                {platform.name}: {platform.value}
             </label>
           </div>
           <div className="select-information-checkbox">
@@ -88,7 +87,7 @@ const SelectInformation = props => {
               <input className="select-information-input"
                      id={index /* passed to update state */}
                      type="checkbox"
-                     checked={checked[index - 1] || false /* was triggering an
+                     checked={checked[index] || false /* was triggering an
                      uncontrolled component warning without second part */}
                      onChange={e => handleCheckBox(e)} />
               <span className="select-information-slider"></span>
