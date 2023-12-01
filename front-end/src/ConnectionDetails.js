@@ -67,7 +67,7 @@ const ConnectionDetails = () => {
      
 		axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/saveConnection`, newUserConnection)
 		.then(response => {
-		console.log('Profile saved successfully:', response.data)
+		console.log(response.data.message)	
 		navigate("/saved-connections")
 		console.log("Navigate to Save Code")
 		})
