@@ -12,7 +12,7 @@ const ConnectionDetails = () => {
 	const [isQRCodeVisible, setQRCodeVisible] = useState(false);
 	const location = useLocation();
 	const queryParameter = new URLSearchParams(location.search);
-	const { qrImageData } = location.state;
+	const qrImageData = location.state ? location.state.qrImageData : null;
 	const qrCodeText = queryParameter.get('');
 
 

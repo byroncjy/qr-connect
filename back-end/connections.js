@@ -1,51 +1,63 @@
 const express = require('express');
-const axios = require('axios');
-const router = express.Router();
-require('dotenv').config();
 const mongoose = require('mongoose');
-const User = require('./models/User.js');
-
-const apiBaseUrl = process.env.API_BASE_URL;
-const apiKey = process.env.LARA_API_KEY;
+const { User } = require('./models/User')
 const authenticateToken = require('./authRoutes');
+const router = express.Router();
+const defaultImage = '/default.png'; 
 
-// Route for saved connections
-router.get('/connections', authenticateToken, async (req, res, next) => {
-  if (process.env.SIMULATE_ERROR === 'true') {
-    const err = new Error('Simulated server error');
-    err.status = 500;
-    return next(err);
-  }
-
+router.get('/users/:id', authenticateToken, async (req, res) => {
+  const { id } = req.params;
   try {
-    const mockApiUrl = `${apiBaseUrl}?key=${apiKey}`;
-    const response = await axios.get(mockApiUrl);
-    const connections = response.data;
-
-    res.json(connections);
-  } catch (error) {
-    console.error('Error fetching connections data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-// Route for user-specific connections
-router.get('/connections/:userId', async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    console.log('User ID:', userId);
-
-    const userConnections = await User.findById(userId).select('connections');
-    if (!userConnections) {
-      return res.status(404).json({ error: 'User not found' });
+    const user = await User.findById(id, 'first_name last_name profile_picture').exec();
+    if (!user) {
+      return res.status(404).send('User not found');
     }
-    console.log('User Connections:', userConnections);
-    res.json(userConnections.connections);
+    res.json(user);
   } catch (error) {
-    console.error('Error fetching user connections:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
+
+router.get('/connections/:userId', authenticateToken, async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+          return res.status(400).json({ error: 'Invalid User ID' });
+      }
+
+      const user = await User.findById(userId);
+      
+      if (!user || !user.connections) {
+          return res.status(404).json({ error: 'User not found or no connections available' });
+      }
+
+      const uniqueFriendIds = new Set();
+      const connectionsDetails = [];
+
+      for (const connection of user.connections) {
+          if (!uniqueFriendIds.has(connection.friend_id.toString())) {
+              uniqueFriendIds.add(connection.friend_id.toString());
+              const friend = await User.findById(connection.friend_id).select('first_name last_name profile_picture');
+              connectionsDetails.push({
+                  friend_id: connection.friend_id,
+                  first_name: friend.first_name,
+                  last_name: friend.last_name,
+                  profile_picture: friend.profile_picture || defaultImage,
+                  platforms: connection.platforms
+              });
+          }
+      }
+
+      res.json(connectionsDetails);
+  } catch (error) {
+      console.error('Error fetching user connections:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 
 // Error handling middleware
 router.use((err, req, res, next) => {
