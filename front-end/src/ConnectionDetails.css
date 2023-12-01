@@ -18,7 +18,7 @@ img {
   grid-template-rows: auto auto repeat(4, 1fr);
   gap: 15px;
   width: 80vw;
-  height: 30vh;
+  height: 40vh;
   box-sizing: border-box;
   font-size: 12px;
 }
