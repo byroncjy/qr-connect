@@ -3,8 +3,8 @@ import axios from 'axios'
 import './SelectInformation.css'
 
 const SelectInformation = props => {
-  // example id
-  const [userId] = useState(() => 0)
+  // placeholder id
+  const [userId] = useState(() => '6562c186a4a586c6e19a4eef')
   const [data, setData] = useState(() => [])
   // track which boxes are checked
   const [checked, setChecked] = useState(() => []) // bool array
