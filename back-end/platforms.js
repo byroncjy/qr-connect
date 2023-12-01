@@ -21,7 +21,7 @@ router.get('/:id/platforms', async (req, res) => {
 
 // Route for updating platform information
 router.put('/:id/platforms', 
-  param('id').trim().notEmpty().isMongoId(),
+  param('id').notEmpty().isMongoId(),
   // check that field names are valid for each platform
   body('platforms').custom(( value, { req }) => {
     return value.every(plat => plat.hasOwnProperty('name') && plat.hasOwnProperty('value'))
