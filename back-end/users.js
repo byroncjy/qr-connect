@@ -58,13 +58,10 @@ router.put('/:id',
   async (req, res) => {
   try {
     const result = validationResult(req)
-    console.log(result)
     if (!(result.isEmpty())) {
       res.status(400).json({ error: 'Invalid request' })
     } else {
       const data = matchedData(req)
-      console.log(data)
-      console.log(req.body.first_name)
       // Update user information
       // since this is just an update and not a create we don't need to guarantee
       // every field.
