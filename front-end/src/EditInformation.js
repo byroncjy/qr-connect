@@ -26,7 +26,7 @@ const EditInformation = () => {
   // In final implementation, we will retrieve userId of current logged in user
   // For now, we just mock userId
   const userId = '6562c186a4a586c6e19a4eef'
-
+  
   // Fetch all saved data from backend upon load
   useEffect(() => {
     const fetchData = async () => {
