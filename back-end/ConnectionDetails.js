@@ -22,17 +22,13 @@ router.get('/ScanCode', (req, res) => {
   }
 })
 
-router.post('/ScanCode', async (req, res) => {
-  //Data Validation
-  body('qrData').notEmpty().withMessage('QR data is required'),
-
-  async (req, res) => {
-
-  const errors = validationResult(req)
+router.post('/ScanCode',
+body('qrData').notEmpty().withMessage('QR data is required'),
+async (req, res) => {
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log("Error")
     return res.status(400).json({ errors: errors.array() })
-  }
   }
 
   const { qrData } = req.body
