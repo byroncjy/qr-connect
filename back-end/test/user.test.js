@@ -49,10 +49,9 @@ describe('User Routes', function () {
           .request(router)
           .put(`/users/${validUserId}`)
           .send({
-            email: 'email',
+            email: 'email@example.com',
             first_name: 'first_name',
             last_name: 'last_name',
-            profile_picture: 'profile_picture'
           })
           .end((err, res) => {
             expect(res).to.have.status(200)
@@ -63,15 +62,17 @@ describe('User Routes', function () {
     }),
     // Invalid input: Sending an array under profile_picture field
     describe('Unsuccessful PUT', function () {
-      it('should respond with an HTTP 500 status and error message', function (done) {
+      it('should respond with an HTTP 400 status and error message', function (done) {
         chai
           .request(router)
           .put(`/users/${validUserId}`)
           .send({
-            profile_picture: ['bad_data']
+            email: 'not_an_email',
+            first_name: '',
+            last_name: 'okay_last_name'
           })
           .end((err, res) => {
-            expect(res).to.have.status(500)
+            expect(res).to.have.status(400)
             expect(res.body).to.be.a('object').that.has.keys('error')
             done(err)
           })
@@ -125,7 +126,7 @@ describe('User Routes', function () {
       })
     }),
     describe('Unsuccessful PUT', function () {
-      it('should respond with an HTTP 500 status and an error body', function (done) {
+      it('should respond with an HTTP 400 status and an error body', function (done) {
         chai
           .request(router)
           .put(`/users/${validUserId}/platforms`)
@@ -135,7 +136,7 @@ describe('User Routes', function () {
             ]
           })
           .end((err, res) => {
-            expect(res).to.have.status(500)
+            expect(res).to.have.status(400)
             expect(res.body).to.be.a('object').that.has.keys('error')
             done(err)
           })
