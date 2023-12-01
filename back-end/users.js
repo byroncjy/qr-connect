@@ -58,7 +58,7 @@ router.put('/:id',
   try {
     const result = validationResult(req)
     if (result.notEmpty()) {
-      res.status(400).json({ error: 'Invalid user ID' })
+      res.status(400).json({ error: 'Invalid request' })
     } else {
       const data = matchedData(req)
       // Update user information
