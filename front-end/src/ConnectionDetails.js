@@ -55,7 +55,7 @@ const ConnectionDetails = () => {
 
 		const decodedToken = jwtDecode(token)
 		const userId = decodedToken.userId
-      
+		
 		const newUserConnection = {
 		userId,
 		friend_id: qrCodeText,
@@ -86,7 +86,6 @@ const ConnectionDetails = () => {
         {scanResult && (
             <>
                
-
                 {scanResult.platforms && scanResult.platforms.map((platform, index) => (
                     <div className="detailsContainer" key={index}>
                         <div className="areaB">

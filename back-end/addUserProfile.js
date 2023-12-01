@@ -2,11 +2,25 @@ const express = require('express')
 const router = express.Router()
 const { Connection, User, Platform } = require('./models/User')
 const mongoose = require('mongoose')
-
+const { body, validationResult } = require('express-validator')
 
 router.post('/saveConnection', async (req, res) => {
+  //Data Validation
+  body('userId').notEmpty().withMessage('User ID is required'),
+  body('friend_id').notEmpty().withMessage('Friend ID is required'),
+  body('platforms').isArray().withMessage('Platforms is an array'),
+  body('connected_date').notEmpty().withMessage('Connected date is required'),
+    
+  async (req, res) => {
+    const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+      }
+  }
+
   try {
     const { userId, friend_id, platforms, connected_date } = req.body
+
     const user = await User.findById(userId)
     const friendIdStr = new mongoose.Types.ObjectId(friend_id).toString()
     if (!user) {
