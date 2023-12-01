@@ -75,9 +75,6 @@ router.put('/:id',
       if (data.last_name) {
         user.last_name = data.last_name
       }
-      if (data.profile_picture) {
-        user.profile_picture = data.profile_picture
-      }
       await user.save()
 
       res.status(200).json({ message: 'User information updated successfully.' })

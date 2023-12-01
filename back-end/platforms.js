@@ -33,7 +33,6 @@ router.put('/:id/platforms',
   try {
     const result = validationResult(req)
     if (!(result.isEmpty())) {
-      console.log(result)
       res.status(400).json({ error: 'Invalid request' })
     } else {
       const data = matchedData(req)
