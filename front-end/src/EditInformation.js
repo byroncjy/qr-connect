@@ -30,7 +30,10 @@ const EditInformation = () => {
   useEffect(() => {
     // Here, we would change it to retrieve userId from /protected backend route
     const userId = '6562c186a4a586c6e19a4eef'
-    setUserId(userId); // Set userId in state
+    // In final implementation
+    // Only if valid userId, fetch data
+    // Otherwise, send client to login page
+    setUserId(userId);
     fetchData(userId);
     fetchProfileData(userId);
   }, []);
