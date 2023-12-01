@@ -12,7 +12,7 @@ router.post('/saveConnection', async (req, res) => {
       platforms: req.body.platforms,
       connected_date: req.body.connected_date
     }
-
+    
     const updatedUser = await User.findByIdAndUpdate(
       userId, 
       { $push: { connections: connectionData } },
