@@ -1,56 +1,56 @@
 const express = require('express')
+const { param, body, validationResult, matchedData } = require('express-validator')
 const axios = require('axios')
+const mongoose = require('mongoose')
 const router = express.Router()
+
+const { User, Platform } = require('./models/User.js')
 
 // Route for retrieving platform information
 // In final implementation, this will extract info tied to userId
 router.get('/:id/platforms', async (req, res) => {
-  const userId = req.params.id
   try {
-    const apiUrl = process.env.API_BASE_URL_PROFILE
-    const apiKey = process.env.PROFILE_API_KEY
-    const response = await axios.get(`${apiUrl}?key=${apiKey}`)
-    const data = response.data
-    console.log(`User id: ${userId}`)
+    const user = await User.findById(req.params.id)
     // Extracts and returns only user platform data
-    res.json(data.platform_information)
-    console.log(data.platform_information)
-  } catch (error) {
-    console.error('Error fetching user platform data:', error)
+    res.status(200).json(user.platforms)
+  } catch(err) {
+    console.error('Error fetching user platform data:', err)
     res.status(500).json({ error: 'Internal Server Error' })
   }
 })
 
 // Route for updating platform information
-router.put('/:id/platforms', (req, res) => {
+router.put('/:id/platforms', 
+  param('id').notEmpty().isMongoId(),
+  // check that field names are valid for each platform
+  body('platforms').custom(( value, { req }) => {
+    return value.every(plat => plat.hasOwnProperty('name') && plat.hasOwnProperty('value'))
+  }),
+  // ** checks nested fields
+  body('**.name').trim().notEmpty().escape(),
+  body('**.value').trim().notEmpty().escape(),
+  async (req, res) => {
   try {
-    const userId = req.params.id
-    const platformInformation = req.body
-    // Authorized platform values
-    const authorizedPlatforms = [
-      'Phone number',
-      'Personal website',
-      'Linkedin',
-      'Instagram',
-      'Facebook',
-      'Twitter',
-      'Github'
-    ]
+    const result = validationResult(req)
+    if (!(result.isEmpty())) {
+      res.status(400).json({ error: 'Invalid request' })
+    } else {
+      const data = matchedData(req)
+      const user = await User.findById(data.id)
+      // Update the database with the received platform information
+      // Need to convert plain objects to Platforms before adding
+      const converted = []
+      data.platforms.forEach(platform => {
+        converted.push(new Platform({
+          name: platform.name,
+          value: platform.value
+        }))
+      })
+      user.platforms = converted
+      await user.save()
 
-    // Check if any unauthorized platforms are present in the request body
-    // We can accept fewer platforms as long as all authorized, since from user side
-    //  this means they have replaced some platforms
-    const unauthorizedPlatforms = Object.values(platformInformation)
-      .filter(entry => !(authorizedPlatforms.includes(entry.platform)))
-    if (unauthorizedPlatforms.length > 0) {
-      console.log(unauthorizedPlatforms)
-      return res.status(400).json({ error: 'Unauthorized platforms detected' })
+      res.status(200).json({ message: 'Platform information updated successfully' })
     }
-
-    // Simulate updating the database with the received platform information
-    console.log(`User id: ${userId}`)
-    console.log('Platform Information:', platformInformation)
-    res.status(200).json({ message: 'Platform information updated successfully' })
   } catch (error) {
     console.error('Error updating platform information:', error)
     res.status(500).json({ error: 'Internal Server Error' })

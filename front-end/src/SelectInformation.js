@@ -49,6 +49,7 @@ const SelectInformation = props => {
   }, [data])
 
   // check if all checked after `checked` changes (confusing i know)
+  // extra comment
   useEffect(() => {
     if (checked.length) {
       setAllChecked(checked.reduce((acc, head) => acc && head))

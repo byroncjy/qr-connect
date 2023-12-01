@@ -18,6 +18,17 @@ describe('Connections', () => {
     });
   });
 
+  describe('/GET non-existent-endpoint', () => {
+    it('it should return 404 for non-existent endpoint', (done) => {
+      chai.request(server)
+        .get('/api/non-existent-endpoint')
+        .end((err, res) => {
+          res.should.have.status(404);
+          done();
+        });
+    });
+  });
+
   describe('/GET saved-connections with wrong endpoint', () => {
     it('it should not GET connections due to wrong endpoint', (done) => {
       chai.request(server)

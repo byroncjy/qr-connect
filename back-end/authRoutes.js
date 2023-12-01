@@ -1,97 +1,101 @@
-const express = require('express');
-//const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const router = express.Router();
+require('dotenv').config() // Load environment variables from .env file
+const express = require('express')
+const { body, validationResult, matchedData } = require('express-validator')
+const router = express.Router()
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose')
+const { User } = require('./models/User.js') // Ensure this path is correct
 
+// Middleware to parse JSON
+router.use(express.json())
 
 // Function to generate JWT
-const generateToken = () => { //Since we don't have a database implemented, the backend will not validate the credentials and will allow access with any username and password.
-    return jwt.sign({}, 'secretKey', { expiresIn: '24h' }); 
-  };
-  
-  // Signup route
-router.post('/signup', async (req, res) => {
-    const token = generateToken();
-    res.status(201).json({ token });
-  });
-  
-router.post('/login', async (req, res) => {
-    const token = generateToken();
-    res.json({ token });
-  });
+const generateToken = (user) => {
+  const jwtSecret = process.env.JWT_SECRET || 'yourDefaultJwtSecret'
+  return jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '24h' })
+}
 
-router.post('/logout', async (req, res) => {
-    // Since JWTs are stateless, we cannot invalidate the token on the server.
-    // However, you can signal the client to remove the token from storage.
-    res.json({ message: 'Logged out successfully' });
-});
-  module.exports = router;
+// Signup route
+router.post('/signup', 
+  // unique email check below
+  body('email').notEmpty().isEmail(),
+  body('password').notEmpty(),
+  body('first_name').notEmpty().escape(),
+  body('last_name').notEmpty().escape(),
+  async (req, res) => {
+  try {
+    const result = validationResult(req)
+    if (!(result.isEmpty())) {
+      res.status(400).json({ error: 'Invalid request: all fields are required' })
+    } else {
+      const { email, password, first_name, last_name } = matchedData(req)
 
-// // Mock database
-// const users = [];
+      const existingUser = await User.findOne({ email })
+      if (existingUser) {
+        return res.status(409).json({ message: 'User already exists' })
+      }
 
-// // Function to generate JWT
-// const generateToken = (user) => {
-//   // Replace 'secretKey' with a real secret key in a production environment
-//   return jwt.sign({ data: user.username }, 'secretKey', { expiresIn: '24h' }); 
-// };
+      const hashedPassword = await bcrypt.hash(password, 10)
+      const user = new User({ email, password: hashedPassword, first_name, last_name })
+      await user.save()
 
-// // Function to find a user by username
-// const findUserByUsername = (username) => {
-//   return users.find(user => user.username === username);
-// };
+      const token = generateToken(user)
+      res.status(201).json({ token })
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating user', error: error.message })
+  }
+})
 
-// // Function to add a new user
-// const addUser = (username, hashedPassword) => {
-//   const newUser = {
-//     id: users.length + 1,
-//     username,
-//     password: hashedPassword
-//   };
-//   users.push(newUser);
-//   return newUser;
-// };
+// Login route
+router.post('/login', 
+  body('email').notEmpty().isEmail(),
+  body('password').notEmpty(),
+  async (req, res) => {
+  try {
+    const result = validationResult(req)
+    if (!(result.isEmpty())) {
+      res.status(400).json({ error: 'Invalid request: all fields are required' })
+    } else {
+      const { email, password } = matchedData(req)
 
-// // Signup route
-// router.post('/signup', async (req, res) => {
-//   try {
-//     const { username, password } = req.body;
-//     // Check if the user already exists
-//     if (findUserByUsername(username)) {
-//       return res.status(400).json({ message: 'User already exists' });
-//     }
-//     // Hash password
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     // Save user
-//     const newUser = addUser(username, hashedPassword);
-//     // Generate token
-//     const token = generateToken(newUser);
-//     res.status(201).json({ token });
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error creating new user' });
-//   }
-// });
+      const user = await User.findOne({ email })
+      if (!user || !(await bcrypt.compare(password, user.password))) {
+        return res.status(401).json({ message: 'Invalid credentials' })
+      }
 
-// // Login route
-// router.post('/login', async (req, res) => {
-//   try {
-//     const { username, password } = req.body;
-//     // Find user by username
-//     const user = findUserByUsername(username);
-//     if (!user) {
-//       return res.status(401).json({ message: 'Invalid credentials' });
-//     }
-//     // Check if password matches
-//     const match = await bcrypt.compare(password, user.password);
-//     if (!match) {
-//       return res.status(401).json({ message: 'Invalid credentials' });
-//     }
-//     // Generate token
-//     const token = generateToken(user);
-//     res.json({ token });
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error logging in' });
-//   }
-// });
+      const token = generateToken(user)
+      res.status(200).json({ token })
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Login error', error: error.message })
+  }
+})
 
-// module.exports = router;
+router.post('/logout', (req, res) => {
+  console.log('User logged out')
+  res.status(200).json({ message: 'Logout successful' })
+})
+
+// Authentication Middleware
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+
+  if (!token) return res.status(401).json({ message: 'Access denied' })
+
+  jwt.verify(token, process.env.JWT_SECRET || 'yourDefaultJwtSecret', (err, user) => {
+    if (err) return res.status(403).json({ message: 'Invalid token' })
+    req.user = user
+    next()
+  })
+}
+
+// Example of a protected route
+router.get('/protected', authenticateToken, (req, res) => {
+  res.json({ message: `Hello ${req.user.userId}` })
+})
+
+
+module.exports = router
