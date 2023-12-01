@@ -24,25 +24,11 @@ const EditInformation = () => {
 	const [errorMessage, setErrorMessage] = useState("");
 	const [buttonClicked, setButtonClicked] = useState(false); // State to handle button click
   const [userId, setUserId] = useState(""); // State to hold userId
-  // const navigate = useNavigate();
 
   // In final implementation, we will retrieve userId of current logged in user
   // For now, we just mock userId
-  // const userId = '6562c186a4a586c6e19a4eef'
-
-  // useEffect(() => {
-  //   const storedUserId = localStorage.getItem("userId");
-  //   if (!storedUserId) {
-  //     navigate("/");
-  //   } else {
-  //     setUserId(storedUserId); // Set userId in state
-  //     fetchData(storedUserId);
-  //     fetchProfileData(storedUserId);
-  //   }
-  // }, [navigate]);
-
   useEffect(() => {
-    // const storedUserId = localStorage.getItem("userId");
+    // Here, we would change it to retrieve userId from /protected backend route
     const userId = '65660283aae41cbfe98fb9f4'
     setUserId(userId); // Set userId in state
     fetchData(userId);
