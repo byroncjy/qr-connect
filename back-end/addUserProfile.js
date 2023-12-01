@@ -17,13 +17,13 @@ router.post('/saveConnection', async (req, res) => {
       userId, 
       { $push: { connections: connectionData } },
       { new: true, runValidators: true }
-    );
+    )
 
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.status(200).json({ message: 'Connection added successfully', updatedUser });
+    res.status(200).json({ message: 'Connection added successfully', updatedUser })
   } catch (error) {
     console.log('Error:', error.message)
     res.status(400).json({ message: error.message })
