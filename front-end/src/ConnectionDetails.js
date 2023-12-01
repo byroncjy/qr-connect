@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ConnectionDetails.css";
+import {jwtDecode} from 'jwt-decode';
 
 const ConnectionDetails = () => {
 	const navigate = useNavigate()
@@ -34,7 +35,7 @@ const ConnectionDetails = () => {
 
 		fetchScanResult();
 
-	}, [qrCodeText]);
+	}, [qrCodeText])
 
 	const handleViewCode = () => {
 		setQRCodeVisible(true)
@@ -45,22 +46,33 @@ const ConnectionDetails = () => {
 	}
 
 	const handleSaveCode = () => {	
+		const token = localStorage.getItem('token')
+		if (!token) {
+		console.error('No token found')
+
+		return
+		}
+
+		const decodedToken = jwtDecode(token)
+		const userId = decodedToken.userId
+      
 		const newUserConnection = {
-			friend_id: qrCodeText,
-			platforms: scanResult.platforms,
-			connected_date: new Date() 
-         };
-	
-          console.log("New User Connection:", newUserConnection);
-		
+		userId,
+		friend_id: qrCodeText,
+		platforms: scanResult.platforms,
+		connected_date: new Date()
+		}
+     
+		console.log("New User Connection:", newUserConnection)
+     
 		axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/saveConnection`, newUserConnection)
 		.then(response => {
-		console.log('Profile saved successfully:', response.data);
-		navigate("/saved-connections");
-		console.log("Navigate to Save Code");
+		console.log('Profile saved successfully:', response.data)
+		navigate("/saved-connections")
+		console.log("Navigate to Save Code")
 		})
-		.catch(error => {
-		console.error('Error in saving user profile:', error);
+	.catch(error => {
+		console.error('Error in saving user profile:', error)
 		});
 		
       }
