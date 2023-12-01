@@ -23,8 +23,7 @@ router.get('/ScanCode', (req, res) => {
 })
 
 router.post('/ScanCode', async (req, res) => {
-  const { qrData } = req.body
-
+  //Data Validation
   body('qrData').notEmpty().withMessage('QR data is required'),
 
   async (req, res) => {
@@ -35,6 +34,8 @@ router.post('/ScanCode', async (req, res) => {
     return res.status(400).json({ errors: errors.array() })
   }
   }
+
+  const { qrData } = req.body
 
   const base64Data = qrData.replace(/^data:image\/(png|jpeg|jpg);base64,/, '')
 
