@@ -8,7 +8,9 @@ const SavedConnections = () => {
   const [connections, setConnections] = useState([]);
   const navigate = useNavigate();
   const defaultImage = '/default.png'; 
-
+  const navigateHome = () => {
+    navigate('/home');
+  };
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem('token');
@@ -56,7 +58,10 @@ const SavedConnections = () => {
 
   return (
     <div className="saved-connections-container">
+      <div className="header-container">
         <h2>Saved Connections</h2>
+        <button onClick={navigateHome} className="home-button">Home</button>
+      </div>
         <div className="connections-grid">
             {connections.map((connection, index) => (
                 <div key={index}
