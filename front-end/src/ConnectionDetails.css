@@ -15,10 +15,10 @@ img {
 .detailsContainer {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: auto auto repeat(8, 1fr);
+  grid-template-rows: auto auto repeat(4, 1fr);
   gap: 15px;
   width: 80vw;
-  height: 50vh;
+  height: 30vh;
   box-sizing: border-box;
   font-size: 12px;
 }
@@ -53,7 +53,7 @@ img {
 
 .areaB {
   grid-column: 2 / 5;
-  grid-row: 1 / 2;
+  grid-row: 1 / 1;
   background-color: white;
   color: black;
   border: 1px solid black;
@@ -70,7 +70,7 @@ img {
 
 .areaD {
   grid-column: 1 / 5;
-  grid-row: 2 / 3;
+  grid-row: 2 / 2;
   background-color: white;
   color: black;
   border: 1px solid black;
@@ -81,8 +81,6 @@ img {
 }
 
 .areaE {
-  grid-column: 1 / 5;
-  grid-row: 5 / 8;
   background-color: white;
   color: black;
   border: 1px solid black;
