@@ -1,4 +1,5 @@
 const express = require('express')
+const { param, body, validationResult, matchedData } = require('express-validator')
 const axios = require('axios')
 const mongoose = require('mongoose')
 const { ObjectId } = require('mongodb')
@@ -49,27 +50,35 @@ router.get('/:id', async (req, res) => {
 })
 
 // Route for updating user information
-router.put('/:id', async (req, res) => {
+router.put('/:id', 
+  param('id').notEmpty().isMongoId(), 
+  body('email').optional().notEmpty().isEmail(),
+  body('first_name').optional().notEmpty().escape(),
+  body('last_name').optional().notEmpty().escape(),
+  async (req, res) => {
   try {
-    // Update user information
-    // since this is just an update and not a create we don't need to guarantee
-    // every field.
-    const user = await User.findById(req.params.id).exec()
-    if (req.body.email) {
-      user.email = req.body.email
-    }
-    if (req.body.first_name) {
-      user.first_name = req.body.first_name
-    }
-    if (req.body.last_name) {
-      user.last_name = req.body.last_name
-    }
-    if (req.body.profile_picture) {
-      user.profile_picture = req.body.profile_picture
-    }
-    await user.save()
+    const result = validationResult(req)
+    if (!(result.isEmpty())) {
+      res.status(400).json({ error: 'Invalid request' })
+    } else {
+      const data = matchedData(req)
+      // Update user information
+      // since this is just an update and not a create we don't need to guarantee
+      // every field.
+      const user = await User.findById(data.id).exec()
+      if (data.email) {
+        user.email = data.email
+      }
+      if (data.first_name) {
+        user.first_name = data.first_name
+      }
+      if (data.last_name) {
+        user.last_name = data.last_name
+      }
+      await user.save()
 
-    res.status(200).json({ message: 'User information updated successfully.' })
+      res.status(200).json({ message: 'User information updated successfully.' })
+    }
   } catch (err) {
     console.error(`Error updating user information: ${err}`)
     res.status(500).json({ error: 'Internal Server Error' })
@@ -95,7 +104,6 @@ router.get('/:id/profilePicture', async (req, res) => {
 router.put('/:id/uploadPicture', upload.single('file'), async (req, res) => {
   // Assuming the file is successfully uploaded
   if (req.file) {
-    console.log('file')
     try {
       const user = await User.findById(req.params.id).exec()
       // Save the file path or name in the url_picture variable
@@ -108,7 +116,7 @@ router.put('/:id/uploadPicture', upload.single('file'), async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' })
     }
   } else {
-    res.status(400).json({ message: 'No file uploaded' })
+    res.status(400).json({ error: 'No file uploaded' })
   }
 })
 
