@@ -13,12 +13,6 @@ router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
 
-const mongoUrl = process.env.MONGO_URL
-
-mongoose.connect(mongoUrl)
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err));
-
   
 router.get('/ScanCode', (req, res) => {
   try {
