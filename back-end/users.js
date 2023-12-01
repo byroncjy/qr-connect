@@ -51,10 +51,10 @@ router.get('/:id', async (req, res) => {
 
 // Route for updating user information
 router.put('/:id', 
-  param('id').trim().notEmpty().isMongoId(), 
-  body('email').optional().trim().notEmpty().isEmail(),
-  body('first_name').optional().trim().notEmpty().escape(),
-  body('last_name').optional().trim().notEmpty().escape(),
+  param('id').notEmpty().isMongoId(), 
+  body('email').optional().notEmpty().isEmail(),
+  body('first_name').optional().notEmpty().escape(),
+  body('last_name').optional().notEmpty().escape(),
   async (req, res) => {
   try {
     const result = validationResult(req)

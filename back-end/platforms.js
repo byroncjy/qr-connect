@@ -22,19 +22,26 @@ router.get('/:id/platforms', async (req, res) => {
 // Route for updating platform information
 router.put('/:id/platforms', 
   param('id').trim().notEmpty().isMongoId(),
+  // check that field names are valid for each platform
+  body('platforms').custom(( value, { req }) => {
+    return value.every(plat => plat.hasOwnProperty('name') && plat.hasOwnProperty('value'))
+  }),
+  // ** checks nested fields
   body('**.name').trim().notEmpty().escape(),
   body('**.value').trim().notEmpty().escape(),
   async (req, res) => {
   try {
     const result = validationResult(req)
     if (!(result.isEmpty())) {
+      console.log(result)
       res.status(400).json({ error: 'Invalid request' })
     } else {
-      const user = await User.findById(req.params.id)
+      const data = matchedData(req)
+      const user = await User.findById(data.id)
       // Update the database with the received platform information
       // Need to convert plain objects to Platforms before adding
       const converted = []
-      req.body.platforms.forEach(platform => {
+      data.platforms.forEach(platform => {
         converted.push(new Platform({
           name: platform.name,
           value: platform.value
