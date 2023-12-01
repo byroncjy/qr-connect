@@ -95,7 +95,6 @@ router.get('/:id/profilePicture', async (req, res) => {
 router.put('/:id/uploadPicture', upload.single('file'), async (req, res) => {
   // Assuming the file is successfully uploaded
   if (req.file) {
-    console.log('file')
     try {
       const user = await User.findById(req.params.id).exec()
       // Save the file path or name in the url_picture variable
@@ -108,7 +107,7 @@ router.put('/:id/uploadPicture', upload.single('file'), async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' })
     }
   } else {
-    res.status(400).json({ message: 'No file uploaded' })
+    res.status(400).json({ error: 'No file uploaded' })
   }
 })
 
