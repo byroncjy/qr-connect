@@ -13,7 +13,7 @@ const ConnectionDetails = () => {
 	const location = useLocation();
 	const queryParameter = new URLSearchParams(location.search);
 	const qrImageData = location.state ? location.state.qrImageData : null;
-	const qrCodeText = queryParameter.get('qrCodeText');
+	const qrCodeText = queryParameter.get('');
 
 
 	useEffect(() => {

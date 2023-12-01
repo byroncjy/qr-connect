@@ -48,7 +48,7 @@ const SavedConnections = () => {
 
   const handleConnectionClick = (friendId) => {
     if (friendId) {
-      navigate(`/ConnectionDetails?qrCodeText=${friendId}`);
+      navigate(`/ConnectionDetails?=${friendId}`);
     } else {
       console.error('Undefined connection ID');
     }
