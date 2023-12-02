@@ -69,6 +69,32 @@ router.get('/connections/:userId', authenticateToken, async (req, res) => {
   }
 });
 
+router.delete('/connections/:userId/:friendId', authenticateToken, async (req, res) => {
+  const { userId, friendId } = req.params;
+
+  if (!isValidObjectId(userId) || !isValidObjectId(friendId)) {
+    return res.status(400).send('Invalid User ID or Friend ID format');
+  }
+
+  try {
+    const friendObjectId = new mongoose.Types.ObjectId(friendId);
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { connections: { friend_id: friendObjectId } } },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    res.status(200).send('Connection deleted successfully');
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 // Error handling middleware
 router.use((err, req, res, next) => {

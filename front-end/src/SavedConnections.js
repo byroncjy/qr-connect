@@ -11,6 +11,14 @@ const SavedConnections = () => {
   const navigateHome = () => {
     navigate('/home');
   };
+  
+  const token = localStorage.getItem('token');
+  let userId;
+  if (token) {
+    const decoded = jwtDecode(token);
+    userId = decoded.userId;
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem('token');
@@ -56,24 +64,39 @@ const SavedConnections = () => {
     }
   };  
 
+    // Function to handle delete
+    const handleDeleteConnection = async (friendId) => {
+      try {
+        await axios.delete(`http://localhost:3001/connections/${userId}/${friendId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setConnections(connections.filter(conn => conn.friend_id !== friendId));
+      } catch (error) {
+        console.error('Error deleting connection:', error);
+      }
+    };
+
   return (
     <div className="saved-connections-container">
       <div className="header-container">
         <h2>Saved Connections</h2>
         <button onClick={navigateHome} className="home-button">Home</button>
       </div>
-        <div className="connections-grid">
-            {connections.map((connection, index) => (
-                <div key={index}
-                     className="connection-box"
-                     onClick={() => handleConnectionClick(connection.friend_id)}>
-                    <img src={connection.profile_picture} alt={`${connection.first_name} ${connection.last_name}`} />
-                    <p className="connection-box-text">{`${connection.first_name} ${connection.last_name}`}</p>
-                </div>
-            ))}
-        </div>
+      <div className="connections-grid">
+        {connections.map((connection, index) => (
+          <div key={index} className="connection-box">
+            <img src={connection.profile_picture} alt={`${connection.first_name} ${connection.last_name}`} />
+            <p className="connection-box-text">{`${connection.first_name} ${connection.last_name}`}</p>
+            <div className="connection-actions">
+              <button onClick={() => handleConnectionClick(connection.friend_id)}>View</button>
+              <button onClick={() => handleDeleteConnection(connection.friend_id)}>Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
+
 
 export default SavedConnections;

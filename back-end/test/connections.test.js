@@ -54,3 +54,39 @@ describe('Connections', function() {
   });
 
 });
+
+
+describe('/DELETE /connections/:userId/:friendId', () => {
+  it('should DELETE a connection for a user', (done) => {
+    const testUserId = '656a21d3110e39dcc9abb4cc';
+    const testFriendId = '6562c186a4a586c6e19a4eef'; 
+    chai.request(server)
+      .delete(`/connections/${testUserId}/${testFriendId}`)
+      .end((err, res) => {
+        res.should.have.status(200);
+        done();
+      });
+  });
+
+  it('should return 400 for an invalid user ID or friend ID format', (done) => {
+    const invalidUserId = '! !';
+    const invalidFriendId = '! !';
+    chai.request(server)
+      .delete(`/connections/${invalidUserId}/${invalidFriendId}`)
+      .end((err, res) => {
+        res.should.have.status(400);
+        done();
+      });
+  });
+
+  it('should return 404 for a non-existent user or friend ID', (done) => {
+    const nonExistentUserId = '656a21d3110e39dcc9abb4ee'; 
+    const nonExistentFriendId = '656a21d3110e39dcc9abb4ff';
+    chai.request(server)
+      .delete(`/connections/${nonExistentUserId}/${nonExistentFriendId}`)
+      .end((err, res) => {
+        res.should.have.status(404);
+        done();
+      });
+  });
+});
