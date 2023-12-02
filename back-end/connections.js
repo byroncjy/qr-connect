@@ -5,8 +5,15 @@ const authenticateToken = require('./authRoutes');
 const router = express.Router();
 const defaultImage = '/default.png'; 
 
+function isValidObjectId(id) {
+  return mongoose.Types.ObjectId.isValid(id) && (new mongoose.Types.ObjectId(id)).toString() === id;
+}
+
 router.get('/users/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
+  if (!isValidObjectId(id)) {
+    return res.status(400).send('Invalid User ID format');
+  }
   try {
     const user = await User.findById(id, 'first_name last_name profile_picture').exec();
     if (!user) {
@@ -14,6 +21,9 @@ router.get('/users/:id', authenticateToken, async (req, res) => {
     }
     res.json(user);
   } catch (error) {
+    if (error.name === 'CastError' && error.kind === 'ObjectId') {
+      return res.status(404).send('User not found');
+    }
     console.error('Error:', error);
     res.status(500).send('Internal Server Error');
   }
@@ -21,7 +31,9 @@ router.get('/users/:id', authenticateToken, async (req, res) => {
 
 router.get('/connections/:userId', authenticateToken, async (req, res) => {
   const userId = req.params.userId;
-
+  if (!isValidObjectId(userId)) {
+    return res.status(400).json({ error: 'Invalid User ID' });
+  }
   try {
       if (!mongoose.Types.ObjectId.isValid(userId)) {
           return res.status(400).json({ error: 'Invalid User ID' });
@@ -56,7 +68,6 @@ router.get('/connections/:userId', authenticateToken, async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 
 // Error handling middleware
