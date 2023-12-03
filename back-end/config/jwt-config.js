@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const User = ('../models/User.js')
+const { User } = require('../models/User.js')
 const { ExtractJwt, Strategy } = require('passport-jwt')
 
 const jwtOptions = {
@@ -8,13 +8,10 @@ const jwtOptions = {
 }
 
 const jwtVerifyToken = async (payload, next) => {
-  console.log(payload)
   const expired = new Date(payload.exp) < new Date()
   if (expired) {
-    console.log('expired!')
     return next(null, false, { error: 'Error: expired JWT token!' })
   }
-  console.log('not expired!')
 
   const user = await User.findById(payload.userId).exec()
   if (user) {
