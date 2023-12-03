@@ -1,4 +1,3 @@
-require('dotenv').config() // Load environment variables from .env file
 const express = require('express')
 const { body, validationResult, matchedData } = require('express-validator')
 const router = express.Router()
@@ -11,9 +10,9 @@ const { User } = require('./models/User.js') // Ensure this path is correct
 router.use(express.json())
 
 // Function to generate JWT
-const generateToken = (user) => {
-  const jwtSecret = process.env.JWT_SECRET || 'yourDefaultJwtSecret'
-  return jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '24h' })
+const generateToken = user => {
+  const jwtSecret = process.env.JWT_SECRET
+  return jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: '24h' })
 }
 
 // Signup route
@@ -60,7 +59,7 @@ router.post('/login',
     } else {
       const { email, password } = matchedData(req)
 
-      const user = await User.findOne({ email })
+      const user = await User.findOne({ email: email })
       if (!user || !(await bcrypt.compare(password, user.password))) {
         return res.status(401).json({ message: 'Invalid credentials' })
       }
@@ -77,25 +76,5 @@ router.post('/logout', (req, res) => {
   console.log('User logged out')
   res.status(200).json({ message: 'Logout successful' })
 })
-
-// Authentication Middleware
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
-
-  if (!token) return res.status(401).json({ message: 'Access denied' })
-
-  jwt.verify(token, process.env.JWT_SECRET || 'yourDefaultJwtSecret', (err, user) => {
-    if (err) return res.status(403).json({ message: 'Invalid token' })
-    req.user = user
-    next()
-  })
-}
-
-// Example of a protected route
-router.get('/protected', authenticateToken, (req, res) => {
-  res.json({ message: `Hello ${req.user.userId}` })
-})
-
 
 module.exports = router
