@@ -11,7 +11,13 @@ const router = express.Router()
 
 const { User } = require('./models/User.js')
 
+// covers both user and platform routes
 router.get('/*', passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    next()
+  }
+)
+router.put('/*', passport.authenticate('jwt', { session: false }),
   (req, res, next) => {
     next()
   }

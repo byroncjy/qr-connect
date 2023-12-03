@@ -8,7 +8,7 @@ const jwtOptions = {
 }
 
 const jwtVerifyToken = async (payload, next) => {
-  const expired = new Date(payload.exp) < new Date()
+  const expired = payload.exp * 1000 < new Date()
   if (expired) {
     return next(null, false, { error: 'Error: expired JWT token!' })
   }
