@@ -18,7 +18,7 @@ const Login = () => {
           password: password
         })
         .then(response => {
-          localStorage.setItem('token', response.token)
+          localStorage.setItem('token', response.data.token)
           navigate('/home')
         })
         .catch(err => {
