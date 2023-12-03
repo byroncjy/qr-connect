@@ -5,9 +5,17 @@ const mongoose = require('mongoose')
 const { ObjectId } = require('mongodb')
 const path = require('path')
 const multer = require('multer') // middleware to handle HTTP POST requests with file uploads
+const passport = require('passport')
+
 const router = express.Router()
 
 const { User } = require('./models/User.js')
+
+router.get('/*', passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    next()
+  }
+)
 
 // Multer handles file uploads
 // enable file uploads saved to disk in a directory named 'public/uploads'
