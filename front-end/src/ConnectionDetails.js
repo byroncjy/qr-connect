@@ -1,41 +1,42 @@
 
-import { useLocation, useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "./ConnectionDetails.css";
-import {jwtDecode} from 'jwt-decode';
+import { useLocation, useNavigate } from "react-router-dom"
+import React, { useState, useEffect } from "react"
+import axios from "axios"
+import "./ConnectionDetails.css"
+import {jwtDecode} from 'jwt-decode'
 
 const ConnectionDetails = () => {
 	const navigate = useNavigate()
-	console.log(navigate)
-	const [scanResult, setScanResult] = useState([]);
-	const [isQRCodeVisible, setQRCodeVisible] = useState(false);
-	const location = useLocation();
-	const queryParameter = new URLSearchParams(location.search);
-	const qrImageData = location.state ? location.state.qrImageData : null;
-	const qrCodeText = queryParameter.get('');
+	const [scanResult, setScanResult] = useState([])
+	const [isQRCodeVisible, setQRCodeVisible] = useState(false)
+	const location = useLocation()
+	const queryParameter = new URLSearchParams(location.search)
+	const qrImageData = location.state ? location.state.qrImageData : null
+	const qrCodeText = queryParameter.get('')
 
 
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
-				await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/ConnectionDetails/`, { qrCodeText })
+				await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/scan/${qrCodeText}`)
 					.then(response => {
 						if (response.status === 200) {
-							setScanResult(response.data);
-							console.log(response.data);
-
+							setScanResult(response.data)
 						}
-					});
+					})
 			} catch (error) {
-				console.error(error);
+				console.error(error)
 			}
 		}
 
 
-		fetchScanResult();
+		fetchScanResult()
 
 	}, [qrCodeText])
+
+  useEffect(() => {
+    console.log(scanResult)
+  }, [scanResult])
 
 	const handleViewCode = () => {
 		setQRCodeVisible(true)
@@ -48,34 +49,31 @@ const ConnectionDetails = () => {
 	const handleSaveCode = () => {	
 		const token = localStorage.getItem('token')
 		if (!token) {
-		console.error('No token found')
-
-		return
+      console.error('No token found')
+      return
 		}
 
 		const decodedToken = jwtDecode(token)
 		const userId = decodedToken.userId
 		
 		const newUserConnection = {
-		userId,
-		friend_id: qrCodeText,
-		platforms: scanResult.platforms,
-		connected_date: new Date()
+      friend_id: qrCodeText,
+      platforms: scanResult.platforms,
+      connected_date: new Date()
 		}
      
 		console.log("New User Connection:", newUserConnection)
      
-		axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/saveConnection`, newUserConnection)
+		axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/save/${userId}`, newUserConnection)
 		.then(response => {
-		console.log(response.data.message)	
-		navigate("/saved-connections")
-		console.log("Navigate to Save Code")
-		})
-	.catch(error => {
-		console.error('Error in saving user profile:', error)
-		});
-		
-      }
+      console.log(response.data.message)	
+      navigate("/saved-connections")
+      console.log("Navigate to Save Code")
+      })
+    .catch(error => {
+      console.error('Error in saving user profile:', error)
+    })
+  }
 
     
 
@@ -122,8 +120,8 @@ const ConnectionDetails = () => {
 			</div>
 		
 
-	);
-};
+	)
+}
 
-export default ConnectionDetails;
+export default ConnectionDetails
 
