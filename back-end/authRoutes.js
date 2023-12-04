@@ -88,13 +88,16 @@ const authenticateToken = (req, res, next) => {
   jwt.verify(token, process.env.JWT_SECRET || 'yourDefaultJwtSecret', (err, user) => {
     if (err) return res.status(403).json({ message: 'Invalid token' })
     req.user = user
+    console.log('Authenticated User ID:', user.userId);
+
     next()
   })
 }
 
-// Example of a protected route
+
 router.get('/protected', authenticateToken, (req, res) => {
-  res.json({ message: `Hello ${req.user.userId}` })
+  console.log('Authenticated user ID:', req.user.userId);
+  res.json({ message: `Hello ${req.user.userId}`, userId: req.user.userId  })
 })
 
 
