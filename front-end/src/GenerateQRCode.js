@@ -37,10 +37,10 @@ const GenerateQRCode = () => {
 
     return (
         <div className="generateQRCodeContainer">
-            <div className="generateQRCodeText">Scan this QR Code</div>
+            <div className="generateQRCodeText">Your QR Code</div>
             <div className="qrCode">
                 <QRCode
-                    value={userId || "Placeholder Value"}
+                    value={userId || `${process.env.PORT}/home`}
                     size={128}
                     bgColor="#ffffff"
                     fgColor="#000000"
