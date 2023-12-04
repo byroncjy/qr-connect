@@ -1,58 +1,109 @@
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const jwt = require('jsonwebtoken');
+// Import necessary libraries
+const request = require('supertest');
 const express = require('express');
-const authRouter = require('../authRoutes'); // Make sure the path is correct
-
-const expect = chai.expect;
-chai.use(chaiHttp);
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { MongoMemoryServer } = require('mongodb-memory-server');
+const mongoose = require('mongoose');
+const { User } = require('./models/User'); // Update this path as necessary
 
 const app = express();
-app.use(express.json()); // Middleware to parse JSON bodies
-app.use('/auth', authRouter); // Mount the auth router at the /auth path
+app.use('/', require('./path-to-your-router')); // Update with the path to your router file
 
-describe('Auth Router', () => {
+describe('Authentication Tests', () => {
+    let mongoServer;
 
-  describe('POST /signup', () => {
-    it('should sign up a new user and return a JWT', (done) => {
-      chai.request(app)
-        .post('/auth/signup')
-        // .send({ username: 'user', password: 'pass' }) // If you had a real signup process
-        .end((err, res) => {
-          expect(res).to.have.status(201);
-          expect(res.body).to.have.property('token');
-          const payload = jwt.verify(res.body.token, 'secretKey');
-          expect(payload).to.be.an('object');
-          done();
-        });
+    beforeAll(async () => {
+        // Setup an in-memory MongoDB server
+        mongoServer = await MongoMemoryServer.create();
+        await mongoose.connect(mongoServer.getUri(), { useNewUrlParser: true, useUnifiedTopology: true });
     });
-  });
 
-  describe('POST /login', () => {
-    it('should log in a user and return a JWT', (done) => {
-      chai.request(app)
-        .post('/auth/login')
-        // .send({ username: 'user', password: 'pass' }) // If you had a real login process
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.have.property('token');
-          const payload = jwt.verify(res.body.token, 'secretKey');
-          expect(payload).to.be.an('object');
-          done();
-        });
+    afterAll(async () => {
+        // Disconnect and stop in-memory MongoDB server
+        await mongoose.disconnect();
+        await mongoServer.stop();
     });
-  });
 
-  describe('POST /logout', () => {
-    it('should log out a user', (done) => {
-      chai.request(app)
-        .post('/auth/logout')
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.have.property('message', 'Logged out successfully');
-          done();
-        });
+    beforeEach(async () => {
+        // Clear the users collection before each test
+        await User.deleteMany({});
     });
-  });
 
+    // Test for Sign Up functionality
+    test('Sign Up - Successful', async () => {
+        const res = await request(app)
+            .post('/signup')
+            .send({ email: 'test@example.com', password: 'password123', first_name: 'John', last_name: 'Doe' });
+        expect(res.statusCode).toBe(201);
+        expect(res.body).toHaveProperty('token');
+    });
+
+    describe('Signup Error Tests', () => {
+      test('Signup - Missing Fields', async () => {
+          const res = await request(app)
+              .post('/signup')
+              .send({ email: 'test@example.com', first_name: 'John', last_name: 'Doe' }); // Password is missing
+          expect(res.statusCode).toBe(400);
+          expect(res.body).toHaveProperty('error');
+      });
+  
+      test('Signup - Existing User', async () => {
+          // First create a user
+          const hashedPassword = await bcrypt.hash('password123', 10);
+          await User.create({ email: 'test@example.com', password: hashedPassword, first_name: 'John', last_name: 'Doe' });
+  
+          // Then try to create the same user again
+          const res = await request(app)
+              .post('/signup')
+              .send({ email: 'test@example.com', password: 'password123', first_name: 'John', last_name: 'Doe' });
+          expect(res.statusCode).toBe(409);
+          expect(res.body).toHaveProperty('message', 'User already exists');
+      });
+  });
+    // Test for Login functionality
+    test('Login - Successful', async () => {
+        // First create a user
+        const hashedPassword = await bcrypt.hash('password123', 10);
+        await User.create({ email: 'test@example.com', password: hashedPassword, first_name: 'John', last_name: 'Doe' });
+
+        // Then test the login
+        const res = await request(app)
+            .post('/login')
+            .send({ email: 'test@example.com', password: 'password123' });
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toHaveProperty('token');
+    });
+
+    describe('Login Error Tests', () => {
+      test('Login - Missing Fields', async () => {
+          const res = await request(app)
+              .post('/login')
+              .send({ email: 'test@example.com' }); // Password is missing
+          expect(res.statusCode).toBe(400);
+          expect(res.body).toHaveProperty('error');
+      });
+  
+      test('Login - Invalid Credentials', async () => {
+          // First create a user
+          const hashedPassword = await bcrypt.hash('password123', 10);
+          await User.create({ email: 'test@example.com', password: hashedPassword, first_name: 'John', last_name: 'Doe' });
+  
+          // Then try to log in with the wrong password
+          const res = await request(app)
+              .post('/login')
+              .send({ email: 'test@example.com', password: 'wrongPassword' });
+          expect(res.statusCode).toBe(401);
+          expect(res.body).toHaveProperty('message', 'Invalid credentials');
+      });
+  });
+    // Test for Logout functionality
+    test('Logout - Successful', async () => {
+        const res = await request(app).post('/logout');
+        expect(res.statusCode).toBe(200);
+        expect(res.body.message).toBe('Logout successful');
+    });
+
+    // ... additional tests for protected route access
 });
+
