@@ -4,7 +4,7 @@ const sinon = require('sinon');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken'); // Import jsonwebtoken
 const mongoose = require('mongoose');
-const server = require('../app'); // Adjust this to the path of your Express server
+const app = require('../app'); // Import your Express app (not server)
 const { User } = require('../models/User'); // Adjust this to the path of your User model
 
 chai.use(chaiHttp);
@@ -16,7 +16,7 @@ describe('User Routes', () => {
   });
 
   describe('POST /signup', () => {
-    it('should create a new user and return a token', (done) => {
+    it('should create a new user and return a token', async () => { // Use async/await here
       // Stub the findOne and save methods on the User model
       sinon.stub(User, 'findOne').resolves(null);
       sinon.stub(User.prototype, 'save').resolves({
@@ -26,27 +26,25 @@ describe('User Routes', () => {
         last_name: 'Doe'
       });
 
-      chai.request(server)
-        .post('/signup')
+      const res = await chai.request(app) // Use your Express app here
+        .post('/api/auth/signup') // Make sure the route path is correct
         .send({
           email: 'test@example.com',
           password: 'password123',
           first_name: 'John',
           last_name: 'Doe'
-        })
-        .end((err, res) => {
-          expect(res).to.have.status(201);
-          expect(res.body).to.be.an('object');
-          expect(res.body).to.have.property('token');
-          done();
         });
+
+      expect(res).to.have.status(201);
+      expect(res.body).to.be.an('object');
+      expect(res.body).to.have.property('token');
     });
 
     // Additional test cases for /signup can be added here
   });
 
   describe('POST /login', () => {
-    it('should login a user and return a token', (done) => {
+    it('should login a user and return a token', async () => { // Use async/await here
       // Stub the findOne method on the User model
       sinon.stub(User, 'findOne').resolves({
         _id: '123456789',
@@ -54,29 +52,29 @@ describe('User Routes', () => {
         password: bcrypt.hashSync('password123', 10)
       });
 
-      chai.request(server)
-        .post('/login')
+      const res = await chai.request(app) // Use your Express app here
+        .post('/api/auth/login') // Make sure the route path is correct
         .send({
           email: 'test@example.com',
           password: 'password123'
-        })
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.be.an('object');
-          expect(res.body).to.have.property('token');
-          done();
         });
+
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.an('object');
+      expect(res.body).to.have.property('token');
     });
 
     // Additional test cases for /login can be added here
   });
 
-  
+  // ...
+});
+
 
   describe('POST /logout', () => {
     it('should log out a user', (done) => {
-      chai.request(server)
-        .post('/logout')
+      chai.request(app)
+        .post('/api/auth/logout') // Adjust the route path based on your Express routes
         .end((err, res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.have.property('message', 'Logout successful');
@@ -89,8 +87,8 @@ describe('User Routes', () => {
     it('should access the protected route with a valid token', (done) => {
       const fakeToken = jwt.sign({ userId: '123456789' }, 'yourDefaultJwtSecret');
       
-      chai.request(server)
-        .get('/protected')
+      chai.request(app)
+        .get('/api/auth/protected') // Adjust the route path based on your Express routes
         .set('Authorization', `Bearer ${fakeToken}`)
         .end((err, res) => {
           expect(res).to.have.status(200);
@@ -101,4 +99,3 @@ describe('User Routes', () => {
 
     // ... other test cases for protected route
   });
-});
