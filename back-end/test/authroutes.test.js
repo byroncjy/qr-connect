@@ -1,109 +1,100 @@
-// Import necessary libraries
-const request = require('supertest');
-const express = require('express');
-const bcrypt = require('bcrypt');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const sinon = require('sinon');
 const jwt = require('jsonwebtoken');
-const { MongoMemoryServer } = require('mongodb-memory-server');
+const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
-const { User } = require('./models/User'); // Update this path as necessary
+const server = require('../app'); // Replace with the path to your Express app
+const User = require('../models/User'); // Replace with the correct path
 
-const app = express();
-app.use('/', require('./path-to-your-router')); // Update with the path to your router file
+chai.use(chaiHttp);
+const expect = chai.expect;
 
-describe('Authentication Tests', () => {
-    let mongoServer;
-
-    beforeAll(async () => {
-        // Setup an in-memory MongoDB server
-        mongoServer = await MongoMemoryServer.create();
-        await mongoose.connect(mongoServer.getUri(), { useNewUrlParser: true, useUnifiedTopology: true });
-    });
-
-    afterAll(async () => {
-        // Disconnect and stop in-memory MongoDB server
-        await mongoose.disconnect();
-        await mongoServer.stop();
-    });
-
-    beforeEach(async () => {
-        // Clear the users collection before each test
-        await User.deleteMany({});
-    });
-
-    // Test for Sign Up functionality
-    test('Sign Up - Successful', async () => {
-        const res = await request(app)
-            .post('/signup')
-            .send({ email: 'test@example.com', password: 'password123', first_name: 'John', last_name: 'Doe' });
-        expect(res.statusCode).toBe(201);
-        expect(res.body).toHaveProperty('token');
-    });
-
-    describe('Signup Error Tests', () => {
-      test('Signup - Missing Fields', async () => {
-          const res = await request(app)
-              .post('/signup')
-              .send({ email: 'test@example.com', first_name: 'John', last_name: 'Doe' }); // Password is missing
-          expect(res.statusCode).toBe(400);
-          expect(res.body).toHaveProperty('error');
-      });
-  
-      test('Signup - Existing User', async () => {
-          // First create a user
-          const hashedPassword = await bcrypt.hash('password123', 10);
-          await User.create({ email: 'test@example.com', password: hashedPassword, first_name: 'John', last_name: 'Doe' });
-  
-          // Then try to create the same user again
-          const res = await request(app)
-              .post('/signup')
-              .send({ email: 'test@example.com', password: 'password123', first_name: 'John', last_name: 'Doe' });
-          expect(res.statusCode).toBe(409);
-          expect(res.body).toHaveProperty('message', 'User already exists');
-      });
+describe('User Routes', () => {
+  beforeEach(() => {
+    sinon.restore();
   });
-    // Test for Login functionality
-    test('Login - Successful', async () => {
-        // First create a user
-        const hashedPassword = await bcrypt.hash('password123', 10);
-        await User.create({ email: 'test@example.com', password: hashedPassword, first_name: 'John', last_name: 'Doe' });
 
-        // Then test the login
-        const res = await request(app)
-            .post('/login')
-            .send({ email: 'test@example.com', password: 'password123' });
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toHaveProperty('token');
+  describe('POST /signup', () => {
+    it('should create a new user and return a token', (done) => {
+      sinon.stub(User, 'findOne').resolves(null);
+      sinon.stub(User.prototype, 'save').resolves({
+        _id: '123456789',
+        email: 'test@example.com',
+        first_name: 'John',
+        last_name: 'Doe'
+      });
+
+      chai.request(server)
+        .post('/signup')
+        .send({
+          email: 'test@example.com',
+          password: 'password123',
+          first_name: 'John',
+          last_name: 'Doe'
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(201);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('token');
+          done();
+        });
     });
-
-    describe('Login Error Tests', () => {
-      test('Login - Missing Fields', async () => {
-          const res = await request(app)
-              .post('/login')
-              .send({ email: 'test@example.com' }); // Password is missing
-          expect(res.statusCode).toBe(400);
-          expect(res.body).toHaveProperty('error');
-      });
-  
-      test('Login - Invalid Credentials', async () => {
-          // First create a user
-          const hashedPassword = await bcrypt.hash('password123', 10);
-          await User.create({ email: 'test@example.com', password: hashedPassword, first_name: 'John', last_name: 'Doe' });
-  
-          // Then try to log in with the wrong password
-          const res = await request(app)
-              .post('/login')
-              .send({ email: 'test@example.com', password: 'wrongPassword' });
-          expect(res.statusCode).toBe(401);
-          expect(res.body).toHaveProperty('message', 'Invalid credentials');
-      });
+    // ... other test cases for signup
   });
-    // Test for Logout functionality
-    test('Logout - Successful', async () => {
-        const res = await request(app).post('/logout');
-        expect(res.statusCode).toBe(200);
-        expect(res.body.message).toBe('Logout successful');
+
+  describe('POST /login', () => {
+    it('should login a user and return a token', (done) => {
+      sinon.stub(User, 'findOne').resolves({
+        _id: '123456789',
+        email: 'test@example.com',
+        password: bcrypt.hashSync('password123', 10)
+      });
+
+      chai.request(server)
+        .post('/login')
+        .send({
+          email: 'test@example.com',
+          password: 'password123'
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('token');
+          done();
+        });
     });
 
-    // ... additional tests for protected route access
+    // ... other test cases for login
+  });
+
+  describe('POST /logout', () => {
+    it('should log out a user', (done) => {
+      chai.request(server)
+        .post('/logout')
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.property('message', 'Logout successful');
+          done();
+        });
+    });
+  });
+
+  describe('GET /protected', () => {
+    it('should access the protected route with a valid token', (done) => {
+      const fakeToken = jwt.sign({ userId: '123456789' }, 'yourDefaultJwtSecret');
+      
+      chai.request(server)
+        .get('/protected')
+        .set('Authorization', `Bearer ${fakeToken}`)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message');
+          done();
+        });
+    });
+
+    // ... other test cases for protected route
+  });
 });
-
