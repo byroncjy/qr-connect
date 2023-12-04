@@ -30,12 +30,12 @@ const SavedConnections = () => {
       try {
         const decoded = jwtDecode(token);
         const userId = decoded.userId;
-        const response = await axios.get(`http://localhost:3001/connections/${userId}`, {
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/${userId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
         const enhancedConnections = await Promise.all(response.data.map(async (conn) => {
-          const userDetails = await axios.get(`http://localhost:3001/users/${conn.friend_id}`, {
+          const userDetails = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${conn.friend_id}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           console.log(userDetails.data);
@@ -67,7 +67,7 @@ const SavedConnections = () => {
     // Function to handle delete
     const handleDeleteConnection = async (friendId) => {
       try {
-        await axios.delete(`http://localhost:3001/connections/${userId}/${friendId}`, {
+        await axios.delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/${userId}/${friendId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setConnections(connections.filter(conn => conn.friend_id !== friendId));

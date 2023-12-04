@@ -2,86 +2,78 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { User } = require('./models/User')
 const authenticateToken = require('./authRoutes');
+const { param, validationResult } = require('express-validator'); 
 const router = express.Router();
 const defaultImage = '/default.png'; 
 
-function isValidObjectId(id) {
-  return mongoose.Types.ObjectId.isValid(id) && (new mongoose.Types.ObjectId(id)).toString() === id;
-}
-
-router.get('/users/:id', authenticateToken, async (req, res) => {
-  const { id } = req.params;
-  if (!isValidObjectId(id)) {
-    return res.status(400).send('Invalid User ID format');
+const validateObjectId = (paramName) => [
+  param(paramName).isMongoId(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
   }
+];
+ 
+const handleValidationErrors = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  next();
+};
+
+router.get('/users/:id', authenticateToken, validateObjectId('id'), async (req, res) => {
   try {
-    const user = await User.findById(id, 'first_name last_name profile_picture').exec();
+    const user = await User.findById(req.params.id, 'first_name last_name profile_picture').exec();
     if (!user) {
       return res.status(404).send('User not found');
     }
     res.json(user);
   } catch (error) {
-    if (error.name === 'CastError' && error.kind === 'ObjectId') {
-      return res.status(404).send('User not found');
-    }
     console.error('Error:', error);
     res.status(500).send('Internal Server Error');
   }
 });
 
-router.get('/connections/:userId', authenticateToken, async (req, res) => {
-  const userId = req.params.userId;
-  if (!isValidObjectId(userId)) {
-    return res.status(400).json({ error: 'Invalid User ID' });
-  }
+router.get('/connections/:userId', authenticateToken, validateObjectId('userId'), async (req, res) => {
   try {
-      if (!mongoose.Types.ObjectId.isValid(userId)) {
-          return res.status(400).json({ error: 'Invalid User ID' });
+    const user = await User.findById(req.params.userId);
+    if (!user || !user.connections) {
+      return res.status(404).json({ error: 'User not found or no connections available' });
+    }
+
+    const uniqueFriendIds = new Set();
+    const connectionsDetails = [];
+
+    for (const connection of user.connections) {
+      if (!uniqueFriendIds.has(connection.friend_id.toString())) {
+        uniqueFriendIds.add(connection.friend_id.toString());
+        const friend = await User.findById(connection.friend_id).select('first_name last_name profile_picture');
+        connectionsDetails.push({
+          friend_id: connection.friend_id,
+          first_name: friend.first_name,
+          last_name: friend.last_name,
+          profile_picture: friend.profile_picture || defaultImage,
+          platforms: connection.platforms
+        });
       }
+    }
 
-      const user = await User.findById(userId);
-      
-      if (!user || !user.connections) {
-          return res.status(404).json({ error: 'User not found or no connections available' });
-      }
-
-      const uniqueFriendIds = new Set();
-      const connectionsDetails = [];
-
-      for (const connection of user.connections) {
-          if (!uniqueFriendIds.has(connection.friend_id.toString())) {
-              uniqueFriendIds.add(connection.friend_id.toString());
-              const friend = await User.findById(connection.friend_id).select('first_name last_name profile_picture');
-              connectionsDetails.push({
-                  friend_id: connection.friend_id,
-                  first_name: friend.first_name,
-                  last_name: friend.last_name,
-                  profile_picture: friend.profile_picture || defaultImage,
-                  platforms: connection.platforms
-              });
-          }
-      }
-
-      res.json(connectionsDetails);
+    res.json(connectionsDetails);
   } catch (error) {
-      console.error('Error fetching user connections:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error fetching user connections:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-router.delete('/connections/:userId/:friendId', authenticateToken, async (req, res) => {
-  const { userId, friendId } = req.params;
-
-  if (!isValidObjectId(userId) || !isValidObjectId(friendId)) {
-    return res.status(400).send('Invalid User ID or Friend ID format');
-  }
-
+router.delete('/connections/:userId/:friendId', authenticateToken, validateObjectId('userId'), validateObjectId('friendId'), async (req, res) => {
   try {
-    const friendObjectId = new mongoose.Types.ObjectId(friendId);
-
     const user = await User.findByIdAndUpdate(
-      userId,
-      { $pull: { connections: { friend_id: friendObjectId } } },
+      req.params.userId,
+      { $pull: { connections: { friend_id: req.params.friendId } } },
       { new: true }
     );
 
@@ -96,7 +88,6 @@ router.delete('/connections/:userId/:friendId', authenticateToken, async (req, r
   }
 });
 
-// Error handling middleware
 router.use((err, req, res, next) => {
   console.error(err);
   res.status(err.status || 500).json({ error: err.message || 'Internal Server Error' });
