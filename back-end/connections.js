@@ -45,24 +45,7 @@ router.get('/connections/:userId', authenticateToken, validateObjectId('userId')
       return res.status(404).json({ error: 'User not found or no connections available' });
     }
 
-    const uniqueFriendIds = new Set();
-    const connectionsDetails = [];
-
-    for (const connection of user.connections) {
-      if (!uniqueFriendIds.has(connection.friend_id.toString())) {
-        uniqueFriendIds.add(connection.friend_id.toString());
-        const friend = await User.findById(connection.friend_id).select('first_name last_name profile_picture');
-        connectionsDetails.push({
-          friend_id: connection.friend_id,
-          first_name: friend.first_name,
-          last_name: friend.last_name,
-          profile_picture: friend.profile_picture || defaultImage,
-          platforms: connection.platforms
-        });
-      }
-    }
-
-    res.json(connectionsDetails);
+    res.json(user.connections);
   } catch (error) {
     console.error('Error fetching user connections:', error);
     res.status(500).json({ error: 'Internal Server Error' });
