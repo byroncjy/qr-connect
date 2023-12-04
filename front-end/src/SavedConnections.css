@@ -66,15 +66,18 @@ body {
   border-radius: 50%;
   height: 50px;
   width: 50px; 
-  margin-right: 10px;
+  margin-right: 20px;
 }
 
 .connection-box p {
   font-size: 16px;
   font-weight: bold;
   margin: 0;
-  text-align: left; 
+  text-align: left;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 1; 
 }
 
 .connection-actions {
@@ -87,7 +90,23 @@ body {
 }
 
 @media (max-width: 768px) {
+  .connections-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 480px) {
+  .home-button {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+
+  .connection-box img {
+    height: 40px;
+    width: 40px;
+  }
+
+  .connection-box p {
+    font-size: 14px;
+  }
 }
