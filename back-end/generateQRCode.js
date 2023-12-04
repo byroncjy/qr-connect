@@ -1,26 +1,27 @@
+const { body, validationResult } = require('express-validator');
 const express = require('express');
 const router = express.Router();
 require('dotenv').config();
 const User = require('./models/User.js');
 
-router.post('/GenerateQRCode', async (req, res) => {
-    const { decodedToken } = req.body
+router.post('/GenerateQRCode', 
+    body('decodedToken').notEmpty().withMessage('Decoded token is required'),
+    body('decodedToken.userId').notEmpty().withMessage('User ID is required'),
 
-    if (!decodedToken) {
-        return res.status(400).json({ error: 'No decoded token provided' })
-    }
-
-    try {
-        const { userId } = decodedToken
-
-        if (!userId) {
-            return res.status(401).json({ error: 'Invalid token' })
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
         }
 
-        res.json({ decodedToken })
-    } catch (error) {
-        res.status(500).json({ error: 'Server error' })
+        const { decodedToken } = req.body;
+
+        try {
+            res.json({ decodedToken });
+        } catch (error) {
+            res.status(500).json({ error: 'Server error' });
+        }
     }
-});
+);
 
 module.exports = router;
