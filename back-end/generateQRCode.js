@@ -4,28 +4,22 @@ require('dotenv').config();
 const User = require('./models/User.js');
 
 router.post('/GenerateQRCode', async (req, res) => {
-    const { decodedToken } = req.body;
+    const { decodedToken } = req.body
 
     if (!decodedToken) {
-        return res.status(400).json({ error: 'No decoded token provided' });
+        return res.status(400).json({ error: 'No decoded token provided' })
     }
 
     try {
-        // Assuming the decoded token contains the userId
-        const { userId } = decodedToken;
+        const { userId } = decodedToken
 
         if (!userId) {
-            return res.status(401).json({ error: 'Invalid token' });
+            return res.status(401).json({ error: 'Invalid token' })
         }
 
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        res.json({ userId });
+        res.json({ decodedToken })
     } catch (error) {
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: 'Server error' })
     }
 });
 

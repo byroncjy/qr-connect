@@ -7,9 +7,10 @@ const cors = require('cors');
 // Import routes
 const authRoutes = require('./authRoutes');
 const connectionsRoutes = require('./connections');
-const unchangedImagesRouter = require('./unchanged-images');
+const unchangedImagesRouter = require('./unchanged-images'); // Ensure this path is correct
 const connectionsdetailsRoutes = require('./ConnectionDetails');
 const generateQRCodeRoutes = require('./generateQRCode');
+const addNewConnectionRoutes = require('./addUserProfile'); 
 const userRoutes = require('./users');
 const platformRoutes = require('./platforms');
 
@@ -48,9 +49,12 @@ app.use('/api/auth', authRoutes);
 // These are both set to users to make backend route more intuitive
 app.use('/users', userRoutes);
 app.use('/users', platformRoutes);
-app.use('/api', connectionsRoutes);
+app.use('/', connectionsRoutes);
 app.use('/', connectionsdetailsRoutes);
 app.use('/', generateQRCodeRoutes);
+app.use('/', addNewConnectionRoutes);
+
+
 
 // Root route
 app.get('/', (req, res) => {
