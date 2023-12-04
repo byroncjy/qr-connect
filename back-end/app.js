@@ -9,6 +9,7 @@ const authRoutes = require('./authRoutes');
 const connectionsRoutes = require('./connections');
 const unchangedImagesRouter = require('./unchanged-images');
 const connectionsdetailsRoutes = require('./ConnectionDetails');
+const generateQRCodeRoutes = require('./generateQRCode');
 const userRoutes = require('./users');
 const platformRoutes = require('./platforms');
 
@@ -49,6 +50,7 @@ app.use('/users', userRoutes);
 app.use('/users', platformRoutes);
 app.use('/api', connectionsRoutes);
 app.use('/', connectionsdetailsRoutes);
+app.use('/', generateQRCodeRoutes);
 
 // Root route
 app.get('/', (req, res) => {

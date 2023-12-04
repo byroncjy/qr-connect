@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ScanCode.css";
-import QRCode from 'qrcode.react';
+//import QRCode from 'qrcode.react';
 
 
 function ScanCode() {
@@ -60,15 +60,7 @@ function ScanCode() {
 			<input type="file" accept="image/*" capture="camera" id="file-input" onChange={handleFileChange} style={{ display: 'none' }} />
 			<label htmlFor="file-input" className="scanButton">Scan</label>
 
-			<div>
-				<QRCode
-					value="https://google.com"
-					size={64}
-					bgColor={"#ffffff"}
-					fgColor={"#000000"}
-					level={"L"}
-				/>
-			</div>
+
 		</div>
 	);
 }
