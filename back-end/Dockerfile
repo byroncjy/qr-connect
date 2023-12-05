@@ -13,7 +13,10 @@ ENV PYTHON /usr/bin/python3
 
 RUN npm install
 
+# Copy everything except contents of dockerignore
 COPY . .
 
 EXPOSE 3001
-CMD [ "node", "server.js" ]
+
+# Final run command
+CMD [ "npm", "start" ]
