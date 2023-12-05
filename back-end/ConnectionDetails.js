@@ -61,7 +61,7 @@ router.post('/:id',
   }
 
   try {
-    const user = await User.findOne({ id: qrCodeText })
+    const user = await User.findById(qrCodeText).exec()
     console.log(user)
     if (!user) {
       return res.status(404).send('User not found')

@@ -18,7 +18,7 @@ const ConnectionDetails = () => {
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
-				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}`)
+				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/scan/${qrCodeText}`)
 					.then(response => {
 						if (response.status === 200) {
 							setScanResult(response.data)
