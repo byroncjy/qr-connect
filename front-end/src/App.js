@@ -14,6 +14,7 @@ import TermOfServices from "./TermOfServices";
 import SelectInformation from "./SelectInformation"
 import SavedConnections from "./SavedConnections"
 import EditInformation from "./EditInformation"
+import GenerateQRCode from "./GenerateQRCode";
 import './App.css';
 
 const App = () => {
@@ -29,13 +30,14 @@ const App = () => {
 				<Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
 				<Route path="/TermOfServices" element={<TermOfServices />} />
 				<Route path="/ScanCode" element={<ScanCode />} />
-				<Route path="/ConnectionDetails" element={<ConnectionDetails />} />
+				<Route path="/ConnectionDetails/:friend_id" element={<ConnectionDetails />} />
 				<Route path="/ContactUs" element={<ContactUs />} />
 				<Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
 				<Route path="/scan-code" element={<ScanCode />} />
 				<Route path="/select-information" element={<SelectInformation/>} />
 				<Route path="/saved-connections" element={<SavedConnections />} />
 				<Route path="/edit-information" element={<EditInformation />} />
+				<Route path="/GenerateQRCode" element={<GenerateQRCode />} />
 			</Routes>
 			</div>
 			<Footer />

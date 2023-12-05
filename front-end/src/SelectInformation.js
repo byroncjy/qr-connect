@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import './SelectInformation.css'
 
 const SelectInformation = props => {
+  const navigate = useNavigate();
   // placeholder id
   const [userId] = useState(() => '6562c186a4a586c6e19a4eef')
   const [data, setData] = useState(() => [])
@@ -23,6 +25,7 @@ const SelectInformation = props => {
   }
 
   const handleSubmit = () => {
+    navigate('/GenerateQRCode')
     console.log('Submitted!')
   }
 

@@ -11,7 +11,7 @@ const Header = () => {
     try {
       // Use the environment variable for the API URL
       const apiUrl = process.env.REACT_APP_API_URL || ''; // Fallback to an empty string if not defined
-      await axios.post(`${apiUrl}/api/auth/logout`);
+      await axios.post(`${apiUrl}/logout`);
 
       // Clear the token from local storage or cookies
       localStorage.removeItem('token'); // Adjust according to your token storage
@@ -33,7 +33,7 @@ const Header = () => {
       {location.pathname !== '/home' && location.pathname !== '/' && (
         <button onClick={handleBack} className="back-button">Back</button>
       )}
-      <h1 className="header-title">QR Code Generator</h1>
+      <h1 className="header-title">QRConnect</h1>
       {location.pathname === '/home' && (
         <button onClick={handleLogout} className="logout-button">Logout</button>
       )}

@@ -60,12 +60,12 @@ describe('/DELETE /connections/:userId/:friendId', () => {
     const newUserConnection = {
       userId: testUserId,
       friend_id: testFriendId,
-      platforms: [], 
+      platforms: [{ name: "name", value: "value" }], 
       connected_date: new Date()
     };
 
     chai.request(server)
-      .post(`/saveConnection`)
+      .post(`/connections/save/${testUserId}`)
       .send(newUserConnection)
       .end((err, res) => {
         res.should.have.status(200); 
