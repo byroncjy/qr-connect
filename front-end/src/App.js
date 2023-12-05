@@ -22,8 +22,9 @@ const App = () => {
 			<Header />
 			<div className="main-content"> {/* Main content area */}
 			<Routes>
-				<Route path="/" element={<Login />} />
+				<Route path="/login" element={<Login />} />
 				<Route path="/signup" element={<Signup />} />
+				<Route path="/" element={<HomeScreen />} />
 				<Route path="/home" element={<HomeScreen />} />
 				<Route path="/ContactUs" element={<ContactUs />} />
 				<Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />

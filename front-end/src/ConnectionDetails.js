@@ -1,4 +1,3 @@
-
 import { useLocation, useNavigate } from "react-router-dom"
 import React, { useState, useEffect } from "react"
 import axios from "axios"
@@ -6,6 +5,8 @@ import "./ConnectionDetails.css"
 import {jwtDecode} from 'jwt-decode'
 
 const ConnectionDetails = () => {
+	const token = localStorage.getItem('token')
+  const [userId] = useState(() => token ? jwtDecode(token).userId : '')
 	const navigate = useNavigate()
 	const [scanResult, setScanResult] = useState([])
 	const [isQRCodeVisible, setQRCodeVisible] = useState(false)
@@ -14,11 +15,15 @@ const ConnectionDetails = () => {
 	const qrImageData = location.state ? location.state.qrImageData : null
 	const qrCodeText = queryParameter.get('')
 
+  useEffect(() => {
+    if (!token) navigate('/login')
+  }, [token])
 
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
-				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}`)
+				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}`,
+                          { headers: { Authorization: `JWT ${token}` } })
 					.then(response => {
 						if (response.status === 200) {
 							setScanResult(response.data)
@@ -32,7 +37,7 @@ const ConnectionDetails = () => {
 
 		fetchScanResult()
 
-	}, [qrCodeText])
+	}, [qrCodeText, token])
 
   useEffect(() => {
     console.log(scanResult)
@@ -47,15 +52,6 @@ const ConnectionDetails = () => {
 	}
 
 	const handleSaveCode = () => {	
-		const token = localStorage.getItem('token')
-		if (!token) {
-      console.error('No token found')
-      return
-		}
-
-		const decodedToken = jwtDecode(token)
-		const userId = decodedToken.userId
-		
 		const newUserConnection = {
       friend_id: qrCodeText,
       platforms: scanResult.platforms || [],
@@ -64,7 +60,8 @@ const ConnectionDetails = () => {
      
 		console.log("New User Connection:", newUserConnection)
      
-		axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/save/${userId}`, newUserConnection)
+		axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/save/${userId}`, newUserConnection,
+                 { headers: { Authorization: `JWT ${token}` } })
 		.then(response => {
       console.log(response.data.message)	
       navigate("/saved-connections")

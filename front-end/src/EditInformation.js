@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from 'jwt-decode'
 import "./EditInformation.css";
 
 const platformOptions = [
@@ -16,71 +17,70 @@ const platformOptions = [
 ];
 
 const EditInformation = () => {
+  const token = localStorage.getItem('token')
 	// Array of maps of containing platform, info
 	const [platformInformationMap, setPlatformInformationMap] = useState([]);
 	// State to hold profile data
 	const [profileData, setProfileData] = useState({});
 	// State for error message
-	const [errorMessage, setErrorMessage] = useState("");
+	const [errorMessage, setErrorMessage] = useState('');
 	const [buttonClicked, setButtonClicked] = useState(false); // State to handle button click
-  const [userId, setUserId] = useState(""); // State to hold userId
+  const [userId] = useState(() => token ? jwtDecode(token).userId : ''); // State to hold userId
 
   // In final implementation, we will retrieve userId of current logged in user
   // For now, we just mock userId
   useEffect(() => {
-    // Here, we would change it to retrieve userId from /protected backend route
-    const userId = '6562c186a4a586c6e19a4eef'
-    // In final implementation
-    // Only if valid userId, fetch data
-    // Otherwise, send client to login page
-    setUserId(userId);
+    const fetchData = async (userId) => {
+      try {
+        // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
+        // Ensure .env file is setup for this to work
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`,
+            { headers: { Authorization: `JWT ${token}` } })
+        const data = response.data
+        // Map the fetched data to maintain the structure
+        const updatedPlatformInformationMap = data.map((entry) => {
+          // Check if the entry name exists in the platformOptions list
+          // If doesn't exist, set isCustom flag
+          const isCustom = !platformOptions.some((option) => option.value === entry.name)
+
+          if (isCustom) {
+            return {
+              name: entry.name,
+              value: entry.value,
+              isCustom: true,
+            }
+          } else {
+            return {
+              name: entry.name,
+              value: entry.value,
+            }
+          }
+        })
+        setPlatformInformationMap(updatedPlatformInformationMap)
+      } catch (error) {
+        console.error('Error fetching platform data:', error)
+      }
+    }
+
+    // Fetch profile data: email, firstname, lastname, profile pic
+    const fetchProfileData = async (userId) => {
+      try {
+        // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
+        // Ensure .env file is setup for this to work
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}`,
+            { headers: { Authorization: `JWT ${token}` } })
+        const data = response.data
+        setProfileData(data)
+      } catch (error) {
+        console.error('Error fetching profile data:', error)
+      }
+    }
     fetchData(userId);
     fetchProfileData(userId);
-  }, []);
+  }, [ userId, token ]);
 
-  const fetchData = async (userId) => {
-    try {
-      // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
-      // Ensure .env file is setup for this to work
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`)        
-      const data = response.data
-      // Map the fetched data to maintain the structure
-      const updatedPlatformInformationMap = data.map((entry) => {
-        // Check if the entry name exists in the platformOptions list
-        // If doesn't exist, set isCustom flag
-        const isCustom = !platformOptions.some((option) => option.value === entry.name)
-
-        if (isCustom) {
-          return {
-            name: entry.name,
-            value: entry.value,
-            isCustom: true,
-          }
-        } else {
-          return {
-            name: entry.name,
-            value: entry.value,
-          }
-        }
-      })
-      setPlatformInformationMap(updatedPlatformInformationMap)
-    } catch (error) {
-      console.error('Error fetching platform data:', error)
-    }
-  }
-
-  // Fetch profile data: email, firstname, lastname, profile pic
-  const fetchProfileData = async (userId) => {
-    try {
-      // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
-      // Ensure .env file is setup for this to work
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}`)
-      const data = response.data
-      setProfileData(data)
-    } catch (error) {
-      console.error('Error fetching profile data:', error)
-    }
-  }
 
 	// Handle change in platform name
 	const handlePlatformChange = (index, event) => {
@@ -143,7 +143,8 @@ const EditInformation = () => {
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `JWT ${token}`
           }
         }
       )
@@ -153,7 +154,9 @@ const EditInformation = () => {
         try {
           // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
           // Ensure .env file is setup for this to work
-          const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/profilePicture`)        
+          const response = await axios.get(
+            `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/profilePicture`,
+              { headers: { Authorization: `JWT ${token}` } })
           const data = response.data
           setProfileData({ ...profileData, profile_picture: data.profile_picture })
         } catch (error) {
@@ -183,7 +186,8 @@ const EditInformation = () => {
         profileData,
         {
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: `JWT ${token}`
           }
         }
       )
@@ -225,7 +229,8 @@ const EditInformation = () => {
         requestBody,
         {
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: `JWT ${token}`
           }
         }
       )

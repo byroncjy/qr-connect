@@ -5,30 +5,29 @@ import { jwtDecode } from 'jwt-decode'
 import './SavedConnections.css'
 
 const SavedConnections = () => {
+  const token = localStorage.getItem('token')
+  const [userId] = useState(() => token ? jwtDecode(token).userId : '')
   const [connections, setConnections] = useState([])
   const navigate = useNavigate()
   const defaultImage = '/default.png' 
   const navigateHome = () => {
     navigate('/home')
   }
+
+  useEffect(() => {
+    if (!token) navigate('/login')
+  }, [token])
+
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('token')
-      if (!token) {
-        console.error('No token found')
-        return
-      }
-
       try {
-        const decoded = jwtDecode(token)
-        const userId = decoded.userId
         const response = await axios.get(`http://localhost:3001/connections/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `JWT ${token}` }
         })
         
         const enhancedConnections = await Promise.all(response.data.map(async (conn) => {
           const userDetails = await axios.get(`http://localhost:3001/users/${conn.friend_id}`, {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `JWT ${token}` }
           })
           console.log(userDetails.data)
           return {
@@ -46,7 +45,7 @@ const SavedConnections = () => {
     }
 
     fetchData()
-  }, [navigate])
+  }, [navigate, token, userId])
 
   const handleConnectionClick = (friendId) => {
     if (friendId) {
