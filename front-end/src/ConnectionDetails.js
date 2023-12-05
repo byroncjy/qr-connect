@@ -35,7 +35,6 @@ const ConnectionDetails = () => {
 	}, [qrCodeText])
 
   useEffect(() => {
-    console.log(scanResult)
   }, [scanResult])
 
 	const handleViewCode = () => {
@@ -62,13 +61,9 @@ const ConnectionDetails = () => {
       connected_date: new Date()
 		}
      
-		console.log("New User Connection:", newUserConnection)
-     
 		axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/save/${userId}`, newUserConnection)
 		.then(response => {
-      console.log(response.data.message)	
       navigate("/saved-connections")
-      console.log("Navigate to Save Code")
       })
     .catch(error => {
       console.error('Error in saving user profile:', error)

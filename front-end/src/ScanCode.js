@@ -12,7 +12,6 @@ function ScanCode() {
 			try {
 				const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/images/home-logo-image`);
 				if (response.status === 200 && response.data.LogoUrl) {
-					console.log(response.data)
 					setImageUrl(response.data.LogoUrl);
 				}
 			} catch (error) {
@@ -30,7 +29,6 @@ function ScanCode() {
 			const reader = new FileReader()
 			reader.onload = async (e) => {
 				const imageDataUrl = e.target.result
-				console.log('Image data URL:', imageDataUrl)
 				try {
 					const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/scan`, {
 						qrData: imageDataUrl
