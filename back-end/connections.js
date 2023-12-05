@@ -1,68 +1,67 @@
-const express = require('express');
-const mongoose = require('mongoose');
+const express = require('express')
+const mongoose = require('mongoose')
 const { User } = require('./models/User')
-const authenticateToken = require('./authRoutes');
-const router = express.Router();
-const defaultImage = '/default.png'; 
+const { param, validationResult } = require('express-validator')
+const router = express.Router()
+const defaultImage = '/default.png' 
 
-router.get('/users/:id', authenticateToken, async (req, res) => {
-  const { id } = req.params;
-  try {
-    const user = await User.findById(id, 'first_name last_name profile_picture').exec();
-    if (!user) {
-      return res.status(404).send('User not found');
+const validateObjectId = (paramName) => [
+  param(paramName).isMongoId(),
+  (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() })
     }
-    res.json(user);
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(500).send('Internal Server Error');
+    next()
   }
-});
+]
 
-router.get('/connections/:userId', authenticateToken, async (req, res) => {
-  const userId = req.params.userId;
+const handleValidationErrors = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() })
+  }
+  next()
+}
 
+router.get('/:id', validateObjectId('id'), async (req, res) => {
   try {
-      if (!mongoose.Types.ObjectId.isValid(userId)) {
-          return res.status(400).json({ error: 'Invalid User ID' });
-      }
-
-      const user = await User.findById(userId);
-      
-      if (!user || !user.connections) {
-          return res.status(404).json({ error: 'User not found or no connections available' });
-      }
-
-      const uniqueFriendIds = new Set();
-      const connectionsDetails = [];
-
-      for (const connection of user.connections) {
-          if (!uniqueFriendIds.has(connection.friend_id.toString())) {
-              uniqueFriendIds.add(connection.friend_id.toString());
-              const friend = await User.findById(connection.friend_id).select('first_name last_name profile_picture');
-              connectionsDetails.push({
-                  friend_id: connection.friend_id,
-                  first_name: friend.first_name,
-                  last_name: friend.last_name,
-                  profile_picture: friend.profile_picture || defaultImage,
-                  platforms: connection.platforms
-              });
-          }
-      }
-
-      res.json(connectionsDetails);
+    const user = await User.findById(req.params.id).exec()
+    if (!user || !user.connections || res.stats === 400) {
+      return res.status(404).json({ error: 'User not found or no connections available' })
+    }
+    res.json(user.connections)
   } catch (error) {
-      console.error('Error fetching user connections:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error fetching user connections:', error)
+    res.status(500).json({ error: 'Internal Server Error' })
   }
-});
+})
 
+router.delete('/:userId/:friendId', 
+  validateObjectId('userId'), 
+  validateObjectId('friendId'), 
+  async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.userId,
+      { $pull: { connections: { friend_id: req.params.friendId } } },
+      { new: true }
+    )
 
+    if (!user || res.status === 400) {
+      return res.status(404).send('User not found')
+    }
 
-// Error handling middleware
+    res.status(200).send('Connection deleted successfully')
+  } catch (error) {
+    console.error('Error:', error)
+    res.status(500).send('Internal Server Error')
+  }
+})
+
 router.use((err, req, res, next) => {
-  console.error(err);
-  res.status(err.status || 500).json({ error: err.message || 'Internal Server Error' });
-});
+  console.error(err)
+  res.status(err.status || 500).json({ error: err.message || 'Internal Server Error' })
+})
 
-module.exports = router;
+module.exports = router
