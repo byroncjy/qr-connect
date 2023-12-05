@@ -107,8 +107,6 @@ router.get('/protected', authenticateToken, async (req, res) => {
     res.json({
       message: `Hello ${user.first_name} ${user.last_name}`,
       userId: user._id, // Send the userId to the front-end
-      email: user.email,
-      // Include other user details you want to send to the front-end
     });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching user details', error: error.message });
