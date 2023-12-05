@@ -43,14 +43,13 @@ body {
 }
 
 .connection-box {
+  display: flex;
+  flex-direction: column; 
   align-items: center;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 10px;
   color: black;
-  display: flex;
-  flex-direction: row; 
-  justify-content: flex-start;
   padding: 15px;
   text-decoration: none;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
@@ -66,19 +65,65 @@ body {
   border-radius: 50%;
   height: 50px;
   width: 50px; 
-  margin-right: 10px;
+  margin-bottom: 15px;
 }
 
 .connection-box p {
   font-size: 16px;
   font-weight: bold;
   margin: 0;
-  text-align: left; 
+  text-align: center; 
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+.connection-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center; 
+}
+
+
+.connection-actions button {
+  margin: 0 5px;
+}
+
+
 @media (max-width: 768px) {
+  .connections-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .connection-box {
+    flex-direction: column; 
+    align-items: center; 
+  }
+
+  .connection-box img {
+    align-items: center;
+    margin-bottom: 20px; 
+    margin-right: 0;
+  }
+
+  .connection-box p {
+    white-space: normal; 
+  }
 }
 
 @media (max-width: 480px) {
+  .home-button {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+
+  .connection-box img {
+    height: 40px;
+    width: 40px;
+  }
+
+  .connection-box p {
+    font-size: 14px;
+    text-align: center; 
+}
 }
