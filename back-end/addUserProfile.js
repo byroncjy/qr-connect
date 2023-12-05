@@ -21,12 +21,11 @@ router.post('/save/:id',   // Data Validation
     const platforms = req.body.platforms
     const connected_date = req.body.connected_date
 
-    const user = await User.findById(userId)
+    const user = await User.findById(userId).exec()
     const friendIdStr = new mongoose.Types.ObjectId(friend_id).toString()
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
-    console.log('friendIdStr', friendIdStr)
 
     const existingConnectionIndex = user.connections.findIndex(
       connection => connection.friend_id.toString() == friend_id
