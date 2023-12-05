@@ -1,60 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { jwtDecode } from 'jwt-decode'; 
-import './SavedConnections.css';
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { jwtDecode } from 'jwt-decode' 
+import './SavedConnections.css'
 
 const SavedConnections = () => {
-  const [connections, setConnections] = useState([]);
-  const navigate = useNavigate();
-  const defaultImage = '/default.png'; 
+  const [connections, setConnections] = useState([])
+  const navigate = useNavigate()
+  const defaultImage = '/default.png' 
   const navigateHome = () => {
-    navigate('/home');
-  };
+    navigate('/home')
+  }
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token')
       if (!token) {
-        console.error('No token found');
-        return;
+        console.error('No token found')
+        return
       }
 
       try {
-        const decoded = jwtDecode(token);
-        const userId = decoded.userId;
+        const decoded = jwtDecode(token)
+        const userId = decoded.userId
         const response = await axios.get(`http://localhost:3001/connections/${userId}`, {
           headers: { Authorization: `Bearer ${token}` }
-        });
+        })
         
         const enhancedConnections = await Promise.all(response.data.map(async (conn) => {
           const userDetails = await axios.get(`http://localhost:3001/users/${conn.friend_id}`, {
             headers: { Authorization: `Bearer ${token}` }
-          });
-          console.log(userDetails.data);
+          })
+          console.log(userDetails.data)
           return {
             ...conn,
             first_name: userDetails.data.first_name,
             last_name: userDetails.data.last_name,
             profile_picture: userDetails.data.profile_picture || defaultImage
-          };
-        }));
+          }
+        }))
 
-        setConnections(enhancedConnections);
+        setConnections(enhancedConnections)
       } catch (error) {
-        console.error('Error fetching connections data:', error);
+        console.error('Error fetching connections data:', error)
       }
-    };
+    }
 
-    fetchData();
-  }, [navigate]);
+    fetchData()
+  }, [navigate])
 
   const handleConnectionClick = (friendId) => {
     if (friendId) {
-      navigate(`/ConnectionDetails?=${friendId}`);
+      navigate(`/ConnectionDetails?=${friendId}`)
     } else {
-      console.error('Undefined connection ID');
+      console.error('Undefined connection ID')
     }
-  };  
+  }  
 
   return (
     <div className="saved-connections-container">
@@ -73,7 +73,7 @@ const SavedConnections = () => {
             ))}
         </div>
     </div>
-  );
-};
+  )
+}
 
-export default SavedConnections;
+export default SavedConnections

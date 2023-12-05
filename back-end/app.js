@@ -51,13 +51,12 @@ try {
  */
 // Routes
 app.use('/images', unchangedImagesRouter)
-app.use('/api/auth', authRoutes)
-// These are both set to users to make backend route more intuitive
+app.use('/', authRoutes)
 app.use('/users', userRoutes)
 app.use('/users', platformRoutes)
-app.use('/', connectionsRoutes)
-app.use('/', connectionsdetailsRoutes)
-app.use('/', addNewConnectionRoutes)
+app.use('/connections', connectionsRoutes)
+app.use('/connections', addNewConnectionRoutes)
+app.use('/scan', connectionsdetailsRoutes)
 
 
 
