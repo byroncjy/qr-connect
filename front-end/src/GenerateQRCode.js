@@ -18,7 +18,7 @@ const GenerateQRCode = () => {
 	const fetchUserId = async () => {
 	try {
 	const decodedToken = jwtDecode(token)
-	const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/GenerateQRCode`, { decodedToken }, {
+	const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/generateQRCode`, { decodedToken }, {
 		headers: {
 		Authorization: `Bearer ${token}`
 		}
@@ -40,7 +40,7 @@ const GenerateQRCode = () => {
             <div className="generateQRCodeText">Your QR Code</div>
             <div className="qrCode">
                 <QRCode
-                    value={userId || `${process.env.PORT}/home`}
+                    value={userId || 'www.google.com'}
                     size={128}
                     bgColor="#ffffff"
                     fgColor="#000000"

@@ -1,27 +1,27 @@
-const express = require('express');
-const app = express();
-require('dotenv').config({ silent: true });
-const morgan = require('morgan');
-const cors = require('cors');
+const express = require('express')
+const app = express()
+require('dotenv').config({ silent: true })
+const morgan = require('morgan')
+const cors = require('cors')
 
 // Import routes
-const authRoutes = require('./authRoutes');
-const connectionsRoutes = require('./connections');
-const unchangedImagesRouter = require('./unchanged-images'); // Ensure this path is correct
-const connectionsdetailsRoutes = require('./ConnectionDetails');
+const authRoutes = require('./authRoutes')
+const connectionsRoutes = require('./connections')
+const unchangedImagesRouter = require('./unchanged-images') // Ensure this path is correct
+const connectionsdetailsRoutes = require('./ConnectionDetails')
+const addNewConnectionRoutes = require('./addUserProfile') 
+const userRoutes = require('./users')
+const platformRoutes = require('./platforms')
 const generateQRCodeRoutes = require('./generateQRCode');
-const addNewConnectionRoutes = require('./addUserProfile'); 
-const userRoutes = require('./users');
-const platformRoutes = require('./platforms');
 
 // Morgan for logging requests
-app.use(morgan('dev', { skip: (req, res) => process.env.NODE_ENV === 'test' }));
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(morgan('dev', { skip: (req, res) => process.env.NODE_ENV === 'test' }))
+app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 // Static content
-app.use('/static', express.static('public'));
+app.use('/static', express.static('public'))
 
 //connect to MongoDB with Mongoose
 const mongoose = require('mongoose')
@@ -44,27 +44,25 @@ try {
  * This is to match the order of the accompanying slides
  */
 // Routes
-app.use('/images', unchangedImagesRouter);
-app.use('/api/auth', authRoutes);
-// These are both set to users to make backend route more intuitive
-app.use('/users', userRoutes);
-app.use('/users', platformRoutes);
-app.use('/', connectionsRoutes);
-app.use('/', connectionsdetailsRoutes);
-app.use('/', generateQRCodeRoutes);
-app.use('/', addNewConnectionRoutes);
-
+app.use('/images', unchangedImagesRouter)
+app.use('/', authRoutes)
+app.use('/users', userRoutes)
+app.use('/users', platformRoutes)
+app.use('/connections', connectionsRoutes)
+app.use('/connections', addNewConnectionRoutes)
+app.use('/scan', connectionsdetailsRoutes)
+app.use('/generateQRCode', generateQRCodeRoutes);
 
 
 // Root route
 app.get('/', (req, res) => {
-  res.send('Hello from root');
-});
+  res.send('Hello from root')
+})
 
 // Global error handler
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Internal Server Error');
-});
+  console.error(err.stack)
+  res.status(500).send('Internal Server Error')
+})
 
-module.exports = app;
+module.exports = app

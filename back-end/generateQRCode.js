@@ -4,7 +4,7 @@ const router = express.Router()
 require('dotenv').config()
 const User = require('./models/User.js')
 
-router.post('/GenerateQRCode', 
+router.post('/', 
     body('decodedToken').notEmpty().withMessage('Decoded token is required'),
     body('decodedToken.userId').notEmpty().withMessage('User ID is required'),
 
