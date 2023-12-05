@@ -1,19 +1,17 @@
 const express = require('express');
-const axios = require('axios');
+const path = require('path');
 const router = express.Router();
 
-// Here we're using router.get, NOT app.get
-router.get('/home-logo-image', async (req, res) => {
-  try {
-    const response = await axios.get('https://picsum.photos/400', { responseType: 'stream' });
+// Define the path to the Static directory relative to unchanged-image.js
+const staticDirPath = path.join(__dirname, 'Static');
 
-    res.setHeader('content-type', response.headers['content-type']);
+// Route to serve the Logo.png file
+router.get('/home-logo-image', (req, res) => {
+  // Define the path to your logo
+  const logoPath = path.join(staticDirPath, 'Logo.png');
 
-    response.data.pipe(res);
-  } catch (error) {
-    console.error('Error fetching image from Picsum:', error);
-    res.status(500).send('Error fetching image');
-  }
+  // Send the logo file in the response
+  res.sendFile(logoPath);
 });
 
 module.exports = router;
