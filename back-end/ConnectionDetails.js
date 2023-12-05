@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const jsQR = require('jsqr')
 const axios = require('axios')
-const { User } = require('./models/User')
+const { User } = require('./models/User.js')
 require('dotenv').config()
 const { createCanvas, loadImage } = require('canvas')
 const { isValidObjectId } = require('mongoose')
@@ -50,10 +50,10 @@ router.post('/',
   }
 })
 
-router.post('/:id', 
+router.get('/:id', 
   param('id').isMongoId,
   async (req, res) => {
-  const { qrCodeText } = req.params.id
+  const qrCodeText = req.params.id
   console.log(qrCodeText)
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
