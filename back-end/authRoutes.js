@@ -15,7 +15,7 @@ const generateToken = user => {
   return jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: '24h' })
 }
 
-// Signup route
+// /signup (creates a new user)
 router.post('/signup', 
   // unique email check below
   body('email').notEmpty().isEmail(),
@@ -47,7 +47,7 @@ router.post('/signup',
   }
 })
 
-// Login route
+// /login (logs a user in)
 router.post('/login', 
   body('email').notEmpty().isEmail(),
   body('password').notEmpty(),
@@ -72,6 +72,7 @@ router.post('/login',
   }
 })
 
+// /logout (logs a user out, handled on front end by removing token)
 router.post('/logout', (req, res) => {
   console.log('User logged out')
   res.status(200).json({ message: 'Logout successful' })

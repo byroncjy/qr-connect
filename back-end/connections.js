@@ -5,6 +5,13 @@ const authenticateToken = require('./authRoutes')
 const router = express.Router()
 const defaultImage = '/default.png' 
 
+router.get('/*', passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    next()
+  }
+)
+
+// /connections/:id (gets connections list of id)
 router.get('/:id', authenticateToken, async (req, res) => {
   const userId = req.params.id
 

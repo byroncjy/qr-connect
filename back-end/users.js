@@ -44,8 +44,7 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage })
 
-// User profile route
-// Produces user profile data (note no password)
+// /users/:id (gets user info (no pass))
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).exec()
@@ -63,7 +62,7 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-// Route for updating user information
+// /users/:id (update/create user information)
 router.put('/:id', 
   param('id').notEmpty().isMongoId(), 
   body('email').optional().notEmpty().isEmail(),
@@ -99,7 +98,7 @@ router.put('/:id',
   }
 })
 
-// Route for getting profile_picture
+// /users/:id/profilePicture (gets profile picture path)
 router.get('/:id/profilePicture', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).exec()
@@ -114,7 +113,7 @@ router.get('/:id/profilePicture', async (req, res) => {
   }
 })
 
-// Route for updating profile picture
+// /users/:id/profilePicture (uploads profile picture to web server)
 router.put('/:id/uploadPicture', upload.single('file'), async (req, res) => {
   // Assuming the file is successfully uploaded
   if (req.file) {

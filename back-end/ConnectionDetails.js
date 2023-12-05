@@ -12,6 +12,13 @@ router.use(cors())
 router.use(express.urlencoded({ extended: true }))
 router.use(express.json())
 
+router.post('/*', passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    next()
+  }
+)
+
+// /scan/ (decodes QR code)
 router.post('/',
   body('qrData').notEmpty().withMessage('QR data is required'),
   async (req, res) => {
@@ -50,6 +57,7 @@ router.post('/',
   }
 })
 
+// /scan/:id (Finds a user, maybe redundant? maybe can be converted to get)
 router.post('/:id', 
   param('id').isMongoId,
   async (req, res) => {
