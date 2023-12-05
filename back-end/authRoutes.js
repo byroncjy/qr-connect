@@ -92,10 +92,28 @@ const authenticateToken = (req, res, next) => {
   })
 }
 
-// Example of a protected route
-router.get('/protected', authenticateToken, (req, res) => {
-  res.json({ message: `Hello ${req.user.userId}` })
-})
+//protected route
+router.get('/protected', authenticateToken, async (req, res) => {
+  try {
+    // Retrieve user details from the database using the userId from req.user
+    const user = await User.findById(req.user.userId);
+
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Respond with user details
+    res.json({
+      message: `Hello ${user.first_name} ${user.last_name}`,
+      userId: user._id, // Send the userId to the front-end
+      email: user.email,
+      // Include other user details you want to send to the front-end
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching user details', error: error.message });
+  }
+});
 
 
 module.exports = router
