@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from 'jwt-decode'
 import "./EditInformation.css";
@@ -18,6 +18,8 @@ const platformOptions = [
 
 const EditInformation = () => {
   const token = localStorage.getItem('token')
+  const [userId] = useState(() => token ? jwtDecode(token).userId : ''); // State to hold userId
+  const navigate = useNavigate()
 	// Array of maps of containing platform, info
 	const [platformInformationMap, setPlatformInformationMap] = useState([]);
 	// State to hold profile data
@@ -25,7 +27,10 @@ const EditInformation = () => {
 	// State for error message
 	const [errorMessage, setErrorMessage] = useState('');
 	const [buttonClicked, setButtonClicked] = useState(false); // State to handle button click
-  const [userId] = useState(() => token ? jwtDecode(token).userId : ''); // State to hold userId
+
+  useEffect(() => {
+    if (!token) navigate('/login')
+  }, [token])
 
   // In final implementation, we will retrieve userId of current logged in user
   // For now, we just mock userId
