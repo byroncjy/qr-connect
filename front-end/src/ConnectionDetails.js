@@ -18,7 +18,7 @@ const ConnectionDetails = () => {
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
-				await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/scan/${qrCodeText}`)
+				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}`)
 					.then(response => {
 						if (response.status === 200) {
 							setScanResult(response.data)
@@ -58,7 +58,7 @@ const ConnectionDetails = () => {
 		
 		const newUserConnection = {
       friend_id: qrCodeText,
-      platforms: scanResult.platforms,
+      platforms: scanResult.platforms || [],
       connected_date: new Date()
 		}
      
