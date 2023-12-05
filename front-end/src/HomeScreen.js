@@ -39,10 +39,10 @@ const HomeScreen = () => {
       </div>
       <div className="home-links">
         {/* Define navigation links for the app */}
-        <a href="/scan-code" className="home-link">Scan Code</a>
-        <a href="/edit-information" className="home-link">Edit Information</a>
-        <a href="/saved-connections" className="home-link">Saved Connections</a>
-        <a href="/select-information" className="home-link">Generate Code</a>
+        <a href="/scan-code" className="home-link">Scan QR Code</a>
+        <a href="/edit-information" className="home-link">My Information</a>
+        <a href="/saved-connections" className="home-link">My Connections</a>
+        <a href="/select-information" className="home-link">Generate My QR Code</a>
       </div>
     </div>
   )
