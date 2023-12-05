@@ -36,7 +36,7 @@ function ScanCode() {
 						qrData: imageDataUrl
 					});
 					
-					navigate(`/ConnectionDetails?=${response.data.qrCodeText}`, { state: { qrCodeText: response.data.qrCodeText, qrImageData: imageDataUrl } })
+					navigate(`/ConnectionDetails/${response.data.qrCodeText}`, { state: { qrCodeText: response.data.qrCodeText, qrImageData: imageDataUrl } })
 				
 				} catch (error) {
 					console.error('Error sending QR data to backend:', error);

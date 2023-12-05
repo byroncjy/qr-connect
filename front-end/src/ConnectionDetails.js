@@ -1,5 +1,5 @@
 
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import "./ConnectionDetails.css"
@@ -10,15 +10,15 @@ const ConnectionDetails = () => {
 	const [scanResult, setScanResult] = useState([])
 	const [isQRCodeVisible, setQRCodeVisible] = useState(false)
 	const location = useLocation()
-	const queryParameter = new URLSearchParams(location.search)
 	const qrImageData = location.state ? location.state.qrImageData : null
-	const qrCodeText = queryParameter.get('')
+  const params = useParams()
+	const qrCodeText = params.friend_id // /cd/friend_id
 
 
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
-				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/scan/${qrCodeText}`)
+				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}/platforms`)
 					.then(response => {
 						if (response.status === 200) {
 							setScanResult(response.data)
@@ -47,7 +47,7 @@ const ConnectionDetails = () => {
 	}
 
 	const handleSaveCode = () => {	
-		const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token')
 		if (!token) {
       console.error('No token found')
       return
@@ -58,7 +58,7 @@ const ConnectionDetails = () => {
 		
 		const newUserConnection = {
       friend_id: qrCodeText,
-      platforms: scanResult.platforms || [],
+      platforms: scanResult || [],
       connected_date: new Date()
 		}
      
@@ -84,7 +84,7 @@ const ConnectionDetails = () => {
         {scanResult && (
             <>
                
-                {scanResult.platforms && scanResult.platforms.map((platform, index) => (
+                {scanResult.map((platform, index) => (
                     <div className="detailsContainer" key={index}>
                         <div className="areaB">
                             {platform.name}
