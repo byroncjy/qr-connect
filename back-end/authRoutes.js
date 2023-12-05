@@ -78,4 +78,24 @@ router.post('/logout', (req, res) => {
   res.status(200).json({ message: 'Logout successful' })
 })
 
+// Authentication Middleware
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+
+  if (!token) return res.status(401).json({ message: 'Access denied' })
+
+  jwt.verify(token, process.env.JWT_SECRET || 'yourDefaultJwtSecret', (err, user) => {
+    if (err) return res.status(403).json({ message: 'Invalid token' })
+    req.user = user
+    next()
+  })
+}
+
+// Example of a protected route
+router.get('/protected', authenticateToken, (req, res) => {
+  res.json({ message: `Hello ${req.user.userId}` })
+})
+
+
 module.exports = router
