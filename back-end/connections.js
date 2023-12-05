@@ -47,7 +47,6 @@ router.delete('/:userId/:friendId',
       { $pull: { connections: { friend_id: req.params.friendId } } },
       { new: true }
     )
-    console.log(res)
 
     if (!user || res.status === 400) {
       return res.status(404).send('User not found')
