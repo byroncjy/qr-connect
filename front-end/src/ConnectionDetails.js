@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import "./ConnectionDetails.css"
@@ -11,9 +11,9 @@ const ConnectionDetails = () => {
 	const [scanResult, setScanResult] = useState([])
 	const [isQRCodeVisible, setQRCodeVisible] = useState(false)
 	const location = useLocation()
-	const queryParameter = new URLSearchParams(location.search)
 	const qrImageData = location.state ? location.state.qrImageData : null
-	const qrCodeText = queryParameter.get('')
+  const params = useParams()
+	const qrCodeText = params.friend_id // /cd/friend_id
 
   useEffect(() => {
     if (!token) navigate('/login')
@@ -22,7 +22,7 @@ const ConnectionDetails = () => {
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
-				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}`,
+				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}/platforms`,
                           { headers: { Authorization: `JWT ${token}` } })
 					.then(response => {
 						if (response.status === 200) {
@@ -40,7 +40,6 @@ const ConnectionDetails = () => {
 	}, [qrCodeText, token])
 
   useEffect(() => {
-    console.log(scanResult)
   }, [scanResult])
 
 	const handleViewCode = () => {
@@ -52,9 +51,9 @@ const ConnectionDetails = () => {
 	}
 
 	const handleSaveCode = () => {	
-		const newUserConnection = {
+    const newUserConnection = {
       friend_id: qrCodeText,
-      platforms: scanResult.platforms || [],
+      platforms: scanResult || [],
       connected_date: new Date()
 		}
      
@@ -63,9 +62,7 @@ const ConnectionDetails = () => {
 		axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/save/${userId}`, newUserConnection,
                  { headers: { Authorization: `JWT ${token}` } })
 		.then(response => {
-      console.log(response.data.message)	
       navigate("/saved-connections")
-      console.log("Navigate to Save Code")
       })
     .catch(error => {
       console.error('Error in saving user profile:', error)
@@ -81,7 +78,7 @@ const ConnectionDetails = () => {
         {scanResult && (
             <>
                
-                {scanResult.platforms && scanResult.platforms.map((platform, index) => (
+                {scanResult.map((platform, index) => (
                     <div className="detailsContainer" key={index}>
                         <div className="areaB">
                             {platform.name}

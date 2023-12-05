@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const jsQR = require('jsqr')
 const axios = require('axios')
-const { User } = require('./models/User')
+const { User } = require('./models/User.js')
 require('dotenv').config()
 const { createCanvas, loadImage } = require('canvas')
 const { isValidObjectId } = require('mongoose')
@@ -33,7 +33,6 @@ router.post('/',
   const base64Data = qrData.replace(/^data:image\/(png|jpeg|jpg);base64,/, '')
 
   try {
-    console.log('Loading image from QR data...')
     const image = await loadImage(`data:image/png;base64,${base64Data}`)
     const canvas = createCanvas(image.width, image.height)
     const context = canvas.getContext('2d')
@@ -41,11 +40,9 @@ router.post('/',
     context.drawImage(image, 0, 0)
     const imageData = context.getImageData(0, 0, image.width, image.height)
 
-    console.log('Decoding QR code...')
     const code = jsQR(imageData.data, imageData.width, imageData.height)
 
     if (code) {
-      console.log(`QR Code found: ${code.data}`)
       res.json({ qrCodeText: code.data, qrImageBase64: base64Data })
     } else {
       console.log('No QR code found in the provided image.')
@@ -61,16 +58,14 @@ router.post('/',
 router.post('/:id', 
   param('id').isMongoId,
   async (req, res) => {
-  const { qrCodeText } = req.params.id
-  console.log(qrCodeText)
+  const qrCodeText = req.params.id
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(400).send('Invalid User ID')
   }
 
   try {
-    const user = await User.findOne({ id: qrCodeText })
-    console.log(user)
+    const user = await User.findById(qrCodeText).exec()
     if (!user) {
       return res.status(404).send('User not found')
     }
