@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  frontend:
+  front-end:
     build:
       context: ./front-end  # Path to our frontend directory containing front-end's Dockerfile
       dockerfile: Dockerfile  # Name of your frontend Dockerfile
@@ -15,7 +15,7 @@ services:
       - ./front-end:/usr/src/front-end  # Mount your front-end directory to the container
     # Add other configurations as required
 
-  backend:
+  back-end:
     build:
       context: ./back-end  # Path to our backend directory containing back-end's Dockerfile
       dockerfile: Dockerfile  # Name of your backend Dockerfile
