@@ -1,0 +1,34 @@
+name: Continuous Integration
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build back-end
+      run: |
+        cd back-end
+        docker build -t back-end .
+
+    - name: Test back-end
+      run: |
+        cd back-end
+        npm install
+        npm test
+
+  frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build front-end
+      run: |
+        cd front-end
+        docker build -t front-end .
