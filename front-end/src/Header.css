@@ -15,9 +15,15 @@
     text-align: center;
 }
 
-.back-button, .logout-button {
+.header-button-buffer {
     flex: 1;
-    padding: 5px 0px;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+}
+
+.back-button, .logout-button {
+    padding: 5px 20px;
     border: none;
     border-radius: 5px;
     background-color: #007bff;
