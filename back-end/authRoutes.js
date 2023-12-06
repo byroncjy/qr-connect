@@ -3,6 +3,7 @@ const { body, validationResult, matchedData } = require('express-validator')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { jwtDecode } = require('jwt-decode')
 const mongoose = require('mongoose')
 const { User } = require('./models/User.js') // Ensure this path is correct
 
@@ -89,12 +90,15 @@ router.post('/logout', (req, res) => {
   res.status(200).json({ message: 'Logout successful' })
 })
 
-// Protected route
+// /protected (gets user id from token)
 router.get('/protected', passport.authenticate('jwt', { session: false }), 
   async (req, res) => {
   try {
+    const token = req.get('Authorization')
+    const userId = jwtDecode(token).userId
+
     // Retrieve user details from the database using the userId from req.user
-    const user = await User.findById(req.user.userId)
+    const user = await User.findById(userId)
 
     // Check if user exists
     if (!user) {
