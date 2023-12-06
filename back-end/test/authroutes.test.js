@@ -27,7 +27,7 @@ describe('User Routes', () => {
       });
 
       chai.request(app)
-        .post('/api/signup') // Adjust the route path based on your Express routes
+        .post('/signup') // Adjust the route path based on your Express routes
         .send({
           email: 'test@example.com',
           password: 'password123',
@@ -55,7 +55,7 @@ describe('User Routes', () => {
       });
 
       chai.request(app)
-        .post('/api/login') // Adjust the route path based on your Express routes
+        .post('/login') // Adjust the route path based on your Express routes
         .send({
           email: 'test@example.com',
           password: 'password123'
