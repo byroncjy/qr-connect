@@ -4,6 +4,7 @@ const { User } = require('./models/User')
 const { param, validationResult } = require('express-validator')
 const router = express.Router()
 const defaultImage = '/default.png' 
+require('dotenv').config()
 
 const validateObjectId = (paramName) => [
   param(paramName).isMongoId(),
