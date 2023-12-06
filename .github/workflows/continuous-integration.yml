@@ -16,11 +16,10 @@ jobs:
         cd back-end
         docker build -t back-end .
 
-    - name: Test back-end
+    - name: Run and Test back-end
       run: |
-        cd back-end
-        npm install
-        npm test
+        docker run -d --name back-end-container back-end
+        docker exec back-end-container npm test
 
   frontend:
     runs-on: ubuntu-latest
