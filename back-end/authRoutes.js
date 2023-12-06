@@ -67,19 +67,9 @@ router.post('/login',
       }
 
       const token = generateToken(user)
-      res.status(200).json({ token })
+      // Send the token and the user's ID in the response
+      res.status(200).json({ token, userId: user._id })
     }
-
-    const { email, password } = matchedData(req)
-
-    const user = await User.findOne({ email })
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ message: 'Invalid credentials' })
-    }
-
-    const token = generateToken(user)
-    // Send the token and the user's ID in the response
-    res.status(200).json({ token, userId: user._id })
   } catch (error) {
     res.status(500).json({ message: 'Login error', error: error.message })
   }
