@@ -53,7 +53,7 @@ router.post('/login',
   body('password').notEmpty(),
   async (req, res) => {
   try {
-    const result = validationResult(req);
+    const result = validationResult(req)
     if (!(result.isEmpty())) {
       res.status(400).json({ error: 'Invalid request: all fields are required' })
     } else {
@@ -68,20 +68,20 @@ router.post('/login',
       res.status(200).json({ token })
     }
 
-    const { email, password } = matchedData(req);
+    const { email, password } = matchedData(req)
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email })
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid credentials' })
     }
 
-    const token = generateToken(user);
+    const token = generateToken(user)
     // Send the token and the user's ID in the response
-    res.status(200).json({ token, userId: user._id });
+    res.status(200).json({ token, userId: user._id })
   } catch (error) {
-    res.status(500).json({ message: 'Login error', error: error.message });
+    res.status(500).json({ message: 'Login error', error: error.message })
   }
-});
+})
 
 // /logout (logs a user out, handled on front end by removing token)
 router.post('/logout', (req, res) => {
@@ -89,42 +89,26 @@ router.post('/logout', (req, res) => {
   res.status(200).json({ message: 'Logout successful' })
 })
 
-// Authentication Middleware
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) return res.status(401).json({ message: 'No token, authorization denied' });
-
-  jwt.verify(token, process.env.JWT_SECRET || 'yourDefaultJwtSecret', (err, decoded) => {
-    if (err) {
-      return res.status(403).json({ message: 'Token is not valid' });
-    } else {
-      req.user = decoded; // decoded payload of the token
-      next();
-    }
-  });
-};
-
 // Protected route
-router.get('/protected', authenticateToken, async (req, res) => {
+router.get('/protected', passport.authenticate('jwt', { session: false }), 
+  async (req, res) => {
   try {
     // Retrieve user details from the database using the userId from req.user
-    const user = await User.findById(req.user.userId);
+    const user = await User.findById(req.user.userId)
 
     // Check if user exists
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: 'User not found' })
     }
 
     // Respond with user details
     res.status(200).json({
       userId: user._id, // Send the userId to the front-end
-    });
+    })
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching user details', error: error.message });
+    res.status(500).json({ message: 'Error fetching user details', error: error.message })
   }
-});
+})
 
 
 module.exports = router
