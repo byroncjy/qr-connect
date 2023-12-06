@@ -12,6 +12,7 @@ const connectionsdetailsRoutes = require('./ConnectionDetails')
 const addNewConnectionRoutes = require('./addUserProfile') 
 const userRoutes = require('./users')
 const platformRoutes = require('./platforms')
+const generateQRCodeRoutes = require('./generateQRCode');
 
 // Morgan for logging requests
 app.use(morgan('dev', { skip: (req, res) => process.env.NODE_ENV === 'test' }))
@@ -50,7 +51,7 @@ app.use('/users', platformRoutes)
 app.use('/connections', connectionsRoutes)
 app.use('/connections', addNewConnectionRoutes)
 app.use('/scan', connectionsdetailsRoutes)
-
+app.use('/generateQRCode', generateQRCodeRoutes);
 
 
 // Root route
