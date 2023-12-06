@@ -40,6 +40,12 @@ Before running the code, please input the files into the front and back end dire
 
 See the contribution document above for more instructions including testing.
 
+### Alternative: Running the full app with Docker
+1. Navigate into root directory
+2. Ensure docker and docker-compose are installed
+3. Ensure directory contains `front-end.env` and `back-end.env` files
+4. Run `docker-compose up`
+
 ### How to Run the Scan Code and Connection Details Page (Sprint 3) 
 After building and launching the front and back end, in order to try out the scan code and connection details page, please follow the instructions below. 
 1. Download the QR code png file in this repository: [QR code](https://github.com/agiledev-students-fall2023/4-final-project-qr-code-generator-app/blob/master/qrcode.png?raw=true)
