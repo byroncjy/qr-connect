@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { jwtDecode } from 'jwt-decode' 
 import './SavedConnections.css'
 
 const SavedConnections = () => {
   const token = localStorage.getItem('token')
-  const [userId] = useState(() => token ? jwtDecode(token).userId : '')
+  const [userId, setUserId] = useState(() => '')
   const [connections, setConnections] = useState([])
   const navigate = useNavigate()
   const defaultImage = '/default.png' 
@@ -16,6 +15,13 @@ const SavedConnections = () => {
 
   useEffect(() => {
     if (!token) navigate('/login')
+    else {
+      // get user id
+      axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/protected`,
+                  { headers: { Authorization: `JWT ${token}` } })
+      .then(res => setUserId(res.userId))
+      .catch(err => console.error(err))
+    }
   }, [token])
   
   useEffect(() => {

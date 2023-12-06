@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { jwtDecode } from 'jwt-decode'
 import './SelectInformation.css'
 
 const SelectInformation = props => {
   // grab authentication token to ensure logged in user
   const token = localStorage.getItem('token')
-  const [userId] = useState(() => token ? jwtDecode(token).userId : '')
+  const [userId, setUserId] = useState(() => '')
   const navigate = useNavigate()
   // platform data from db
   const [data, setData] = useState(() => [])
@@ -34,6 +33,13 @@ const SelectInformation = props => {
 
   useEffect(() => {
     if (!token) navigate('/login')
+    else {
+      // get user id
+      axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/protected`,
+                  { headers: { Authorization: `JWT ${token}` } })
+      .then(res => setUserId(res.userId))
+      .catch(err => console.error(err))
+    }
   }, [token])
 
   // get data from api

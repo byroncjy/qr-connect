@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { jwtDecode } from 'jwt-decode'
-import "./EditInformation.css";
+import React, { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
+import "./EditInformation.css"
 
 const platformOptions = [
 	{ value: "", label: "Select platform" },
@@ -14,22 +13,29 @@ const platformOptions = [
 	{ value: "Twitter", label: "Twitter" },
 	{ value: "Github", label: "Github" },
 	{ value: "Custom", label: "Custom" }
-];
+]
 
 const EditInformation = () => {
   const token = localStorage.getItem('token')
-  const [userId] = useState(() => token ? jwtDecode(token).userId : ''); // State to hold userId
+  const [userId, setUserId] = useState('') // State to hold userId
   const navigate = useNavigate()
 	// Array of maps of containing platform, info
-	const [platformInformationMap, setPlatformInformationMap] = useState([]);
+	const [platformInformationMap, setPlatformInformationMap] = useState([])
 	// State to hold profile data
-	const [profileData, setProfileData] = useState({});
+	const [profileData, setProfileData] = useState({})
 	// State for error message
-	const [errorMessage, setErrorMessage] = useState('');
-	const [buttonClicked, setButtonClicked] = useState(false); // State to handle button click
+	const [errorMessage, setErrorMessage] = useState('')
+	const [buttonClicked, setButtonClicked] = useState(false) // State to handle button click
 
   useEffect(() => {
     if (!token) navigate('/login')
+    else {
+      // get user id
+      axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/protected`,
+                  { headers: { Authorization: `JWT ${token}` } })
+      .then(res => setUserId(res.userId))
+      .catch(err => console.error(err))
+    }
   }, [token])
 
   // In final implementation, we will retrieve userId of current logged in user
@@ -82,15 +88,15 @@ const EditInformation = () => {
         console.error('Error fetching profile data:', error)
       }
     }
-    fetchData(userId);
-    fetchProfileData(userId);
-  }, [ userId, token ]);
+    fetchData(userId)
+    fetchProfileData(userId)
+  }, [ userId, token ])
 
 
 	// Handle change in platform name
 	const handlePlatformChange = (index, event) => {
-		const { value } = event.target;
-		const updatedPlatformInformationMap = [...platformInformationMap];
+		const { value } = event.target
+		const updatedPlatformInformationMap = [...platformInformationMap]
 		
 		// If Custom was chosen, set to blank text box and set isCustom flag
 		if (value === "Custom") {
@@ -98,40 +104,40 @@ const EditInformation = () => {
 				name: "",
 				value: "",
 				isCustom: true,
-			};
+			}
 		} else {
-			updatedPlatformInformationMap[index].name = value;
-			updatedPlatformInformationMap[index].isCustom = false;
+			updatedPlatformInformationMap[index].name = value
+			updatedPlatformInformationMap[index].isCustom = false
 		}
-		setPlatformInformationMap(updatedPlatformInformationMap);
-	};
+		setPlatformInformationMap(updatedPlatformInformationMap)
+	}
 
 	// Handle change in custom platform text box
 	const handleCustomPlatformChange = (index, event) => {
-		const updatedPlatformInformationMap = [...platformInformationMap];
-		updatedPlatformInformationMap[index].name = event.target.value;
-		updatedPlatformInformationMap[index].isCustom = true;
-		setPlatformInformationMap(updatedPlatformInformationMap);
-	};
+		const updatedPlatformInformationMap = [...platformInformationMap]
+		updatedPlatformInformationMap[index].name = event.target.value
+		updatedPlatformInformationMap[index].isCustom = true
+		setPlatformInformationMap(updatedPlatformInformationMap)
+	}
 
 	// Handle change in platform information
 	const handleInfoChange = (index, event) => {
-		const updatedPlatformInformationMap = [...platformInformationMap];
-		updatedPlatformInformationMap[index].value = event.target.value;
-		setPlatformInformationMap(updatedPlatformInformationMap);
-	};
+		const updatedPlatformInformationMap = [...platformInformationMap]
+		updatedPlatformInformationMap[index].value = event.target.value
+		setPlatformInformationMap(updatedPlatformInformationMap)
+	}
 
 	// Handle adding new entry of platform name and information
 	const handleAddPlatformInformation = () => {
-		const updatedPlatformInformationMap = [...platformInformationMap, { name: "", value: "" }];
-		setPlatformInformationMap(updatedPlatformInformationMap);
-	};
+		const updatedPlatformInformationMap = [...platformInformationMap, { name: "", value: "" }]
+		setPlatformInformationMap(updatedPlatformInformationMap)
+	}
 
 	// Handle deleting an entry of platform name and information
 	const handleDeletePlatform = (index) => {
-		const updatedPlatformInformationMap = platformInformationMap.filter((_, i) => i !== index);
-		setPlatformInformationMap(updatedPlatformInformationMap);
-	};
+		const updatedPlatformInformationMap = platformInformationMap.filter((_, i) => i !== index)
+		setPlatformInformationMap(updatedPlatformInformationMap)
+	}
 
   // Handles user uploading new profile picture
   // Sends image as multipart form data to backend uploadPicture route
@@ -171,7 +177,7 @@ const EditInformation = () => {
 		} catch (error) {
 			console.error("Error uploading profile picture:", error)
 		}
-	};
+	}
 
   // Handle saving all profile data and platform information (does not include profile picture)
   // Duplicate entries with non-empty info will not be allowed to save
@@ -180,11 +186,11 @@ const EditInformation = () => {
     // Saving of profile data
     try {
       // Update buttonClicked state to trigger the CSS effect
-      setButtonClicked(true);
+      setButtonClicked(true)
       setTimeout(() => {
         // Reset buttonClicked state after a delay
-        setButtonClicked(false);
-      }, 1000); // Set the duration of the darkening effect (in milliseconds)
+        setButtonClicked(false)
+      }, 1000) // Set the duration of the darkening effect (in milliseconds)
 
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}`,
@@ -206,20 +212,20 @@ const EditInformation = () => {
     // Saving of platform info
     try {
       // Check for duplicate entries
-      const platformNames = new Set();
+      const platformNames = new Set()
       for (const item of platformInformationMap) {
         if (item.name && item.value) {
           if (platformNames.has(item.name)) {
             // Set the error message immediately if a duplicate is found
             setErrorMessage('Error: Cannot save duplicate entries of the same platform.')
-            return;
+            return
           } else {
             platformNames.add(item.name)
           }
         }
       }
       // Clear the error message if no duplicates are found
-      setErrorMessage('');
+      setErrorMessage('')
 
       // Filter out the entries with either empty platform or empty info
       const filteredPlatformInformationMap = platformInformationMap
@@ -240,15 +246,15 @@ const EditInformation = () => {
         }
       )
 	if (response.status !== 200) {
-		throw new Error(`Network response was not ok. Status Code: ${response.status}`);
+		throw new Error(`Network response was not ok. Status Code: ${response.status}`)
 	}
 
 	// Update the platformInformationMap state with all fields included
-	setPlatformInformationMap(filteredPlatformInformationMap);
+	setPlatformInformationMap(filteredPlatformInformationMap)
 	} catch (error) {
-		console.error("Error saving data:", error);
+		console.error("Error saving data:", error)
 	}
-  };
+  }
 
 	return (
 		<div className="edit-information-container">
@@ -320,7 +326,7 @@ const EditInformation = () => {
                 <select
                   value={item.name}
                   onChange={(e) => {
-                    handlePlatformChange(index, e);
+                    handlePlatformChange(index, e)
                   }}
                 >
                   {platformOptions.map((option) => (
@@ -368,7 +374,7 @@ const EditInformation = () => {
 				<div className="error-message">{errorMessage}</div>
 			)}
 		</div>
-	);
-};
+	)
+}
 
-export default EditInformation;
+export default EditInformation

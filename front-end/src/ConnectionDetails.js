@@ -2,11 +2,10 @@ import { useLocation, useNavigate, useParams } from "react-router-dom"
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import "./ConnectionDetails.css"
-import {jwtDecode} from 'jwt-decode'
 
 const ConnectionDetails = () => {
 	const token = localStorage.getItem('token')
-  const [userId] = useState(() => token ? jwtDecode(token).userId : '')
+  const [userId, setUserId] = useState(() => '')
 	const navigate = useNavigate()
 	const [scanResult, setScanResult] = useState([])
 	const [isQRCodeVisible, setQRCodeVisible] = useState(false)
@@ -15,8 +14,16 @@ const ConnectionDetails = () => {
   const params = useParams()
 	const qrCodeText = params.friend_id // /cd/friend_id
 
+
   useEffect(() => {
     if (!token) navigate('/login')
+    else {
+      // get user id
+      axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/protected`,
+                  { headers: { Authorization: `JWT ${token}` } })
+      .then(res => setUserId(res.userId))
+      .catch(err => console.error(err))
+    }
   }, [token])
 
 	useEffect(() => {
