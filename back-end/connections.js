@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const { User } = require('./models/User')
 const { param, validationResult } = require('express-validator')
+const passport = require('passport')
 const router = express.Router()
 const defaultImage = '/default.png' 
 
@@ -16,9 +17,6 @@ router.delete('/*', passport.authenticate('jwt', { session: false }),
   }
 )
 
-// /connections/:id (gets connections list of id)
-router.get('/:id', authenticateToken, async (req, res) => {
-  const userId = req.params.id
 const validateObjectId = (paramName) => [
   param(paramName).isMongoId(),
   (req, res, next) => {
@@ -38,6 +36,7 @@ const handleValidationErrors = (req, res, next) => {
   next()
 }
 
+// /connections/:id (gets connections list of id)
 router.get('/:id', validateObjectId('id'), async (req, res) => {
   try {
     const user = await User.findById(req.params.id).exec()

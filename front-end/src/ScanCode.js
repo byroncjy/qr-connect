@@ -15,7 +15,8 @@ function ScanCode() {
   useEffect(() => {
     async function fetchImage() {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/images/home-logo-image`)
+        const response = await axios.get(
+            `${process.env.REACT_APP_SERVER_HOSTNAME}/images/home-logo-image1`)
         if (response.status === 200 && response.data.LogoUrl) {
           setImageUrl(response.data.LogoUrl)
         }
@@ -26,7 +27,7 @@ function ScanCode() {
 
     fetchImage()
 
-  }, [])
+  }, [token])
 
   function handleFileChange(event) {
     const file = event.target.files[0]

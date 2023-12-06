@@ -7,12 +7,18 @@ require('dotenv').config()
 const { createCanvas, loadImage } = require('canvas')
 const { isValidObjectId } = require('mongoose')
 const { param, body, validationResult } = require('express-validator')
+const passport = require('passport')
 const router = express.Router()
 router.use(cors())
 router.use(express.urlencoded({ extended: true }))
 router.use(express.json())
 
 router.post('/*', passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    next()
+  }
+)
+router.post('/', passport.authenticate('jwt', { session: false }),
   (req, res, next) => {
     next()
   }

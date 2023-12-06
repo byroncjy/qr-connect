@@ -15,6 +15,7 @@ const jwtVerifyToken = async (payload, next) => {
 
   const user = await User.findById(payload.userId).exec()
   if (user) {
+    console.log('all good!')
     next(null, user)
   } else {
     next(null, false, { error: 'Error: user not found!' })

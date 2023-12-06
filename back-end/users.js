@@ -45,20 +45,26 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 // /users/:id (gets user info (no pass))
-router.get('/:id', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id).exec()
-    // Extracts and returns only user profile data
-    const user_profile = {
-      email: user.email,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      profile_picture: user.profile_picture
+router.get('/:id', 
+  param('id').notEmpty().isMongoId(),
+  async (req, res) => {
+  if (!(result.isEmpty())) {
+    res.status(400).json({ error: 'Invalid request' })
+  } else {
+    try {
+      const user = await User.findById(req.params.id).exec()
+      // Extracts and returns only user profile data
+      const user_profile = {
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        profile_picture: user.profile_picture
+      }
+      res.json(user_profile)
+    } catch (err) {
+      console.error(`Error fetching user profile data: ${err}`)
+      res.status(500).json({ error: 'Internal Server Error' })
     }
-    res.json(user_profile)
-  } catch (err) {
-    console.error(`Error fetching user profile data: ${err}`)
-    res.status(500).json({ error: 'Internal Server Error' })
   }
 })
 

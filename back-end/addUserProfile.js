@@ -3,6 +3,7 @@ const router = express.Router()
 const { Connection, User, Platform } = require('./models/User')
 const mongoose = require('mongoose')
 const { param, body, validationResult } = require('express-validator')
+const passport = require('passport')
 
 router.post('/*', passport.authenticate('jwt', { session: false }),
   (req, res, next) => {

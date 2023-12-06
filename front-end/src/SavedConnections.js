@@ -58,7 +58,7 @@ const SavedConnections = () => {
     const handleDeleteConnection = async (friendId) => {
       try {
         await axios.delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/${userId}/${friendId}`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `JWT ${token}` }
         });
         setConnections(connections.filter(conn => conn.friend_id !== friendId));
       } catch (error) {
