@@ -35,7 +35,7 @@ const HomeScreen = () => {
     <div className="home-container">
       <div className="home-header">
         <img src={imageSrc} alt="App Logo" className="app-logo" /> {/* Display the fetched image */}
-        <p>Welcome to QRConnect!</p>
+        <p> Introducing QRConnect: Your go-to solution for effortlessly managing and sharing your social profiles.</p>
       </div>
       <div className="home-links">
         {/* Define navigation links for the app */}

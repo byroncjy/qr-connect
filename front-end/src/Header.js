@@ -11,13 +11,13 @@ const Header = () => {
     try {
       // Use the environment variable for the API URL
       const apiUrl = process.env.REACT_APP_API_URL || ''; // Fallback to an empty string if not defined
-      await axios.post(`${apiUrl}/api/auth/logout`);
+      await axios.post(`${apiUrl}/logout`);
 
       // Clear the token from local storage or cookies
       localStorage.removeItem('token'); // Adjust according to your token storage
 
       // Redirect to the login page
-      navigate('/');
+      navigate('/login');
     } catch (error) {
       console.error('Logout failed', error);
       // Handle the error appropriately
