@@ -82,19 +82,22 @@ router.post('/logout', (req, res) => {
 
 // Authentication Middleware
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
-  if (!token) return res.status(401).json({ message: 'Access denied' })
+  if (!token) return res.status(401).json({ message: 'No token, authorization denied' });
 
-  jwt.verify(token, process.env.JWT_SECRET || 'yourDefaultJwtSecret', (err, user) => {
-    if (err) return res.status(403).json({ message: 'Invalid token' })
-    req.user = user
-    next()
-  })
-}
+  jwt.verify(token, process.env.JWT_SECRET || 'yourDefaultJwtSecret', (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ message: 'Token is not valid' });
+    } else {
+      req.user = decoded; // decoded payload of the token
+      next();
+    }
+  });
+};
 
-//protected route
+// Protected route
 router.get('/protected', authenticateToken, async (req, res) => {
   try {
     // Retrieve user details from the database using the userId from req.user

@@ -1,14 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './Header.css';
 import axios from 'axios';
+import './Header.css';
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [userId, setUserId] = useState(null);
 
- // Retrieve user ID from local storage
-  const userId = localStorage.getItem('userId');
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const token = localStorage.getItem('token');
+      const apiUrl = process.env.REACT_APP_API_URL || '';
+
+      try {
+        const response = await axios.get(`${apiUrl}/protected`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setUserId(response.data.userId);
+      } catch (error) {
+        console.error('Error fetching user ID', error);
+      }
+    };
+
+    fetchUserId();
+  }, []);
+
   const handleLogout = async () => {
     try {
       // Use the environment variable for the API URL
@@ -34,7 +53,7 @@ const Header = () => {
         <button onClick={handleBack} className="back-button">Back</button>
       )}
       <h1 className="header-title">QRConnect</h1>
-      {userId && <div className="user-id-display">User ID: {userId}    </div>} {/* Display User ID */}
+      {userId && <div className="user-id-display">User ID: {userId}</div>}
       {location.pathname === '/home' && (
         <button onClick={handleLogout} className="logout-button">Logout</button>
       )}
@@ -43,3 +62,4 @@ const Header = () => {
 };
 
 export default Header;
+
