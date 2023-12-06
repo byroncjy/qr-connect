@@ -49,29 +49,31 @@ router.post('/signup',
 })
 
 // Login route
+// Login route
 router.post('/login', 
   body('email').notEmpty().isEmail(),
   body('password').notEmpty(),
   async (req, res) => {
   try {
-    const result = validationResult(req)
+    const result = validationResult(req);
     if (!(result.isEmpty())) {
-      res.status(400).json({ error: 'Invalid request: all fields are required' })
-    } else {
-      const { email, password } = matchedData(req)
-
-      const user = await User.findOne({ email })
-      if (!user || !(await bcrypt.compare(password, user.password))) {
-        return res.status(401).json({ message: 'Invalid credentials' })
-      }
-
-      const token = generateToken(user)
-      res.status(200).json({ token })
+      return res.status(400).json({ error: 'Invalid request: all fields are required' });
     }
+
+    const { email, password } = matchedData(req);
+
+    const user = await User.findOne({ email });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const token = generateToken(user);
+    // Send the token and the user's ID in the response
+    res.status(200).json({ token, userId: user._id });
   } catch (error) {
-    res.status(500).json({ message: 'Login error', error: error.message })
+    res.status(500).json({ message: 'Login error', error: error.message });
   }
-})
+});
 
 router.post('/logout', (req, res) => {
   console.log('User logged out')

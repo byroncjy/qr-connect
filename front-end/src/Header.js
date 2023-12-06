@@ -7,6 +7,8 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+ // Retrieve user ID from local storage
+  const userId = localStorage.getItem('userId');
   const handleLogout = async () => {
     try {
       // Use the environment variable for the API URL
@@ -23,17 +25,16 @@ const Header = () => {
       // Handle the error appropriately
     }
   };
-
   const handleBack = () => {
     navigate(-1); // Go back to the previous page
   };
-
   return (
     <div className="header">
       {location.pathname !== '/home' && location.pathname !== '/' && (
         <button onClick={handleBack} className="back-button">Back</button>
       )}
-      <h1 className="header-title">QR Code Generator</h1>
+      <h1 className="header-title">QRConnect</h1>
+      {userId && <div className="user-id-display">User ID: {userId}    </div>} {/* Display User ID */}
       {location.pathname === '/home' && (
         <button onClick={handleLogout} className="logout-button">Logout</button>
       )}

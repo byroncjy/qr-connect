@@ -1,14 +1,14 @@
-import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import "./Login.css"
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
 const Login = () => {
-  const navigate = useNavigate()
-  const [email, setEmail] = useState('') // Use email instead of username
-  const [password, setPassword] = useState('')
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
@@ -17,19 +17,20 @@ const Login = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
-      })
+      });
 
       if (response.ok) {
-        const data = await response.json()
-        localStorage.setItem('token', data.token)
-        navigate("/home")
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userId', data.userId); // Store user ID in local storage
+        navigate("/home");
       } else {
-        alert('Login failed!')
+        alert('Login failed!');
       }
     } catch (error) {
-      console.error('Error during login:', error)
+      console.error('Error during login:', error);
     }
-  }
+  };
 
   return (
     <div className="login-container">
@@ -53,7 +54,7 @@ const Login = () => {
       </form>
       <button className="signup-button" onClick={() => navigate("/signup")}>Sign Up</button>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

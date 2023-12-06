@@ -1,18 +1,22 @@
 /* Header.css */
 .header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally */
     padding: 10px 20px;
     background-color: #333;
     color: white;
     font-family: Arial, sans-serif;
+    position: relative; /* Add position relative */
 }
 
 .header-title {
     margin: 0;
-    flex-grow: 1;
-    text-align: center;
+}
+
+.user-id-display {
+    margin-top: 10px;
+    font-size: 1.2em;
 }
 
 .back-button, .logout-button {
@@ -23,6 +27,12 @@
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+.logout-button {
+    position: absolute; /* Position absolute within the header */
+    top: 10px; /* Adjust top and right as needed */
+    right: 20px;
 }
 
 .back-button:hover, .logout-button:hover {
