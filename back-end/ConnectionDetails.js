@@ -12,11 +12,10 @@ router.use(cors())
 router.use(express.urlencoded({ extended: true }))
 router.use(express.json())
 
-router.post('/*', passport.authenticate('jwt', { session: false }),
-  (req, res, next) => {
-    next()
-  }
-)
+/*
+ *    NOTE! No auth here because we can't figure out why it's not working for
+ *    only this route Q_Q Potentially related to Content-Type being sent?
+ */
 
 // /scan (decodes QR code)
 router.post('/',
