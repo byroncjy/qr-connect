@@ -5,7 +5,7 @@ import "./Login.css"
 
 const Login = () => {
   const navigate = useNavigate()
-  const [email, setEmail] = useState('') // Use email instead of username
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const handleLogin = async (e) => {

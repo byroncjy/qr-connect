@@ -54,13 +54,15 @@ function ScanCode() {
 
   return (
 
-    <div className='Box'>
-    <script type="module" src="/static/ScanCode.js"></script>
-    <img className="Logo" src={imageUrl} alt=""></img>
-    <input type="file" accept="image/*" capture="camera" id="file-input" onChange={handleFileChange} style={{ display: 'none' }} />
-    <label htmlFor="file-input" className="scanButton">Scan</label>
-    </div>
-  )
+		<div className='Box'>
+			<script type="module" src="/static/ScanCode.js"></script>
+			<img className="Logo" src={imageUrl} alt=""></img>
+			<input type="file" accept="image/*" capture="camera" id="file-input" onChange={handleFileChange} style={{ display: 'none' }} />
+			<label htmlFor="file-input" className="scanButton">Scan</label>
+
+
+		</div>
+	);
 }
 
 export default ScanCode

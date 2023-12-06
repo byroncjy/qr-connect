@@ -28,6 +28,7 @@ const SelectInformation = props => {
   }
 
   const handleSubmit = () => {
+    navigate('/GenerateQRCode')
     console.log('Submitted!')
   }
 

@@ -33,7 +33,7 @@ const Header = () => {
       {location.pathname !== '/login' && location.pathname !== '/home' && (
         <button onClick={handleBack} className="back-button">Back</button>
       )}
-      <h1 className="header-title">QR Code Generator</h1>
+      <h1 className="header-title">QRConnect</h1>
       {location.pathname === '/home' && (
         <button onClick={handleLogout} className="logout-button">Logout</button>
       )}
