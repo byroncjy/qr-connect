@@ -4,6 +4,7 @@ const router = express.Router()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { jwtDecode } = require('jwt-decode')
+const passport = require('passport')
 const mongoose = require('mongoose')
 const { User } = require('./models/User.js') // Ensure this path is correct
 
