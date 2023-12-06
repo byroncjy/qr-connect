@@ -110,7 +110,6 @@ router.get('/protected', authenticateToken, async (req, res) => {
 
     // Respond with user details
     res.json({
-      message: `Hello ${user.first_name} ${user.last_name}`,
       userId: user._id, // Send the userId to the front-end
     });
   } catch (error) {
