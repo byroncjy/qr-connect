@@ -4,8 +4,8 @@ const sinon = require('sinon');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken'); // Import jsonwebtoken
 const mongoose = require('mongoose');
-const { app} = require('../app'); 
-const { User } = require('../models/User'); 
+const app = require('../app'); 
+const User = require('../models/User'); 
 
 chai.use(chaiHttp);
 const expect = chai.expect;
