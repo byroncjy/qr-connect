@@ -48,6 +48,7 @@ const upload = multer({ storage })
 router.get('/:id', 
   param('id').notEmpty().isMongoId(),
   async (req, res) => {
+  const result = validationResult(req)
   if (!(result.isEmpty())) {
     res.status(400).json({ error: 'Invalid request' })
   } else {
