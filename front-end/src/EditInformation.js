@@ -33,7 +33,7 @@ const EditInformation = () => {
       // get user id
       axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/protected`,
                   { headers: { Authorization: `JWT ${token}` } })
-      .then(res => setUserId(res.userId))
+      .then(res => setUserId(res.data.userId))
       .catch(err => console.error(err))
     }
   }, [token])

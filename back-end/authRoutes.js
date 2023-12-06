@@ -98,7 +98,7 @@ router.get('/protected', passport.authenticate('jwt', { session: false }),
 
     // Respond with user details
     res.status(200).json({
-      userId: user._id, // Send the userId to the front-end
+      userId: user.id, // Send the userId to the front-end
     })
   } catch (error) {
     res.status(500).json({ message: 'Error fetching user details', error: error.message })
