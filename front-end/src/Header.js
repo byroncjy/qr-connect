@@ -1,32 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import './Header.css';
+import axios from 'axios';
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [userId, setUserId] = useState(null);
-
-  useEffect(() => {
-    const fetchUserId = async () => {
-      const token = localStorage.getItem('token');
-      const apiUrl = process.env.REACT_APP_API_URL || '';
-
-      try {
-        const response = await axios.get(`${apiUrl}/protected`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setUserId(response.data.userId);
-      } catch (error) {
-        console.error('Error fetching user ID', error);
-      }
-    };
-
-    fetchUserId();
-  }, []);
 
   const handleLogout = async () => {
     try {
@@ -44,16 +23,17 @@ const Header = () => {
       // Handle the error appropriately
     }
   };
+
   const handleBack = () => {
     navigate(-1); // Go back to the previous page
   };
+
   return (
     <div className="header">
       {location.pathname !== '/home' && location.pathname !== '/' && (
         <button onClick={handleBack} className="back-button">Back</button>
       )}
       <h1 className="header-title">QRConnect</h1>
-      {userId && <div className="user-id-display">User ID: {userId}</div>}
       {location.pathname === '/home' && (
         <button onClick={handleLogout} className="logout-button">Logout</button>
       )}
@@ -62,4 +42,3 @@ const Header = () => {
 };
 
 export default Header;
-
