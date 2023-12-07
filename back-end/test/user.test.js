@@ -6,6 +6,7 @@ const expect = chai.expect
 chai.use(chaiHttp)
 // routes
 const router = require('../app')
+const jwt = require('jsonwebtoken')
 
 // tests related to sending requests about a user's information
 describe('User Routes', function () {
@@ -15,6 +16,8 @@ describe('User Routes', function () {
   // invalidUserId is an obviously invalid objectId that wouldn't exist in database
   const invalidUserId = '6562c186a4a586c6e19a4eea'
 
+  const token = jwt.sign({ userId: validUserId }, secretKey, { expiresIn: '1h' })
+
   // email, first/last name, pfp
   describe('Account Information', function () {
     describe('Successful GET', function () {
@@ -22,6 +25,7 @@ describe('User Routes', function () {
         chai
           .request(router)
           .get(`/users/${validUserId}`)
+          .set('Authorization', `JWT ${token}`)
           .end(function(err, res) {
             expect(err).to.be.null
             expect(res).to.have.status(200)
