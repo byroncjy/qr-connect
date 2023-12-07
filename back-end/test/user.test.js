@@ -6,6 +6,13 @@ const expect = chai.expect
 chai.use(chaiHttp)
 // routes
 const router = require('../app')
+const jwt = require('jsonwebtoken')
+
+// // Function to generate JWT
+// const generateToken = user => {
+//   const jwtSecret = process.env.JWT_SECRET
+//   return jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: '24h' })
+// }
 
 // tests related to sending requests about a user's information
 describe('User Routes', function () {
@@ -14,6 +21,8 @@ describe('User Routes', function () {
   const validUserId = '6562c186a4a586c6e19a4eef'
   // invalidUserId is an obviously invalid objectId that wouldn't exist in database
   const invalidUserId = '6562c186a4a586c6e19a4eea'
+  const jwtSecret = process.env.JWT_SECRET
+  const token = jwt.sign({ userId: validUserId }, jwtSecret, { expiresIn: '10m' })
 
   // email, first/last name, pfp
   describe('Account Information', function () {
@@ -22,6 +31,7 @@ describe('User Routes', function () {
         chai
           .request(router)
           .get(`/users/${validUserId}`)
+          .set('Authorization', `JWT ${token}`)
           .end(function(err, res) {
             expect(err).to.be.null
             expect(res).to.have.status(200)
@@ -36,6 +46,7 @@ describe('User Routes', function () {
         chai
           .request(router)
           .get(`/users/${invalidUserId}`)
+          .set('Authorization', `JWT ${token}`)
           .end((err, res) => {
             expect(res).to.have.status(500)
             expect(res.body).to.be.a('object').that.has.keys('error')
@@ -48,6 +59,7 @@ describe('User Routes', function () {
         chai
           .request(router)
           .put(`/users/${validUserId}`)
+          .set('Authorization', `JWT ${token}`)
           .send({
             email: 'email@example.com',
             first_name: 'first_name',
@@ -66,6 +78,7 @@ describe('User Routes', function () {
         chai
           .request(router)
           .put(`/users/${validUserId}`)
+          .set('Authorization', `JWT ${token}`)
           .send({
             email: 'not_an_email',
             first_name: '',
@@ -86,6 +99,7 @@ describe('User Routes', function () {
         chai
           .request(router)
           .get(`/users/${validUserId}/platforms`)
+          .set('Authorization', `JWT ${token}`)
           .end((err, res) => {
             expect(res).to.have.status(200)
             expect(res.body).to.be.a('array')
@@ -100,6 +114,7 @@ describe('User Routes', function () {
         chai
           .request(router)
           .get(`/users/${invalidUserId}/platforms`)
+          .set('Authorization', `JWT ${token}`)
           .end((err, res) => {
             expect(res).to.have.status(500)
             expect(res.body).to.be.a('object').that.has.keys('error')
@@ -112,6 +127,7 @@ describe('User Routes', function () {
         chai
           .request(router)
           .put(`/users/${validUserId}/platforms`)
+          .set('Authorization', `JWT ${token}`)
           .send({
             platforms: [
               { name: 'Linkedin', value: 'johndoe254' },
@@ -130,6 +146,7 @@ describe('User Routes', function () {
         chai
           .request(router)
           .put(`/users/${validUserId}/platforms`)
+          .set('Authorization', `JWT ${token}`)
           .send({
             platforms: [
               { wrong_name: 'bad_platform', wrong_value: 'johndoe254' }
@@ -152,6 +169,7 @@ describe('User Routes', function () {
           chai
             .request(router)
             .get(`/users/${validUserId}/profilePicture`)
+            .set('Authorization', `JWT ${token}`)
             .end((err, res) => {
               expect(res).to.have.status(200)
               expect(res.body).to.be.a('object').that.has.keys('profile_picture')
@@ -165,6 +183,7 @@ describe('User Routes', function () {
           chai
             .request(router)
             .get(`/users/${invalidUserId}/profilePicture`)
+            .set('Authorization', `JWT ${token}`)
             .end((err, res) => {
               expect(res).to.have.status(500)
               expect(res.body).to.be.a('object').that.has.keys('error')
@@ -181,6 +200,7 @@ describe('User Routes', function () {
             .request(router)
             .put(`/users/${validUserId}/uploadPicture`)
             .set('Content-Type', 'multipart/form-data') // Set the content type
+            .set('Authorization', `JWT ${token}`)
             // This is the path of our test image, ensure this exists!
             .attach('file', path.join(__dirname, '../test/public/profile-picture-test.png'))
             .end((err, res) => {
@@ -198,6 +218,7 @@ describe('User Routes', function () {
             .request(router)
             .put(`/users/${validUserId}/uploadPicture`)
             .set('Content-Type', 'multipart/form-data') // Set the content type
+            .set('Authorization', `JWT ${token}`)
             .field('file', '')
             .end((err, res) => {
               expect(res).to.have.status(400)
@@ -214,6 +235,7 @@ describe('User Routes', function () {
             // This uses an invalid id
             .put(`/users/${invalidUserId}/uploadPicture`)
             .set('Content-Type', 'multipart/form-data') // Set the content type
+            .set('Authorization', `JWT ${token}`)
             .attach('file', path.join(__dirname, '../test/public/profile-picture-test.png'))
             .end((err, res) => {
               expect(res).to.have.status(500)
