@@ -3,12 +3,17 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const nock = require('nock');
 const router = require('../unchanged-images'); // Make sure this is the correct path
+const jwt = require('jsonwebtoken')
 
 const expect = chai.expect;
 chai.use(chaiHttp);
 
 describe('Router Tests', function() {
   let app;
+  // validUserId is an actual valid objectId in the test database
+  const validUserId = '6562c186a4a586c6e19a4eef'
+  const jwtSecret = process.env.JWT_SECRET
+  const token = jwt.sign({ userId: validUserId }, jwtSecret, { expiresIn: '10m' })
 
   before(function() {
     app = express();
@@ -22,7 +27,7 @@ describe('Router Tests', function() {
 
     const res = await chai.request(app).get('/home-logo-image');
     expect(res).to.have.status(200);
-    expect(res.headers).to.include({ 'content-type': 'image/jpeg' });
+    expect(res.headers).to.include({ 'content-type': 'image/png' });
     expect(res.body).to.be.an.instanceof(Buffer); // Additional check for response body
   });
   //this part should return an error
