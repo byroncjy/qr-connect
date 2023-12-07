@@ -1,19 +1,23 @@
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const sinon = require('sinon');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken'); 
-const mongoose = require('mongoose');
-const app = require('../app'); 
-const { User } = require('../models/User'); 
+const chai = require('chai')
+const chaiHttp = require('chai-http')
+const sinon = require('sinon')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose')
+const app = require('../app') 
+const { User } = require('../models/User')
 
-chai.use(chaiHttp);
-const expect = chai.expect;
+chai.use(chaiHttp)
+const expect = chai.expect
 
 describe('User Routes', () => {
   beforeEach(() => {
     sinon.restore(); // Restore the default sandbox here
   });
+  // // validUserId is an actual valid objectId in the test database
+  // const validUserId = '6562c186a4a586c6e19a4eef'
+  // const jwtSecret = process.env.JWT_SECRET
+  // const token = jwt.sign({ userId: validUserId }, jwtSecret, { expiresIn: '10m' })
 
   describe('POST /signup', () => {
     it('should create a new user and return a token', async() => {
@@ -24,7 +28,7 @@ describe('User Routes', () => {
         email: 'test@example.com',
         first_name: 'John',
         last_name: 'Doe'
-      });
+      })
 
       const res = await chai.request(app)
       .post('/signup')
@@ -33,13 +37,13 @@ describe('User Routes', () => {
         password: 'password123',
         first_name: 'John',
         last_name: 'Doe'
-      });
+      })
 
-    expect(res).to.have.status(201);
-    expect(res.body).to.be.an('object');
-    expect(res.body).to.have.property('token');
-        });
-    });
+    expect(res).to.have.status(201)
+    expect(res.body).to.be.an('object')
+    expect(res.body).to.have.property('token')
+        })
+    })
 
 
   describe('POST /login', () => {
@@ -86,7 +90,7 @@ describe('User Routes', () => {
       try {
         const res = await chai.request(app)
           .get('/protected')
-          .set('Authorization', `Bearer ${fakeToken}`);
+          .set('Authorization', `JWT ${fakeToken}`)
          
         console.log('Response Status:', res.status);
         console.log('Response Body:', res.body);
