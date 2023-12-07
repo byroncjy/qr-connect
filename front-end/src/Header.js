@@ -30,13 +30,17 @@ const Header = () => {
 
   return (
     <div className="header">
-      {location.pathname !== '/login' && location.pathname !== '/home' && (
-        <button onClick={handleBack} className="back-button">Back</button>
-      )}
+      <div className="header-button-buffer">
+        {location.pathname !== '/home' && location.pathname !== '/' 
+          && location.pathname !== '/login' && (
+          <button onClick={handleBack} className="back-button">Back</button>
+        )}
+        {(location.pathname === '/home' || location.pathname === '/') && (
+          <button onClick={handleLogout} className="logout-button">Logout</button>
+        )}
+      </div>
       <h1 className="header-title">QRConnect</h1>
-      {location.pathname === '/home' && (
-        <button onClick={handleLogout} className="logout-button">Logout</button>
-      )}
+      <div className="header-buffer"></div>
     </div>
   )
 }
