@@ -76,21 +76,20 @@ describe('User Routes', () => {
     });
   });
 
-  
   describe('GET /protected', () => {
     it('should access the protected route with a valid token', async () => {
-      const secretKey = 'yourDefaultJwtSecret'; // Replace with the actual key used in your app
+      const secretKey = process.env.JWT_SECRET || 'yourDefaultJwtSecret'
+      console.log('Using JWT Secret', secretKey)
       const fakeToken = jwt.sign({ userId: '123456789' }, secretKey, { expiresIn: '1h' });
   
       try {
         const res = await chai.request(app)
           .get('/protected')
           .set('Authorization', `Bearer ${fakeToken}`);
-  
-        if (res.status !== 200) {
-          console.error('Unexpected response:', res.status, res.body);
-        }
-  
+         
+        console.log('Response Status:', res.status);
+        console.log('Response Body:', res.body);
+        
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.property('userId', '123456789');
