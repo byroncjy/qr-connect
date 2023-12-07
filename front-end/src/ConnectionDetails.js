@@ -10,13 +10,11 @@ const ConnectionDetails = () => {
 	const [scanResult, setScanResult] = useState([])
 	const [isQRCodeVisible, setQRCodeVisible] = useState(false)
 	const location = useLocation()
-	console.log("location is", location)
 	const qrImageData = location.state ? location.state.qrImageData : null
           const params = useParams()
-	console.log("params are:",params)
 	const qrCodeText = params.friend_id // /cd/friend_id
 	const names = location.state?.names
-	console.log(qrCodeText)
+
 				
 
 
@@ -34,15 +32,17 @@ const ConnectionDetails = () => {
 
 	useEffect(() => {
 		async function fetchScanResult() {
-			try {
-				console.log("userId is", userId)
-				const params = names ? { names: names.split(',') } : {}
-				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${userId}/platforms`, { params },
-                          { headers: { Authorization: `JWT ${token}` } })
+			try {	
+				const namesArray = names.split(',')
+				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}/platforms`,
+                          { headers: { Authorization: `JWT ${token}` }, params: { names: names } 
+		})
 					.then(response => {
 						if (response.status === 200) {
-							console.log(response.data)
-							setScanResult(response.data)
+							const filteredPlatforms = namesArray.length > 0
+							? response.data.filter(platform => namesArray.includes(platform.name))
+							: response.data;
+							setScanResult(filteredPlatforms)
 						}
 					})
 			} catch (error) {
