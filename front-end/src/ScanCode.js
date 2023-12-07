@@ -16,9 +16,13 @@ function ScanCode() {
     async function fetchImage() {
       try {
         const response = await axios.get(
-            `${process.env.REACT_APP_SERVER_HOSTNAME}/images/home-logo-image1`)
-        if (response.status === 200 && response.data.LogoUrl) {
-          setImageUrl(response.data.LogoUrl)
+            `${process.env.REACT_APP_SERVER_HOSTNAME}/images/home-logo-image`)
+        if (response.status === 200 && response.data) {
+	const response = await axios.get(`${process.env.REACT_APP_API_URL}/images/home-logo-image`, {
+		responseType: 'blob', // Set the response type to 'blob' since we're expecting binary data
+	})
+	const url = window.URL.createObjectURL(new Blob([response.data]))
+          setImageUrl(url)
         }
       } catch (error) {
         console.error('Error fetching image:', error.message)
@@ -39,8 +43,11 @@ function ScanCode() {
           const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/scan`,
             { qrData: imageDataUrl,
               headers: { Authorization: `JWT ${token}` } })
-
-          navigate(`/ConnectionDetails/${response.data.qrCodeText}`, { state: { qrCodeText: response.data.qrCodeText, qrImageData: imageDataUrl } })
+	const qrCodeResult = response.data.qrCodeText;
+	const [userId, queryString] = qrCodeResult.split('?');
+	const queryParams = new URLSearchParams(queryString);
+	const names = queryParams.get('names');
+          navigate(`/ConnectionDetails/${userId}`, { state: { qrCodeText: userId, names: names, qrImageData: imageDataUrl } })
         } catch (error) {
           console.error('Error sending QR data to backend:', error)
         }
