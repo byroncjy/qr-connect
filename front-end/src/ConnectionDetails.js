@@ -25,8 +25,9 @@ const ConnectionDetails = () => {
     else {
       // get user id
       axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/protected`,
-                  { headers: { Authorization: `JWT ${token}` } })
-      .then(res => setUserId(res.data.userId))
+                  { headers: { Authorization: `JWT ${token}` },
+	})
+      .then(res => setUserId(res.data.userId) )
       .catch(err => console.error(err))
     }
   }, [token, navigate])
@@ -34,8 +35,9 @@ const ConnectionDetails = () => {
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
+				console.log("userId is", userId)
 				const params = names ? { names: names.split(',') } : {}
-				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}/platforms`, { params },
+				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${userId}/platforms`, { params },
                           { headers: { Authorization: `JWT ${token}` } })
 					.then(response => {
 						if (response.status === 200) {
