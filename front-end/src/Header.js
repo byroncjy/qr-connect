@@ -31,7 +31,8 @@ const Header = () => {
   return (
     <div className="header">
       <div className="header-button-buffer">
-        {location.pathname !== '/home' && location.pathname !== '/' && (
+        {location.pathname !== '/home' && location.pathname !== '/' 
+          && location.pathname !== '/login' && (
           <button onClick={handleBack} className="back-button">Back</button>
         )}
         {(location.pathname === '/home' || location.pathname === '/') && (
