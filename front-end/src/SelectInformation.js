@@ -27,8 +27,16 @@ const SelectInformation = props => {
   }
 
   const handleSubmit = () => {
-    navigate('/GenerateQRCode')
-    console.log('Submitted!')
+// Filter data based on the checked state
+    const selectedPlatforms = data.filter((_, index) => checked[index])
+
+    const selectedNames = selectedPlatforms.map(platform => platform.name)
+
+    // Join the names with a comma (or another separator)
+    const queryString = `names=${selectedNames.join(',')}`
+    navigate(`/GenerateQRCode?${queryString}`);
+
+    console.log('Submitted with selected names:', selectedNames)
   }
 
   useEffect(() => {
