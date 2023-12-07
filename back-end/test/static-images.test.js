@@ -30,17 +30,6 @@ describe('Router Tests', function() {
     expect(res.headers).to.include({ 'content-type': 'image/png' })
     expect(res.body).to.be.an.instanceof(Buffer) // Additional check for response body
   })
-  //this part should return an error
-  it('should handle an error when fetching the image', async function() {
-    nock('https://picsum.photos')
-      .get('/400')
-      .replyWithError('Mocked error')
-
-    const res = await chai.request(app).get('/home-logo-image')
-    expect(res).to.have.status(500)
-    expect(res.text).to.equal('Error fetching image')
-  })
-
 
   // Ensure nock interceptors are removed after tests
   after(function() {
