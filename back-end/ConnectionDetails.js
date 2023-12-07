@@ -51,17 +51,25 @@ router.get('/:id',
   param('id').isMongoId,
   async (req, res) => {
   const qrCodeText = req.params.id
+  const names = req.query.names ? req.query.names.split(',') : []
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(400).send('Invalid User ID')
   }
 
   try {
+    console.log(names)
     const user = await User.findById(qrCodeText).exec()
     if (!user) {
       return res.status(404).send('User not found')
     }
-    res.status(200).json(user)
+    console.log("Names from query:", names);
+    console.log("User platforms:", user.platforms);
+    const filteredPlatforms = user.platforms.filter(platform => 
+      names.includes(platform.name)
+    )
+
+    res.status(200).json(filteredPlatforms)
   } catch (error) {
     console.error('Error:', error)
     res.status(500).json({ message: 'Internal Server Error' })

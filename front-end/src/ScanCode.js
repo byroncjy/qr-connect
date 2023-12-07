@@ -35,8 +35,11 @@ function ScanCode() {
 					const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/scan`, {
 						qrData: imageDataUrl
 					});
-					
-					navigate(`/ConnectionDetails/${response.data.qrCodeText}`, { state: { qrCodeText: response.data.qrCodeText, qrImageData: imageDataUrl } })
+					const qrCodeResult = response.data.qrCodeText;
+					const [userId, queryString] = qrCodeResult.split('?');
+					const queryParams = new URLSearchParams(queryString);
+                                                  const names = queryParams.get('names');
+					navigate(`/ConnectionDetails/${userId}`, { state: { qrCodeText: userId, names: names, qrImageData: imageDataUrl } })
 				
 				} catch (error) {
 					console.error('Error sending QR data to backend:', error);

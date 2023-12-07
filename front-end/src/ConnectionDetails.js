@@ -10,17 +10,22 @@ const ConnectionDetails = () => {
 	const [scanResult, setScanResult] = useState([])
 	const [isQRCodeVisible, setQRCodeVisible] = useState(false)
 	const location = useLocation()
+	console.log("location is", location)
 	const qrImageData = location.state ? location.state.qrImageData : null
-  const params = useParams()
+          const params = useParams()
+	console.log("params are:",params)
 	const qrCodeText = params.friend_id // /cd/friend_id
-
-
+	const names = location.state?.names
+	console.log(qrCodeText)
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
-				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}/platforms`)
+				const params = names ? { names: names.split(',') } : {}
+				console.log(params)
+				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}/platforms` , { params })
 					.then(response => {
 						if (response.status === 200) {
+							console.log(response.data)
 							setScanResult(response.data)
 						}
 					})
@@ -32,7 +37,7 @@ const ConnectionDetails = () => {
 
 		fetchScanResult()
 
-	}, [qrCodeText])
+	}, [qrCodeText, names])
 
   useEffect(() => {
   }, [scanResult])

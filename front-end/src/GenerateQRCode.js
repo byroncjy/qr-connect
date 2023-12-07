@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { useLocation } from 'react-router-dom'
 import axios from "axios"
 import QRCode from "react-qr-code"
 import "./GenerateQRCode.css"
@@ -7,7 +8,11 @@ import { jwtDecode } from 'jwt-decode'
 
 const GenerateQRCode = () => {
     const [userId, setUserId] = useState("")
-
+    const location = useLocation()
+    const getQueryParams = () => {
+	const queryParams = new URLSearchParams(location.search)
+	return queryParams.get('names')
+      }
     useEffect(() => {
 	const token = localStorage.getItem('token')
 	if (!token) {
@@ -25,7 +30,7 @@ const GenerateQRCode = () => {
 	});
       
 	setUserId(response.data.decodedToken.userId)
-	console.log(response.data.decodedToken.userId)
+	
 	} catch (error) {
 	console.error("Error fetching user ID:", error)
 	}
@@ -33,14 +38,15 @@ const GenerateQRCode = () => {
       
 	fetchUserId()
       }, []);
-      
 
+      const names = getQueryParams()
+      console.log(`${userId}?names=${names}`)
     return (
         <div className="generateQRCodeContainer">
             <div className="generateQRCodeText">Your QR Code</div>
             <div className="qrCode">
                 <QRCode
-                    value={userId || 'www.google.com'}
+                    value={userId ? `${userId}?names=${names}` : 'www.google.com'}
                     size={128}
                     bgColor="#ffffff"
                     fgColor="#000000"
@@ -48,7 +54,7 @@ const GenerateQRCode = () => {
                 />
             </div>
         </div>
-    );
-};
+    )
+}
 
 export default GenerateQRCode;
