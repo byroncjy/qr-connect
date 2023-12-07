@@ -79,8 +79,9 @@ describe('User Routes', () => {
   describe('GET /protected', () => {
     it('should access the protected route with a valid token', async () => {
       const secretKey = process.env.JWT_SECRET || 'yourDefaultJwtSecret'
+      const fakeUserId = '6562c186a4a586c6e19a4eef';
       console.log('Using JWT Secret', secretKey)
-      const fakeToken = jwt.sign({ userId: '123456789' }, secretKey, { expiresIn: '1h' });
+      const fakeToken = jwt.sign({ userId: fakeUserId.toString() }, secretKey, { expiresIn: '1h' });
   
       try {
         const res = await chai.request(app)
@@ -92,7 +93,7 @@ describe('User Routes', () => {
         
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
-        expect(res.body).to.have.property('userId', '123456789');
+        expect(res.body).to.have.property('userId', '6562c186a4a586c6e19a4eef');
       } catch (error) {
         console.error('Error during the test:', error);
         throw error;
