@@ -13,7 +13,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     if (!token) navigate('/login')
-  }, [token])
+  }, [token, navigate])
 
   // Use the useEffect hook to fetch the image when the component mounts
   useEffect(() => {

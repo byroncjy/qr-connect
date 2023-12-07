@@ -36,7 +36,7 @@ const EditInformation = () => {
       .then(res => setUserId(res.data.userId))
       .catch(err => console.error(err))
     }
-  }, [token])
+  }, [token, navigate])
 
   // In final implementation, we will retrieve userId of current logged in user
   // For now, we just mock userId

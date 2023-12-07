@@ -19,7 +19,7 @@ const GenerateQRCode = () => {
       .then(res => setUserId(res.data.userId))
       .catch(err => console.error(err))
     }
-  }, [token])
+  }, [token, navigate])
 
   return (
     <div className='generateQRCodeContainer'>

@@ -10,7 +10,7 @@ function ScanCode() {
 
   useEffect(() => {
     if (!token) navigate('/login')
-  }, [token])
+  }, [token, navigate])
 
   useEffect(() => {
     async function fetchImage() {

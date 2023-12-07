@@ -24,7 +24,7 @@ const ConnectionDetails = () => {
       .then(res => setUserId(res.data.userId))
       .catch(err => console.error(err))
     }
-  }, [token])
+  }, [token, navigate])
 
 	useEffect(() => {
 		async function fetchScanResult() {

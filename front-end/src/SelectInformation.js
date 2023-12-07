@@ -40,7 +40,7 @@ const SelectInformation = props => {
       .then(res => setUserId(res.data.userId))
       .catch(err => console.error(err))
     }
-  }, [token])
+  }, [token, navigate])
 
   // get data from api
   useEffect(() => {
