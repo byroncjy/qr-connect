@@ -8,12 +8,6 @@ chai.use(chaiHttp)
 const router = require('../app')
 const jwt = require('jsonwebtoken')
 
-// // Function to generate JWT
-// const generateToken = user => {
-//   const jwtSecret = process.env.JWT_SECRET
-//   return jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: '24h' })
-// }
-
 // tests related to sending requests about a user's information
 describe('User Routes', function () {
   // userIds
