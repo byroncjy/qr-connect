@@ -11,19 +11,22 @@ function ScanCode() {
 	
 	useEffect(() => {
 		async function fetchImage() {
-			try {
-				const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/images/home-logo-image`);
-				if (response.status === 200 && response.data.LogoUrl) {
-					setImageUrl(response.data.LogoUrl);
+			try {	
+				const response = await axios.get(`${process.env.REACT_APP_API_URL}/images/home-logo-image`, {
+					responseType: 'blob',
+				});
+				const url = window.URL.createObjectURL(new Blob([response.data]))
+				if (response.status) {
+					setImageUrl(url)
 				}
 			} catch (error) {
-				console.error('Error fetching image:', error.message);
+				console.error('Error fetching image:', error.message)
 			}
 		}
 
 		fetchImage();
 
-	}, []);
+	}, [])
 
 	function handleFileChange(event) {
 		const file = event.target.files[0]
