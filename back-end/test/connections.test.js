@@ -61,6 +61,10 @@ describe('Connections', function() {
 })
 
 describe('/DELETE /connections/:userId/:friendId', () => {
+  const validUserId = '6562c186a4a586c6e19a4eef'
+  const jwtSecret = process.env.JWT_SECRET
+  const token = jwt.sign({ userId: validUserId }, jwtSecret, { expiresIn: '10m' })
+
   it('should add, then DELETE a connection for a user and verify removal', (done) => {
     const testUserId = '6562c186a4a586c6e19a4eef' 
     const testFriendId = '656a2e020f1c8e7b1de06e40'
