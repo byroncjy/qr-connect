@@ -3,15 +3,21 @@ const cors = require('cors')
 const jsQR = require('jsqr')
 const axios = require('axios')
 const { User } = require('./models/User.js')
-require('dotenv').config()
 const { createCanvas, loadImage } = require('canvas')
 const { isValidObjectId } = require('mongoose')
 const { param, body, validationResult } = require('express-validator')
+const passport = require('passport')
 const router = express.Router()
 router.use(cors())
 router.use(express.urlencoded({ extended: true }))
 router.use(express.json())
 
+/*
+ *    NOTE! No auth here because we can't figure out why it's not working for
+ *    only this route Q_Q Potentially related to Content-Type being sent?
+ */
+
+// /scan (decodes QR code)
 router.post('/',
   body('qrData').notEmpty().withMessage('QR data is required'),
   async (req, res) => {

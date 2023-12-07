@@ -1,44 +1,40 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { jwtDecode } from 'jwt-decode' 
 import './SavedConnections.css'
 
 const SavedConnections = () => {
+  const token = localStorage.getItem('token')
+  const [userId, setUserId] = useState(() => '')
   const [connections, setConnections] = useState([])
   const navigate = useNavigate()
   const defaultImage = '/default.png' 
   const navigateHome = () => {
     navigate('/home')
   }
-  
-  const token = localStorage.getItem('token');
-  let userId;
-  if (token) {
-    const decoded = jwtDecode(token);
-    userId = decoded.userId;
-  }
 
   useEffect(() => {
+    if (!token) navigate('/login')
+    else {
+      // get user id
+      axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/protected`,
+                  { headers: { Authorization: `JWT ${token}` } })
+      .then(res => setUserId(res.data.userId))
+      .catch(err => console.error(err))
+    }
+  }, [token, navigate])
+  
+  useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('token')
-      if (!token) {
-        console.error('No token found')
-        return
-      }
-
       try {
-        const decoded = jwtDecode(token)
-        const userId = decoded.userId
         const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `JWT ${token}` }
         })
         
         const enhancedConnections = await Promise.all(response.data.map(async (conn) => {
           const userDetails = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${conn.friend_id}`, {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `JWT ${token}` }
           })
-          console.log(userDetails.data)
           return {
             ...conn,
             first_name: userDetails.data.first_name,
@@ -53,8 +49,8 @@ const SavedConnections = () => {
       }
     }
 
-    fetchData()
-  }, [navigate])
+    if (userId) fetchData()
+  }, [navigate, token, userId])
 
   const handleConnectionClick = (friendId) => {
     if (friendId) {
@@ -68,7 +64,7 @@ const SavedConnections = () => {
     const handleDeleteConnection = async (friendId) => {
       try {
         await axios.delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/${userId}/${friendId}`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `JWT ${token}` }
         });
         setConnections(connections.filter(conn => conn.friend_id !== friendId));
       } catch (error) {

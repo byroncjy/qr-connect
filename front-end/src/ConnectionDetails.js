@@ -1,11 +1,11 @@
-
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import "./ConnectionDetails.css"
-import {jwtDecode} from 'jwt-decode'
 
 const ConnectionDetails = () => {
+	const token = localStorage.getItem('token')
+  const [userId, setUserId] = useState(() => '')
 	const navigate = useNavigate()
 	const [scanResult, setScanResult] = useState([])
 	const [isQRCodeVisible, setQRCodeVisible] = useState(false)
@@ -17,12 +17,26 @@ const ConnectionDetails = () => {
 	const qrCodeText = params.friend_id // /cd/friend_id
 	const names = location.state?.names
 	console.log(qrCodeText)
+				
+
+
+  useEffect(() => {
+    if (!token) navigate('/login')
+    else {
+      // get user id
+      axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/protected`,
+                  { headers: { Authorization: `JWT ${token}` } })
+      .then(res => setUserId(res.data.userId))
+      .catch(err => console.error(err))
+    }
+  }, [token, navigate])
+
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {
 				const params = names ? { names: names.split(',') } : {}
-				console.log(params)
-				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}/platforms` , { params })
+				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}/platforms`, { params },
+                          { headers: { Authorization: `JWT ${token}` } })
 					.then(response => {
 						if (response.status === 200) {
 							console.log(response.data)
@@ -34,10 +48,11 @@ const ConnectionDetails = () => {
 			}
 		}
 
+		if (userId) fetchScanResult()
 
 		fetchScanResult()
 
-	}, [qrCodeText, names])
+	}, [qrCodeText, names, token, userId])
 
   useEffect(() => {
   }, [scanResult])
@@ -51,22 +66,16 @@ const ConnectionDetails = () => {
 	}
 
 	const handleSaveCode = () => {	
-    const token = localStorage.getItem('token')
-		if (!token) {
-      console.error('No token found')
-      return
-		}
-
-		const decodedToken = jwtDecode(token)
-		const userId = decodedToken.userId
-		
-		const newUserConnection = {
+    const newUserConnection = {
       friend_id: qrCodeText,
       platforms: scanResult || [],
       connected_date: new Date()
 		}
      
-		axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/save/${userId}`, newUserConnection)
+		console.log("New User Connection:", newUserConnection)
+     
+		axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/save/${userId}`, newUserConnection,
+                 { headers: { Authorization: `JWT ${token}` } })
 		.then(response => {
       navigate("/saved-connections")
       })

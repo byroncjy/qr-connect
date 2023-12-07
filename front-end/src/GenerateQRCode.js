@@ -56,5 +56,4 @@ const GenerateQRCode = () => {
         </div>
     )
 }
-
-export default GenerateQRCode;
+export default GenerateQRCode
