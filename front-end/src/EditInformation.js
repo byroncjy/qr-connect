@@ -16,8 +16,8 @@ const platformOptions = [
 ]
 
 const EditInformation = () => {
-  const token = localStorage.getItem('token')
   const [userId, setUserId] = useState('') // State to hold userId
+  const token = localStorage.getItem('token')
   const navigate = useNavigate()
 	// Array of maps of containing platform, info
 	const [platformInformationMap, setPlatformInformationMap] = useState([])
@@ -30,18 +30,21 @@ const EditInformation = () => {
   useEffect(() => {
     if (!token) navigate('/login')
     else {
-      // get user id
-      axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/protected`,
-                  { headers: { Authorization: `JWT ${token}` } })
-      .then(res => setUserId(res.data.userId))
-      .catch(err => console.error(err))
+      const getUserId = async () => {
+        // get user id
+        await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/protected`,
+                    { headers: { Authorization: `JWT ${token}` } })
+        .then(res => setUserId(res.data.userId))
+        .catch(err => console.error(err))
+      }
+      getUserId()
     }
   }, [token, navigate])
 
   // In final implementation, we will retrieve userId of current logged in user
   // For now, we just mock userId
   useEffect(() => {
-    const fetchData = async (userId) => {
+    const fetchData = async () => {
       try {
         // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
         // Ensure .env file is setup for this to work
@@ -88,9 +91,11 @@ const EditInformation = () => {
         console.error('Error fetching profile data:', error)
       }
     }
-    fetchData(userId)
-    fetchProfileData(userId)
-  }, [ userId, token ])
+    if (userId) {
+      fetchData(userId)
+      fetchProfileData(userId)
+    }
+  }, [userId, token, navigate])
 
 
 	// Handle change in platform name

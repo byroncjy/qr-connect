@@ -49,7 +49,7 @@ const SavedConnections = () => {
       }
     }
 
-    fetchData()
+    if (userId) fetchData()
   }, [navigate, token, userId])
 
   const handleConnectionClick = (friendId) => {

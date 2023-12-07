@@ -54,7 +54,7 @@ const SelectInformation = props => {
         console.error(err)
       }
     }
-    fetchData()
+    if (userId) fetchData()
   }, [userId, token])
 
   // initialize checked after data is set

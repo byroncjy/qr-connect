@@ -41,10 +41,9 @@ const ConnectionDetails = () => {
 			}
 		}
 
+		if (userId) fetchScanResult()
 
-		fetchScanResult()
-
-	}, [qrCodeText, token])
+	}, [qrCodeText, token, userId])
 
   useEffect(() => {
   }, [scanResult])
