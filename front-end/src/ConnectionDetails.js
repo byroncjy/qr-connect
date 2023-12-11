@@ -33,7 +33,7 @@ const ConnectionDetails = () => {
 	useEffect(() => {
 		async function fetchScanResult() {
 			try {	
-				const namesArray = names.split(',')
+				const namesArray = names ? names.split(',') : []
 				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}/platforms`,
                           { headers: { Authorization: `JWT ${token}` }, params: { names: names } 
 		})
