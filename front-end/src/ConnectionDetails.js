@@ -5,11 +5,12 @@ import "./ConnectionDetails.css"
 
 const ConnectionDetails = () => {
 	const token = localStorage.getItem('token')
-  const [userId, setUserId] = useState(() => '')
+	const [userId, setUserId] = useState(() => '')
 	const navigate = useNavigate()
 	const [scanResult, setScanResult] = useState([])
 	const [isQRCodeVisible, setQRCodeVisible] = useState(false)
 	const location = useLocation()
+	const hideControls = location.state?.hideControls || false
 	const qrImageData = location.state ? location.state.qrImageData : null
           const params = useParams()
 	const qrCodeText = params.friend_id // /cd/friend_id
@@ -111,21 +112,20 @@ const ConnectionDetails = () => {
         )}
 			
 				
-					<div className="viewCode">
-						<div onClick={handleViewCode}> View Code </div>
-					</div>
-
-				
-				{isQRCodeVisible && <img className="newQRCode" src={qrImageData} alt="Scanned QR" />}
-
-
-				<div className="hideCode">
-					<div onClick={handleHideCode}> Hide Code </div>
-				</div>
-
-				<div className="saveCode">
-					<div onClick={handleSaveCode}> Save Code </div>
-				</div>
+        {!hideControls && (
+        <>
+          <div className="viewCode">
+            <div onClick={handleViewCode}> View Code </div>
+          </div>
+          {isQRCodeVisible && <img className="newQRCode" src={qrImageData} alt="Scanned QR" />}
+          <div className="hideCode">
+            <div onClick={handleHideCode}> Hide Code </div>
+          </div>
+          <div className="saveCode">
+            <div onClick={handleSaveCode}> Save Code </div>
+          </div>
+        </>
+      )}
 
 				
 			</div>

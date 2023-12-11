@@ -54,7 +54,7 @@ const SavedConnections = () => {
 
   const handleConnectionClick = (friendId) => {
     if (friendId) {
-      navigate(`/ConnectionDetails/${friendId}`)
+      navigate(`/ConnectionDetails/${friendId}` , { state: { hideControls: true } })
     } else {
       console.error('Undefined connection ID')
     }
