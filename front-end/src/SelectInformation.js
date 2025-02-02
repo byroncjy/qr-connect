@@ -43,7 +43,7 @@ const SelectInformation = props => {
     if (!token) navigate('/login')
     else {
       // get user id
-      axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/protected`,
+      axios.get(`${process.env.REACT_APP_BACKEND_HOST}/protected`,
                   { headers: { Authorization: `JWT ${token}` } })
       .then(res => setUserId(res.data.userId))
       .catch(err => console.error(err))
@@ -54,7 +54,7 @@ const SelectInformation = props => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = process.env.REACT_APP_API_URL
+        const apiUrl = process.env.REACT_APP_BACKEND_HOST
         const response = await axios.get(`${apiUrl}/users/${userId}/platforms`,
                           { headers: { Authorization: `JWT ${token}` } })
         setData(response.data)

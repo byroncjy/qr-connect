@@ -8,6 +8,8 @@ services:
     # Ensure this .env file exists in your root directory!
     env_file: 
       - ./front-end.env
+    environment:
+      - PORT=3000
     # Add volumes if needed
     volumes:
       - ./front-end:/usr/src/front-end  # Mount your front-end directory to the container
@@ -22,6 +24,8 @@ services:
     # Ensure this .env file exists in your root directory!
     env_file: 
       - ./back-end.env
+    environment:
+      - PORT=3001
     # Add volumes if needed
     volumes:
       - ./back-end:/usr/src/back-end  # Mount your back-end directory to the container

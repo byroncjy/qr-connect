@@ -17,7 +17,7 @@ const SavedConnections = () => {
     if (!token) navigate('/login')
     else {
       // get user id
-      axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/protected`,
+      axios.get(`${process.env.REACT_APP_BACKEND_HOST}/protected`,
                   { headers: { Authorization: `JWT ${token}` } })
       .then(res => setUserId(res.data.userId))
       .catch(err => console.error(err))
@@ -27,12 +27,12 @@ const SavedConnections = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/${userId}`, {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOST}/connections/${userId}`, {
           headers: { Authorization: `JWT ${token}` }
         })
         
         const enhancedConnections = await Promise.all(response.data.map(async (conn) => {
-          const userDetails = await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${conn.friend_id}`, {
+          const userDetails = await axios.get(`${process.env.REACT_APP_BACKEND_HOST}/users/${conn.friend_id}`, {
             headers: { Authorization: `JWT ${token}` }
           })
           return {
@@ -63,7 +63,7 @@ const SavedConnections = () => {
     // Function to handle delete
     const handleDeleteConnection = async (friendId) => {
       try {
-        await axios.delete(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/${userId}/${friendId}`, {
+        await axios.delete(`${process.env.REACT_APP_BACKEND_HOST}/connections/${userId}/${friendId}`, {
           headers: { Authorization: `JWT ${token}` }
         });
         setConnections(connections.filter(conn => conn.friend_id !== friendId));

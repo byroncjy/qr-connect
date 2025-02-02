@@ -18,7 +18,7 @@ const Login = () => {
 
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/login`, {
+        `${process.env.REACT_APP_BACKEND_HOST}/login`, {
           email: email,
           password: password
         })

@@ -32,7 +32,7 @@ const EditInformation = () => {
     else {
       const getUserId = async () => {
         // get user id
-        await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/protected`,
+        await axios.get(`${process.env.REACT_APP_BACKEND_HOST}/protected`,
                     { headers: { Authorization: `JWT ${token}` } })
         .then(res => setUserId(res.data.userId))
         .catch(err => console.error(err))
@@ -46,10 +46,10 @@ const EditInformation = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
+        // We are taking REACT_APP_BACKEND_HOST from .env file
         // Ensure .env file is setup for this to work
         const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`,
+          `${process.env.REACT_APP_BACKEND_HOST}/users/${userId}/platforms`,
             { headers: { Authorization: `JWT ${token}` } })
         const data = response.data
         // Map the fetched data to maintain the structure
@@ -80,10 +80,10 @@ const EditInformation = () => {
     // Fetch profile data: email, firstname, lastname, profile pic
     const fetchProfileData = async (userId) => {
       try {
-        // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
+        // We are taking REACT_APP_BACKEND_HOST from .env file
         // Ensure .env file is setup for this to work
         const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}`,
+          `${process.env.REACT_APP_BACKEND_HOST}/users/${userId}`,
             { headers: { Authorization: `JWT ${token}` } })
         const data = response.data
         setProfileData(data)
@@ -155,7 +155,7 @@ const EditInformation = () => {
     try {
       const response = await axios.put(
         // Ensure .env file is set up for this to work
-        `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/uploadPicture`,
+        `${process.env.REACT_APP_BACKEND_HOST}/users/${userId}/uploadPicture`,
         formData,
         {
           headers: {
@@ -168,10 +168,10 @@ const EditInformation = () => {
 			if (response.status === 200) {
 				// If successful PUT, retrieve it and set it immediately to display
         try {
-          // We are taking REACT_APP_BACKEND_SERVER_HOSTNAME from .env file
+          // We are taking REACT_APP_BACKEND_HOST from .env file
           // Ensure .env file is setup for this to work
           const response = await axios.get(
-            `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/profilePicture`,
+            `${process.env.REACT_APP_BACKEND_HOST}/users/${userId}/profilePicture`,
               { headers: { Authorization: `JWT ${token}` } })
           const data = response.data
           setProfileData({ ...profileData, profile_picture: data.profile_picture })
@@ -198,7 +198,7 @@ const EditInformation = () => {
       }, 1000) // Set the duration of the darkening effect (in milliseconds)
 
       const response = await axios.put(
-        `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}`,
+        `${process.env.REACT_APP_BACKEND_HOST}/users/${userId}`,
         profileData,
         {
           headers: {
@@ -241,7 +241,7 @@ const EditInformation = () => {
         platforms: filteredPlatformInformationMap.map(({ name, value }) => ({ name, value }))
       }
       const response = await axios.put(
-        `${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/users/${userId}/platforms`,
+        `${process.env.REACT_APP_BACKEND_HOST}/users/${userId}/platforms`,
         requestBody,
         {
           headers: {
@@ -269,7 +269,7 @@ const EditInformation = () => {
 				{/* Display profile picture if not undefined */}
 				{profileData.profile_picture && (
           <img
-            src={`${process.env.REACT_APP_BACKEND_SERVER_HOSTNAME}/static/uploads/${profileData.profile_picture}`}
+            src={`${process.env.REACT_APP_BACKEND_HOST}/static/uploads/${profileData.profile_picture}`}
             alt="Profile"
             className="profile-picture"
           />

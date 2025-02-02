@@ -10,7 +10,7 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       // Use the environment variable for the API URL
-      const apiUrl = process.env.REACT_APP_API_URL || '' // Fallback to an empty string if not defined
+      const apiUrl = process.env.REACT_APP_BACKEND_HOST || '' // Fallback to an empty string if not defined
       await axios.post(`${apiUrl}/logout`)
 
       // Clear the token from local storage or cookies

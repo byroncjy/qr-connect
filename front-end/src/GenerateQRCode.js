@@ -23,7 +23,7 @@ const GenerateQRCode = () => {
 	const fetchUserId = async () => {
 	try {
 	const decodedToken = jwtDecode(token)
-	const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/generateQRCode`, { decodedToken }, {
+	const response = await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/generateQRCode`, { decodedToken }, {
 		headers: {
 		Authorization: `Bearer ${token}`
 		}

@@ -16,9 +16,9 @@ function ScanCode() {
     async function fetchImage() {
       try {
         const response = await axios.get(
-            `${process.env.REACT_APP_SERVER_HOSTNAME}/images/home-logo-image`)
+            `${process.env.REACT_APP_BACKEND_HOST}/images/home-logo-image`)
         if (response.status === 200 && response.data) {
-	const response = await axios.get(`${process.env.REACT_APP_API_URL}/images/home-logo-image`, {
+	const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOST}/images/home-logo-image`, {
 		responseType: 'blob', // Set the response type to 'blob' since we're expecting binary data
 	})
 	const url = window.URL.createObjectURL(new Blob([response.data]))
@@ -40,7 +40,7 @@ function ScanCode() {
       reader.onload = async (e) => {
         const imageDataUrl = e.target.result
         try {
-          const response = await axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/scan`,
+          const response = await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/scan`,
             { qrData: imageDataUrl,
               headers: { Authorization: `JWT ${token}` } })
 	const qrCodeResult = response.data.qrCodeText;

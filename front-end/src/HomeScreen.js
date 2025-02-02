@@ -21,8 +21,8 @@ const HomeScreen = () => {
     const fetchImage = async () => {
       try {
         // Use axios to send a GET request to the backend server to retrieve the image
-        // The URL is constructed using the REACT_APP_API_URL environment variable, ensuring flexibility for different environments
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/images/home-logo-image`, {
+        // The URL is constructed using the REACT_APP_BACKEND_HOST environment variable, ensuring flexibility for different environments
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOST}/images/home-logo-image`, {
           responseType: 'blob', // Set the response type to 'blob' since we're expecting binary data
         })
         // Create a local URL for the blob and update the imageSrc state

@@ -23,7 +23,7 @@ const ConnectionDetails = () => {
     if (!token) navigate('/login')
     else {
       // get user id
-      axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/protected`,
+      axios.get(`${process.env.REACT_APP_BACKEND_HOST}/protected`,
                   { headers: { Authorization: `JWT ${token}` },
 	})
       .then(res => setUserId(res.data.userId) )
@@ -35,7 +35,7 @@ const ConnectionDetails = () => {
 		async function fetchScanResult() {
 			try {	
 				const namesArray = names ? names.split(',') : []
-				await axios.get(`${process.env.REACT_APP_SERVER_HOSTNAME}/users/${qrCodeText}/platforms`,
+				await axios.get(`${process.env.REACT_APP_BACKEND_HOST}/users/${qrCodeText}/platforms`,
                           { headers: { Authorization: `JWT ${token}` }, params: { names: names } 
 		})
 					.then(response => {
@@ -77,7 +77,7 @@ const ConnectionDetails = () => {
      
 		console.log("New User Connection:", newUserConnection)
      
-		axios.post(`${process.env.REACT_APP_SERVER_HOSTNAME}/connections/save/${userId}`, newUserConnection,
+		axios.post(`${process.env.REACT_APP_BACKEND_HOST}/connections/save/${userId}`, newUserConnection,
                  { headers: { Authorization: `JWT ${token}` } })
 		.then(response => {
       navigate("/saved-connections")
