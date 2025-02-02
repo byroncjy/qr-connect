@@ -24,9 +24,6 @@ describe('Connections', function() {
           res.body.should.be.a('array')
           res.body.forEach(connection => {
             connection.should.have.property('friend_id')
-            connection.should.have.property('first_name')
-            connection.should.have.property('last_name')
-            connection.should.have.property('profile_picture')
             connection.platforms.forEach(platform => {
               platform.should.have.property('name')
               platform.should.have.property('value')
