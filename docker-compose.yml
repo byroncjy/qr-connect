@@ -6,10 +6,9 @@ services:
     ports:
       - "3000:3000"  # Map container port to host port if needed
     # Ensure this .env file exists in your root directory!
-    env_file: 
-      - ./front-end.env
     environment:
       - PORT=3000
+      - REACT_APP_BACKEND_HOST=${REACT_APP_BACKEND_HOST}
     # Add volumes if needed
     volumes:
       - ./front-end:/usr/src/front-end  # Mount your front-end directory to the container
@@ -21,11 +20,14 @@ services:
       dockerfile: Dockerfile  # Name of your backend Dockerfile
     ports:
       - "3001:3001"  # Map container port to host port if needed
-    # Ensure this .env file exists in your root directory!
-    env_file: 
-      - ./back-end.env
     environment:
       - PORT=3001
+      - MONGODB_USER=${MONGODB_USER}
+      - MONGODB_PASS=${MONGODB_PASS}
+      - MONGODB_URI=${MONGODB_URI}
+      - MONGODB_DATABASE=${MONGODB_DATABASE}
+      - MONGODB_API_KEY=${MONGODB_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
     # Add volumes if needed
     volumes:
       - ./back-end:/usr/src/back-end  # Mount your back-end directory to the container
