@@ -1,0 +1,39 @@
+name: Deploy to DigitalOcean Droplet
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH into Droplet & Pull Latest Code
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: root
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          script: |
+            cd "/root/projects"
+            
+            if [ ! -d "qr-connect" ]; then
+              git clone https://github.com/byroncjy/qr-connect.git
+            else
+              cd qr-connect
+              git pull origin main
+            fi
+
+            # Set environment variables
+            export MONGODB_USER="${{ secrets.MONGODB_USER }}"
+            export MONGODB_PASS="${{ secrets.MONGODB_PASS }}"
+            export MONGODB_URI="${{ secrets.MONGODB_URI }}"
+            export MONGODB_DATABASE="${{ secrets.MONGODB_DATABASE }}"
+            export MONGODB_API_KEY="${{ secrets.MONGODB_API_KEY }}"
+            export JWT_SECRET="${{ secrets.JWT_SECRET }}"
+
+            # Run Docker Compose
+            docker-compose down || true
+            docker-compose up -d --build
