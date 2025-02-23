@@ -27,6 +27,7 @@ jobs:
             fi
 
             # Set environment variables
+            export REACT_APP_BACKEND_HOST="${{secrets.REACT_APP_BACKEND_HOST}}"
             export MONGODB_USER="${{ secrets.MONGODB_USER }}"
             export MONGODB_PASS="${{ secrets.MONGODB_PASS }}"
             export MONGODB_URI="${{ secrets.MONGODB_URI }}"
